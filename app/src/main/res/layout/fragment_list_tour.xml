@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <SearchView
+        android:id="@+id/tour_searchv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:queryHint="Search..."
+        android:iconifiedByDefault="false"
+        android:layout_alignParentTop="true"
+        android:background="#FFFFFF"
+        android:layout_marginBottom="10dp"/>
+
+    <LinearLayout
+        android:id="@+id/container_plenty"
+        android:orientation="horizontal"
+        android:layout_below="@+id/tour_searchv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:padding="5dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/icons8_traveler_100"/>
+
+        <TextView
+            android:id="@+id/tour_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="#Numof"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" trips"
+            android:textColor="#000000"/>
+
+    </LinearLayout>
+    <View
+        android:id="@+id/divider"
+        android:layout_below="@+id/container_plenty"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rview"
+        android:layout_below="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFF"/>
+
+</RelativeLayout>
