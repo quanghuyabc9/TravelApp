@@ -31,8 +31,9 @@ public class SplashActivity extends AppCompatActivity {
         long time = sharedPref.getLong(getString(R.string.saved_access_token_time), (long) 0);
         // Get user info with access token
         long expire = (new Date()).getTime() / 1000 - time;
-        MyAPIClient.getInstance().setAccessToken(accessToken);
+        //MyAPIClient.getInstance().setAccessToken(accessToken);
 
+        //testing
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -44,8 +45,9 @@ public class SplashActivity extends AppCompatActivity {
                 finish();
                 return;
             }
-        }, 1000);
+        }, 500);
 
+        //This is actual activity...
 //        Intent intent = new Intent(this, LoginActivity.class);
 //        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //        //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);

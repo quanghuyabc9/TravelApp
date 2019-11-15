@@ -1,5 +1,7 @@
 package com.example.travelguide.view;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,9 +11,11 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -38,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordView;
     private UserService userService;
     private RelativeLayout relLayout_SignInFormWithAppName, relLayout_SignUpForgotPwBtn;
+    private ProgressDialog progressDialog;
 
     Handler handler = new Handler();
     Runnable runnable = new Runnable() {
@@ -47,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
             relLayout_SignUpForgotPwBtn.setVisibility(View.VISIBLE);
         }
     };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +68,32 @@ public class LoginActivity extends AppCompatActivity {
 
         // Set up the login form.
         emailPhoneView = findViewById(R.id.emailPhone);
+        emailPhoneView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    //passwordView.requestFocus();
+                    hideKeyboard();
+                    handled = true;
+                }
+                return handled;
+            }
+        });
+
         passwordView = findViewById(R.id.password);
+        passwordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if(actionId == EditorInfo.IME_ACTION_DONE) {
+                    //attemptLogin();
+                    hideKeyboard();
+                    handled = true;
+                }
+                return handled;
+            }
+        });
 
         Button mEmailSignInButton = findViewById(R.id.signInButton);
         mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
@@ -116,6 +147,14 @@ public class LoginActivity extends AppCompatActivity {
         if(cancel == true){
 
         }else{
+            progressDialog= new ProgressDialog(LoginActivity.this);
+            progressDialog.setMessage("Please wait...");
+            //To show the dialog
+            progressDialog.show();
+
+            //To dismiss the dialog
+//        progressDialog.dismiss();
+
             final LoginRequest request = new LoginRequest();
             request.setUsername(email);
             request.setPassword(password);
@@ -143,6 +182,7 @@ public class LoginActivity extends AppCompatActivity {
                         startActivity(intent);
                         LoginActivity.this.finish();
                     }
+
                 }
 
                 @Override
@@ -162,6 +202,17 @@ public class LoginActivity extends AppCompatActivity {
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
         return password.length() > 4;
+    }
+
+    private void hideKeyboard() {
+        try {
+            // use application level context to avoid unnecessary leaks.
+            InputMethodManager inputManager = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            assert inputManager != null;
+            inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
