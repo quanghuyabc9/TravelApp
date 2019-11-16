@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_horizontal"
     android:background="@drawable/grad_bg"
     android:animateLayoutChanges="true"
@@ -114,11 +115,21 @@
                 android:textAllCaps="false"
                 android:text="@string/action_sign_in"
                 android:textStyle="bold"
-                android:paddingLeft="70dp"
-                android:paddingRight="70dp"
+                android:paddingLeft="65dp"
+                android:paddingRight="65dp"
                 android:textSize="16sp"
-                android:layout_centerHorizontal="true"
-                android:foreground="?attr/selectableItemBackground"/>
+                android:layout_centerHorizontal="true" />
+
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/signInButton_Google"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/signInButton"
+                android:layout_marginTop="5dp"
+                android:layout_centerInParent="true">
+            </com.google.android.gms.common.SignInButton>
+
+
         </RelativeLayout>
     </RelativeLayout>
 
