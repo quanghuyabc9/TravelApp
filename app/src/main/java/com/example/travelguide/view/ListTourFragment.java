@@ -1,12 +1,14 @@
 package com.example.travelguide.view;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +28,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.travelguide.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,6 +47,14 @@ public class ListTourFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManger;
+
+    private View.OnClickListener createTour = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent creatTourIntent = new Intent(getActivity(), CreateTourActivity.class);
+            startActivity(creatTourIntent);
+        }
+    };
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -52,6 +63,12 @@ public class ListTourFragment extends Fragment {
         searchView.onActionViewExpanded();
         searchView.setIconified(true);
 
+
+
+        //Set click on create tour button
+        FloatingActionButton createTourBtn = (FloatingActionButton) view.findViewById(R.id.create_tour_btn);
+        createTourBtn.setOnClickListener(createTour);
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -59,6 +76,9 @@ public class ListTourFragment extends Fragment {
             }
         }, 300);
 
+        //get token from login
+        SharedPreferences sharedPref = getContext().getApplicationContext().getSharedPreferences(getString(R.string.shared_pref_name), 0);
+        final String accessToken = sharedPref.getString(getString(R.string.saved_access_token),null);
 
         final ArrayList<TourItem> tourItems = new ArrayList<>();
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
@@ -82,7 +102,7 @@ public class ListTourFragment extends Fragment {
                          String location = o.getString("name");
 
                          String startDate;
-                         Integer milisStartDate = o.optInt("startDate", 0);
+                         long milisStartDate = o.optLong("startDate", 0);
                          if (milisStartDate == 0){
                              startDate = "null";
                          }
@@ -93,7 +113,7 @@ public class ListTourFragment extends Fragment {
                              startDate = simple.format(result);
                          }
                          String endDate;
-                         Integer milisEndDate = o.optInt("startDate", 0);
+                         long milisEndDate = o.optLong("startDate", 0);
                          if (milisEndDate == 0){
                              endDate = "null";
                          }
@@ -111,7 +131,7 @@ public class ListTourFragment extends Fragment {
                              quantity = numAdults + " adults";
                          }
                          else{
-                             quantity = numAdults + " adults, " + numChilds + " numChilds";
+                             quantity = numAdults + " adults, " + numChilds + " childs";
                          }
                          String price = o.getString("minCost") + " - " + o.getString("maxCost");
                          tourItems.add(new TourItem(R.drawable.alternative_view, location, date, quantity, price));
@@ -133,7 +153,7 @@ public class ListTourFragment extends Fragment {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzMTUiLCJwaG9uZSI6IjAzNTQ0ODYyOTQiLCJlbWFpbCI6Im5ndXllbmFuaGhhby5oY211c0BnbWFpbC5jb20iLCJleHAiOjE1NzU5OTc1MjY0MTIsImFjY291bnQiOiJ1c2VyIiwiaWF0IjoxNTczNDA1NTI2fQ.WQ6IC_ZgBLRo_1874jv8apOPlzCnHor-GgqNdtIYbDw");
+                headers.put("Authorization",accessToken);
                 return headers;
             }
         };
