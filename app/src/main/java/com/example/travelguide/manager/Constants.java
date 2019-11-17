@@ -6,6 +6,4 @@ public class Constants {
 
     public static final String Google_ClientID = "1053249874174-aac4cdpnjj42r0ucjd6fcccn4nr8buhq.apps.googleusercontent.com";
     public static final String Google_ClientSecret = "mNBUnUtLDX0Ohp4yg3QjCv-P";
-
-
 }

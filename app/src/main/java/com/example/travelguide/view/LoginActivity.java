@@ -34,9 +34,11 @@ import com.example.travelguide.model.LoginRequest;
 import com.example.travelguide.model.LoginResponse;
 import com.example.travelguide.network.MyAPIClient;
 import com.example.travelguide.network.UserService;
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -67,6 +69,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
+    // Constants
     private static final int RC_SIGN_IN = 0;
     public static String TAG  = "LoginActivity";
     private static final String EMAIL = "email";
@@ -79,8 +82,6 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private GoogleSignInClient mGoogleSignInClient;
     private SignInButton signInButton_Google;
-
-
     Handler handler = new Handler();
     Runnable runnable = new Runnable() {
         @Override
@@ -92,35 +93,14 @@ public class LoginActivity extends AppCompatActivity {
     private CallbackManager callbackManager;
     private LoginButton signInButton_Facebook;
 
-    public static void printHashKey(Context pContext) {
-        try {
-            PackageInfo info = pContext.getPackageManager().getPackageInfo(pContext.getPackageName(), PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                String hashKey = new String(Base64.encode(md.digest(), 0));
-                Log.i(TAG, "printHashKey() Hash Key: " + hashKey);
-            }
-        } catch (NoSuchAlgorithmException e) {
-            Log.e(TAG, "printHashKey()", e);
-        } catch (Exception e) {
-            Log.e(TAG, "printHashKey()", e);
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        AccessToken.setCurrentAccessToken(null);
         //printHashKey(this);
-        // Google service for signing in
-        // Configure sign-in to request offline access to the user's ID, basic
-        // profile, and Google Drive. The first time you request a code you will
-        // be able to exchange it for an access token and refresh token, which
-        // you should store. In subsequent calls, the code will only result in
-        // an access token. By asking for profile access (through
-        // DEFAULT_SIGN_IN) you will also get an ID Token as a result of the
-        // code exchange.
+
+        /* Sign in with Google*/
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestScopes(new Scope(Scopes.DRIVE_APPFOLDER))
                 .requestServerAuthCode(Constants.Google_ClientID)
@@ -143,10 +123,10 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+        /* --------------------------------------------------------------------------------------------- */
 
-        //Facebook service for signing in
+        /*Sign in with Facebook*/
         callbackManager = CallbackManager.Factory.create();
-
         signInButton_Facebook = findViewById(R.id.signInButton_Facebook);
         signInButton_Facebook.setPermissions(Arrays.asList(EMAIL));
         // If you are using in a fragment, call loginButton.setFragment(this);
@@ -157,7 +137,9 @@ public class LoginActivity extends AppCompatActivity {
             public void onSuccess(LoginResult loginResult) {
                 // App code
                 Toast.makeText(LoginActivity.this, "Sign in with Facebook success", Toast.LENGTH_LONG).show();
-                Log.i(TAG, "quanghuy said: " + loginResult.getAccessToken().toString());
+                Log.i(TAG, "access_token_facebook: " + loginResult.getAccessToken().getToken());
+
+               // AccessToken accessToken = AccessToken.getCurrentAccessToken();
             }
 
             @Override
@@ -174,11 +156,14 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        /* Animation */
         relLayout_SignInFormWithAppName = findViewById(R.id.relLayout_SignInFromWithAppName);
         relLayout_SignUpForgotPwBtn = findViewById(R.id.relLayout_SignInForgotPwBtn);
 
         handler.postDelayed(runnable, 2000);
 
+
+        /* Sign in with emailPhone, password registered */
         userService = MyAPIClient.getInstance().getAdapter().create(UserService.class);
 
         // Set up the login form.
@@ -219,27 +204,29 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    // Google
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
+        if (requestCode == RC_SIGN_IN) // Google
+        {
+            // The Task returned from this call is always completed, no need to attach a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         }
-        else {
+        else // Facebook
+        {
             callbackManager.onActivityResult(requestCode, resultCode, data);
         }
     }
 
+    // Google
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
@@ -257,25 +244,24 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-}
+    }
 
     @Override
     protected void onStart() {
         super.onStart();
-
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
         // GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         // updateUI(account);
     }
 
+    // Get access token of Google account
     private void updateUI(GoogleSignInAccount account) {
         //Change UI according to user data.
         if (account != null) {
             Toast.makeText(this, "Sign in with Google success", Toast.LENGTH_LONG).show();
-            //Toast.makeText(this, account.getEmail(), Toast.LENGTH_LONG).show();
 
-            String test = account.getServerAuthCode();
+            // Build request to get access token of Google account
             OkHttpClient client = new OkHttpClient();
             RequestBody requestBody = new FormEncodingBuilder()
                     .add("grant_type", "authorization_code")
@@ -300,16 +286,14 @@ public class LoginActivity extends AppCompatActivity {
                                 JSONObject jsonObject = new JSONObject(response.body().string());
                                 final String message = jsonObject.toString(5);
                                 String accessToken = jsonObject.getString("access_token");
-                                Log.i(TAG, message);
+                                // This is access token of Google account
+                                Log.i(TAG, accessToken);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         }
                     }
             );
-
-
-            //startActivity(new Intent(this,AnotherActivity.class));
         } else {
             Toast.makeText(this, "Sign in with Google error", Toast.LENGTH_LONG).show();
         }
@@ -360,7 +344,7 @@ public class LoginActivity extends AppCompatActivity {
             progressDialog.show();
 
             //To dismiss the dialog
-//        progressDialog.dismiss();
+            //progressDialog.dismiss();
 
             final LoginRequest request = new LoginRequest();
             request.setUsername(email);
@@ -388,13 +372,19 @@ public class LoginActivity extends AppCompatActivity {
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                         LoginActivity.this.finish();
+                        //progressDialog.dismiss();
                     }
-
+                    else {
+                        Toast.makeText(LoginActivity.this,"Sign in failed", Toast.LENGTH_LONG).show();
+                        progressDialog.dismiss();
+                    }
                 }
 
                 @Override
                 public void onFailure(Call<LoginResponse> call, Throwable t) {
                     Log.d(TAG, t.getMessage());
+                    Toast.makeText(LoginActivity.this,"Sign in failed", Toast.LENGTH_LONG).show();
+                    progressDialog.dismiss();
                 }
             });
         }
@@ -422,4 +412,19 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    public static void printHashKey(Context pContext) {
+        try {
+            PackageInfo info = pContext.getPackageManager().getPackageInfo(pContext.getPackageName(), PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                String hashKey = new String(Base64.encode(md.digest(), 0));
+                Log.i(TAG, "printHashKey() Hash Key: " + hashKey);
+            }
+        } catch (NoSuchAlgorithmException e) {
+            Log.e(TAG, "printHashKey()", e);
+        } catch (Exception e) {
+            Log.e(TAG, "printHashKey()", e);
+        }
+    }
 }
