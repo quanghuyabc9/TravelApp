@@ -1,6 +1,7 @@
 package com.example.travelguide.view;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,9 +12,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.service.autofill.OnClickAction;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -25,6 +28,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.travelguide.R;
+import com.example.travelguide.utils.ActionBarEdit;
 import com.example.travelguide.view.RecyclerDataAdapter;
 import com.example.travelguide.view.TourItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -43,7 +47,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragmet_container, new ListTourFragment()).commit();
+        ActionBarEdit.Customize("Travel Guide", MainActivity.this);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ListTourFragment()).commit();
 
         BottomNavigationView bottomNav = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
@@ -67,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                         selectedFragment = new SettingsFragment();
                         break;
                 }
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragmet_container, selectedFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
                 return true;
             }
         });

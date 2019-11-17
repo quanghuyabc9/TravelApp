@@ -13,20 +13,10 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-<<<<<<< HEAD
-        android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true">
-        <activity android:name=".view.CreateTourActivity"></activity>
-
-        <meta-data
-            android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id" />
-=======
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
->>>>>>> e29ee7758acc93c6522aaec0416bcc1c5b876b81
 
         <activity
             android:name="com.facebook.FacebookActivity"
@@ -47,16 +37,11 @@
         <activity android:name=".view.MainActivity"></activity>
         <activity
             android:name=".view.LoginActivity"
-<<<<<<< HEAD
-            android:label="@string/title_activity_signin"></activity>
-        <activity android:name=".view.SplashActivity">
-=======
             android:label="@string/title_activity_signin"
             android:theme="@style/AppTheme_NoActionBar">
         </activity>
         <activity android:name=".view.SplashActivity"
             android:theme="@style/AppTheme_NoActionBar">
->>>>>>> e29ee7758acc93c6522aaec0416bcc1c5b876b81
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
