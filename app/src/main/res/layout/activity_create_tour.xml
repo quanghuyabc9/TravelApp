@@ -1,9 +1,270 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.CreateTourActivity">
+    android:background="#FFFFFF"
+    tools:context=".view.CreateTourActivity"
+    android:orientation="vertical"
+    android:padding="10dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="7dp"
+        android:paddingRight="7dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tour Name (*)"
+            android:layout_marginBottom="7dp"/>
+
+        <EditText
+            android:id="@+id/create_tour_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:height="40dp"
+            android:padding="5dip"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:background="@drawable/rounded_edittext_states" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="7dp"
+        android:paddingRight="7dp"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingRight="7dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_marginBottom="7dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Start date (*)"/>
+
+            <TextView
+                android:id="@+id/create_tour_start_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:height="40dp"
+                android:padding="5dip"
+                android:textColor="#000000"
+                android:background="@drawable/rounded_edittext_states"
+                android:gravity="center"
+                android:hint="Select date"
+                android:focusable="true"
+                android:focusableInTouchMode="true"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="7dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_marginBottom="7dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="End date (*)"/>
+
+            <TextView
+                android:id="@+id/create_tour_end_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:height="40dp"
+                android:padding="5dip"
+                android:textColor="#000000"
+                android:background="@drawable/rounded_edittext_states"
+                android:gravity="center"
+                android:hint="Select date"
+                android:focusable="true"
+                android:focusableInTouchMode="true"/>
+        </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="7dp"
+        android:paddingRight="7dp"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingRight="7dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_marginBottom="7dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Adults"/>
+
+            <EditText
+                android:id="@+id/create_tour_adults"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:height="40dp"
+                android:padding="5dip"
+                android:background="@drawable/rounded_edittext_states"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:digits="0123456789"
+                android:inputType="numberDecimal"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="7dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_marginBottom="7dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Children"/>
+
+            <EditText
+                android:id="@+id/create_tour_children"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:height="40dp"
+                android:padding="5dip"
+                android:background="@drawable/rounded_edittext_states"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:digits="0123456789"
+                android:inputType="numberDecimal"/>
+        </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="7dp"
+        android:paddingRight="7dp"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingRight="7dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_marginBottom="7dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Min cost"/>
+
+            <EditText
+                android:id="@+id/create_tour_min_cost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:height="40dp"
+                android:padding="5dip"
+                android:background="@drawable/rounded_edittext_states"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:digits="0123456789"
+                android:inputType="numberDecimal"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="7dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_marginBottom="7dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Max cost"/>
+
+            <EditText
+                android:id="@+id/create_tour_max_cost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:height="40dp"
+                android:padding="5dip"
+                android:background="@drawable/rounded_edittext_states"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:digits="0123456789"
+                android:inputType="numberDecimal"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_marginRight="7dp"
+        android:layout_marginLeft="7dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:layout_height="50dp"
+        android:background="@drawable/rounded_edittext_states">
+        <TextView
+            android:id="@+id/create_tour_choose_img_des"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Choose tour image"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:layout_centerVertical="true"/>
+
+        <Button
+            android:id="@+id/create_tour_choose_img_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@color/transparent"
+            android:text="+"
+            android:textSize="30sp"
+            android:gravity="right|center_vertical"
+            android:paddingRight="20dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+    </RelativeLayout>
+
+    <CheckBox
+        android:id="@+id/is_private_radio"
+        android:padding="7dp"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Is this your private trip?"
+        android:textSize="16sp"/>
+
+    <Button
+        android:id="@+id/create_tour_submit"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/rounded_button"
+        android:textColor="#FFFFFF"
+        android:textAllCaps="false"
+        android:text="Create"
+        android:textSize="16sp"/>
+
+
+    <LinearLayout
+        android:layout_weight="4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </LinearLayout>
+
+
+</LinearLayout>

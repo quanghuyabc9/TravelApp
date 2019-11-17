@@ -51,8 +51,8 @@ public class ListTourFragment extends Fragment {
     private View.OnClickListener createTour = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent creatTourIntent = new Intent(getActivity(), CreateTourActivity.class);
-            startActivity(creatTourIntent);
+            Intent createTourIntent = new Intent(getActivity(), CreateTourActivity.class);
+            startActivity(createTourIntent);
         }
     };
     @Nullable

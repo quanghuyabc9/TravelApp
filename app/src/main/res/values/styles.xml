@@ -2,14 +2,14 @@
 
     <resources>
 
-        <!-- Base application theme. -->
-        <style name="AppTheme" parent="Theme.AppCompat.Light">
-            <!-- Customize your theme here. -->
-            <item name="colorPrimary">@color/gradStart</item>
-            <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-            <item name="colorAccent">@color/colorAccent</item>
-        </style>
-
+            <!-- Application theme. -->
+        <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+            <item name="android:editTextStyle">@style/et</item>
+        </style>
+     
+        <style name="et" parent="@android:style/Widget.EditText">
+            <item name="android:textColor">@color/design_default_color_primary_dark</item>
+        </style>
         <style name="AppTheme_NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
             <!-- Customize your theme here. -->
             <item name="windowActionBar">false</item>
