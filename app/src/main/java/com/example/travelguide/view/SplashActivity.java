@@ -56,7 +56,7 @@ public class SplashActivity extends AppCompatActivity {
                     finish();
                     return;
                 }
-            }, 250);
+            }, 500);
         }else{
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -68,7 +68,7 @@ public class SplashActivity extends AppCompatActivity {
                     finish();
                     return;
                 }
-            }, 250);
+            }, 500);
         }
     }
 }
