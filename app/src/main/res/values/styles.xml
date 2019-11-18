@@ -12,11 +12,12 @@
        <item name="android:textColorPrimary">@color/white</item>
        <item name="android:icon">@color/white</item>
    </style>
-    <style name="FacebookLoginButton">
-        <item name="android:textSize">15sp</item>
-        <item name="android:background">@drawable/facebook_button</item>
-        <item name="android:layout_marginTop">10dp</item>
-        <item name="android:layout_marginBottom">10dp</item>
-        <item name="android:layout_gravity">center_horizontal</item>
+
+    <style name="FullyTranslucent" parent="android:Theme.Translucent.NoTitleBar">
+        <item name="android:progressBarStyle">@style/InvisibleProgress</item>
+    </style>
+
+    <style name="InvisibleProgress">
+        <item name="android:visibility">gone</item>
     </style>
 </resources>

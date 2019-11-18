@@ -147,6 +147,47 @@ public class LoginActivity extends AppCompatActivity {
                 // App code
                 Toast.makeText(LoginActivity.this, "Sign in with Facebook success", Toast.LENGTH_LONG).show();
                 Log.i(TAG, "access_token_facebook: " + loginResult.getAccessToken().getToken());
+                SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.shared_pref_name),0);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(getString(R.string.saved_access_token_facebook), loginResult.getAccessToken().getToken());
+                editor.apply();
+                // Build request to get access token of Google account
+                OkHttpClient client = new OkHttpClient();
+                RequestBody requestBody = new FormEncodingBuilder()
+                        .add("accessToken", loginResult.getAccessToken().getToken())
+                        .build();
+                final Request request = new Request.Builder()
+                        .url(Constants.APIEndpoint + "/user/login/by-facebook")
+                        .post(requestBody)
+                        .build();
+                client.newCall(request)
+                        .enqueue(new com.squareup.okhttp.Callback() {
+                            @Override
+                            public void onFailure(Request request, IOException e) {
+                                Log.e(TAG, e.toString());
+                            }
+
+                            @Override
+                            public void onResponse(com.squareup.okhttp.Response response) throws IOException {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(response.body().string());
+                                    String accessToken = jsonObject.getString("token");
+                                    SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.shared_pref_name), 0);
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    editor.putString(getString(R.string.saved_access_token), accessToken);
+                                    editor.apply();
+                                    Log.i(TAG, accessToken);
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
+                                    finish();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                );
             }
 
             @Override
@@ -387,7 +428,7 @@ public class LoginActivity extends AppCompatActivity {
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                         LoginActivity.this.finish();
-                        //progressDialog.dismiss();
+                        progressDialog.dismiss();
                     }
                     else {
                         Toast.makeText(LoginActivity.this,"Sign in failed", Toast.LENGTH_LONG).show();

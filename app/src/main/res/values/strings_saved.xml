@@ -4,4 +4,5 @@
     <string name="saved_access_token">login_access_token</string>
     <string name="saved_access_token_time">login_access_token_time</string>
     <string name="saved_token">login_token</string>
+    <string name="saved_access_token_facebook">login_access_token_facebook</string>
 </resources>
