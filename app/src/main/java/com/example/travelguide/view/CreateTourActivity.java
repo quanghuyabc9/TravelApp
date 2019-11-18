@@ -30,6 +30,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.travelguide.R;
+import com.example.travelguide.utils.ActionBarEdit;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,6 +52,8 @@ public class CreateTourActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_tour);
+
+        ActionBarEdit.Customize("Create Tour", this);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);

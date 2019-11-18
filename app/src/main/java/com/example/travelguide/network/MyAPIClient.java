@@ -35,11 +35,11 @@ public class MyAPIClient {
                     @Override
                     public Response intercept(Chain chain) throws IOException {
                         Request request = chain.request();
-                        if (!TextUtils.isEmpty(accessToken)) {
-                            request = request.newBuilder()
-                                    .addHeader("Authorization", "Bearer " + accessToken)
-                                    .build();
-                        }
+//                        if (!TextUtils.isEmpty(accessToken)) {
+//                            request = request.newBuilder()
+//                                    .addHeader("Authorization", "Bearer " + accessToken)
+//                                    .build();
+//                        }
                         Response response = chain.proceed(request);
                         return response;
                     }

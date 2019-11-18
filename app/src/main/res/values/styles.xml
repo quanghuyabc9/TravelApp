@@ -1,21 +1,22 @@
-
-
-    <resources>
-
+<resources>
             <!-- Application theme. -->
-        <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-            <item name="android:editTextStyle">@style/et</item>
-        </style>
-     
-        <style name="et" parent="@android:style/Widget.EditText">
-            <item name="android:textColor">@color/design_default_color_primary_dark</item>
-        </style>
-        <style name="AppTheme_NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
-            <!-- Customize your theme here. -->
-            <item name="windowActionBar">false</item>
-            <item name="windowNoTitle">true</item>
-            <item name="colorPrimary">@color/colorPrimary</item>
-            <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-            <item name="colorAccent">@color/colorAccent</item>
-        </style>
-    </resources>
+<!--        <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
+<!--            <item name="android:editTextStyle">@style/et</item>-->
+<!--        </style>-->
+<!--        <style name="et" parent="@android:style/Widget.EditText">-->
+<!--            <item name="android:textColor">@color/design_default_color_primary_dark</item>-->
+<!--        </style>-->
+
+   <style name="AppTheme" parent="Theme.AppCompat.Light">
+       <item name ="colorPrimary">@color/gradStart</item>
+       <item name="android:textColorPrimary">@color/white</item>
+       <item name="android:icon">@color/white</item>
+   </style>
+    <style name="FacebookLoginButton">
+        <item name="android:textSize">15sp</item>
+        <item name="android:background">@drawable/facebook_button</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+</resources>

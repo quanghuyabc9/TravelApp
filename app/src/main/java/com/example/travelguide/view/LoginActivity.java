@@ -20,11 +20,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.travelguide.R;
@@ -38,6 +40,7 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -61,6 +64,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -81,7 +85,8 @@ public class LoginActivity extends AppCompatActivity {
     private RelativeLayout relLayout_SignInFormWithAppName, relLayout_SignUpForgotPwBtn;
     private ProgressDialog progressDialog;
     private GoogleSignInClient mGoogleSignInClient;
-    private SignInButton signInButton_Google;
+    //private SignInButton signInButton_Google;
+    private ImageButton signInButton_Google;
     Handler handler = new Handler();
     Runnable runnable = new Runnable() {
         @Override
@@ -91,14 +96,19 @@ public class LoginActivity extends AppCompatActivity {
         }
     };
     private CallbackManager callbackManager;
+    //private LoginButton signInButton_Facebook;
     private LoginButton signInButton_Facebook;
+    private ImageButton signInButton_Facebook_Fake;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        AccessToken.setCurrentAccessToken(null);
+
+
         //printHashKey(this);
+
+        getSupportActionBar().hide();
 
         /* Sign in with Google*/
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -111,7 +121,7 @@ public class LoginActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         signInButton_Google = findViewById(R.id.signInButton_Google);
-        signInButton_Google.setSize(SignInButton.SIZE_WIDE);
+        //signInButton_Google.setSize(SignInButton.SIZE_WIDE);
         signInButton_Google.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,19 +137,16 @@ public class LoginActivity extends AppCompatActivity {
 
         /*Sign in with Facebook*/
         callbackManager = CallbackManager.Factory.create();
+        //LoginManager.getInstance().logOut();
+        // Callback registration
         signInButton_Facebook = findViewById(R.id.signInButton_Facebook);
         signInButton_Facebook.setPermissions(Arrays.asList(EMAIL));
-        // If you are using in a fragment, call loginButton.setFragment(this);
-
-        // Callback registration
         signInButton_Facebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 // App code
                 Toast.makeText(LoginActivity.this, "Sign in with Facebook success", Toast.LENGTH_LONG).show();
                 Log.i(TAG, "access_token_facebook: " + loginResult.getAccessToken().getToken());
-
-               // AccessToken accessToken = AccessToken.getCurrentAccessToken();
             }
 
             @Override
@@ -153,6 +160,14 @@ public class LoginActivity extends AppCompatActivity {
                 // App code
                 Toast.makeText(LoginActivity.this, "Sign in with Facebook error", Toast.LENGTH_LONG).show();
                 Log.i(TAG, exception.getMessage());
+            }
+        });
+
+        signInButton_Facebook_Fake = findViewById(R.id.signInButton_Facebook_Fake);
+        signInButton_Facebook_Fake.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signInButton_Facebook.performClick();
             }
         });
 

@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ActionBarEdit.Customize("Travel Guide", MainActivity.this);
+        ActionBarEdit.Customize("List Tour", MainActivity.this);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ListTourFragment()).commit();
 
@@ -58,18 +58,23 @@ public class MainActivity extends AppCompatActivity {
                 Fragment selectedFragment = null;
                 switch (menuItem.getItemId()){
                     case R.id.nav_list_tour:
+                        ActionBarEdit.Customize("List Tour", MainActivity.this);
                         selectedFragment = new ListTourFragment();
                         break;
                     case R.id.nav_history:
+                        ActionBarEdit.Customize("History", MainActivity.this);
                         selectedFragment = new HistoryFragment();
                         break;
                     case R.id.nav_map:
+                        ActionBarEdit.Customize("Map", MainActivity.this);
                         selectedFragment = new MapFragment();
                         break;
                     case R.id.nav_noti:
+                        ActionBarEdit.Customize("Notifications", MainActivity.this);
                         selectedFragment = new NotificationsFragment();
                         break;
                     case R.id.nav_setting:
+                        ActionBarEdit.Customize("Settings", MainActivity.this);
                         selectedFragment = new SettingsFragment();
                         break;
                 }
