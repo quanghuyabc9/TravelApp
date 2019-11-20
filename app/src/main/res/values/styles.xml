@@ -8,7 +8,7 @@
 <!--        </style>-->
 
    <style name="AppTheme" parent="Theme.AppCompat.Light">
-       <item name ="colorPrimary">@color/gradStart</item>
+       <item name ="colorPrimary">@color/WindowTitleBackground</item>
 <!--       <item name="android:textColorPrimary">@color/white</item>-->
        <item name="android:icon">@color/white</item>
    </style>

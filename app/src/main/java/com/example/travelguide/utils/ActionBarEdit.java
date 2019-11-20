@@ -1,11 +1,13 @@
 package com.example.travelguide.utils;
 
+import android.content.Context;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.example.travelguide.R;
 
@@ -18,7 +20,8 @@ public class ActionBarEdit extends AppCompatActivity {
                 ActionBar.LayoutParams.WRAP_CONTENT,
                 ActionBar.LayoutParams.MATCH_PARENT,
                 Gravity.CENTER);
-        TextView textviewTitle = (TextView) viewActionBar.findViewById(R.id.actionbar_textview);
+        TextView textviewTitle = viewActionBar.findViewById(R.id.actionbar_textview);
+        viewActionBar.setBackgroundColor(ContextCompat.getColor(context,R.color.window_title_background));
         textviewTitle.setText(title);
         abar.setCustomView(viewActionBar, params);
         abar.setDisplayShowCustomEnabled(true);

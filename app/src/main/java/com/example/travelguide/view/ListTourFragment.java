@@ -55,15 +55,14 @@ public class ListTourFragment extends Fragment {
             startActivity(createTourIntent);
         }
     };
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         final View view = inflater.inflate(R.layout.fragment_list_tour, container, false);
         final SearchView searchView = (SearchView) view.findViewById(R.id.tour_searchv);
-        searchView.onActionViewExpanded();
         searchView.setIconified(true);
-
-
 
         //Set click on create tour button
         FloatingActionButton createTourBtn = (FloatingActionButton) view.findViewById(R.id.create_tour_btn);
@@ -170,4 +169,8 @@ public class ListTourFragment extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
         return view;
     }
+
+
+
+
 }
