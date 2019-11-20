@@ -9,15 +9,7 @@
 
    <style name="AppTheme" parent="Theme.AppCompat.Light">
        <item name ="colorPrimary">@color/gradStart</item>
-       <item name="android:textColorPrimary">@color/white</item>
+<!--       <item name="android:textColorPrimary">@color/white</item>-->
        <item name="android:icon">@color/white</item>
    </style>
-
-    <style name="FullyTranslucent" parent="android:Theme.Translucent.NoTitleBar">
-        <item name="android:progressBarStyle">@style/InvisibleProgress</item>
-    </style>
-
-    <style name="InvisibleProgress">
-        <item name="android:visibility">gone</item>
-    </style>
 </resources>
