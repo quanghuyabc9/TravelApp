@@ -37,11 +37,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class CreateTourActivity extends AppCompatActivity {
 
@@ -56,21 +60,27 @@ public class CreateTourActivity extends AppCompatActivity {
         ActionBarEdit.Customize("Create Tour", this);
 
         ActionBar actionBar = getSupportActionBar();
+        if (actionBar == null) {
+            throw new AssertionError();
+        }
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         //get token from login
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.shared_pref_name), 0);
         final String accessToken = sharedPref.getString(getString(R.string.saved_access_token),null);
 
-        final EditText editTextName = (EditText) findViewById(R.id.create_tour_name);
-        final TextView editStartDate = (TextView) findViewById(R.id.create_tour_start_date);
-        final TextView editEndDate = (TextView) findViewById(R.id.create_tour_end_date);
-        final EditText editAdults = (EditText) findViewById(R.id.create_tour_adults);
-        final EditText editChildren = (EditText) findViewById(R.id.create_tour_children);
-        final EditText editMinCost = (EditText) findViewById(R.id.create_tour_min_cost);
-        final EditText editMaxCost = (EditText) findViewById(R.id.create_tour_max_cost);
-        final CheckBox checkBoxIsPrivate = (CheckBox) findViewById(R.id.is_private_radio);
+        //declare views
+        final EditText editTextName = findViewById(R.id.create_tour_name);
+        final TextView editStartDate = findViewById(R.id.create_tour_start_date);
+        final TextView editEndDate = findViewById(R.id.create_tour_end_date);
+        final EditText editAdults = findViewById(R.id.create_tour_adults);
+        final EditText editChildren = findViewById(R.id.create_tour_children);
+        final EditText editMinCost = findViewById(R.id.create_tour_min_cost);
+        final EditText editMaxCost = findViewById(R.id.create_tour_max_cost);
+        final CheckBox checkBoxIsPrivate = findViewById(R.id.is_private_radio);
 
+
+        //set calendar view choosing date
         editStartDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,7 +94,7 @@ public class CreateTourActivity extends AppCompatActivity {
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                         mDateSetListener1,
                         year,month,day);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }
         });
@@ -101,7 +111,7 @@ public class CreateTourActivity extends AppCompatActivity {
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                         mDateSetListener2,
                         year,month,day);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }
         });
@@ -123,7 +133,8 @@ public class CreateTourActivity extends AppCompatActivity {
             }
         };
 
-        final Button submitBtn = (Button) findViewById(R.id.create_tour_submit);
+        // handle when submit button clicked
+        final Button submitBtn = findViewById(R.id.create_tour_submit);
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -141,10 +152,12 @@ public class CreateTourActivity extends AppCompatActivity {
                 long numMinCost;
                 long numMaxCost;
 
-                long milisStartDate;
-                long milisEndDate;
+                long millisStartDate = 0;
+                long millisEndDate = 0;
 
+                //Check isEmpty in fields: name, date
                 if (TextUtils.isEmpty(name)){
+                    editStartDate.requestFocus();
                     editTextName.setError("Please enter the name");
                     return;
                 }
@@ -185,14 +198,34 @@ public class CreateTourActivity extends AppCompatActivity {
                 else{
                     numMaxCost = Long.parseLong(maxCost);
                 }
+
+                //Convert date to millis second
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                try {
+                    Date dateStarDate = format.parse(startDate);
+                    Date dateEndDate = format.parse(endDate);
+
+                    if (dateStarDate == null) throw new AssertionError();
+                    millisStartDate = dateStarDate.getTime();
+                    if (dateEndDate == null) throw new AssertionError();
+                    millisEndDate = dateEndDate.getTime();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                Log.d("millisStartDate", Long.toString(millisStartDate));
+                Log.d("millisStartDate", Long.toString(millisEndDate));
+
+                //Send request create tour to server
                 RequestQueue requestQueue = Volley.newRequestQueue(v.getContext());
                 String url="http://35.197.153.192:3000/tour/create";
+                //Create request's body
                 JSONObject jsonBody = new JSONObject();
                 try {
 
                     jsonBody.put("name", name);
-                    jsonBody.put("startDate", 1573664400000L);
-                    jsonBody.put("endDate", 1574182800000L);
+                    jsonBody.put("startDate", millisStartDate);
+                    jsonBody.put("endDate", millisEndDate);
                     jsonBody.put("isPrivate", isPrivate);
                     jsonBody.put("adults", numAduts);
                     jsonBody.put("childs", numChilds);
@@ -201,6 +234,7 @@ public class CreateTourActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                //Set request
                 JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, jsonBody, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -219,13 +253,13 @@ public class CreateTourActivity extends AppCompatActivity {
                     }
                 }){
                     @Override
-                    public Map<String, String> getHeaders() throws AuthFailureError {
-                        HashMap<String, String> headers = new HashMap<String, String>();
+                    public Map<String, String> getHeaders() {
+                        HashMap<String, String> headers = new HashMap<>();
                         headers.put("Authorization",accessToken);
                         return headers;
                     }
                 };
-
+                //Add request to Queue
                 requestQueue.add(req);
             }
         });
