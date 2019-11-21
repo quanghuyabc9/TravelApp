@@ -99,11 +99,21 @@ public class LoginActivity extends AppCompatActivity {
     //private LoginButton signInButton_Facebook;
     private LoginButton signInButton_Facebook;
     private ImageButton signInButton_Facebook_Fake;
+    private Button btn_signUp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        //Sign up
+        btn_signUp=(Button)findViewById(R.id.btn_SignUp);
+        btn_signUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent =new Intent(LoginActivity.this,registerActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         //printHashKey(this);
