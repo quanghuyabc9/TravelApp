@@ -7,4 +7,7 @@
     <string name="error_check_network_connection">Vui lòng kiểm tra lại kết nối mạng</string>
     <string name="error_check_network_connection_click_to_retry">Vui lòng kiểm tra lại kết nối mạng. Xin mời thử lại?</string>
     <string name="error_backend_error">Có lỗi hệ thống, vui lòng thử lại sau.</string>
+    <string name="error_invalid_confirmPassword">Confirmpassword không khớp</string>
+    <string name="error_invalid_phone">Số điện thoại không hợp lệ</string>
+
 </resources>

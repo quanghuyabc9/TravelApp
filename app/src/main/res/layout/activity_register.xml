@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
     android:background="@drawable/grad_bg"
     android:animateLayoutChanges="true"
     tools:context=".view.registerActivity">
@@ -16,6 +17,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
             android:id="@+id/LayoutRegister">
             <ImageView
                 android:id="@+id/imgView_logo"
@@ -24,52 +28,97 @@
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
                 android:src="@drawable/around" />
+
             <TextView
+                android:paddingTop="40dp"
+                android:paddingBottom="8dp"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textAllCaps="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="FULL NAME"
                 android:id="@+id/tvName"/>
             <EditText android:id="@+id/input_fullName"
+                android:textSize="15sp"
+                android:textColor="@color/white"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:background="@drawable/et_bg"
+                android:layout_height="40dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:inputType="textCapWords"
                 android:hint="Enter full Name" />
 
             <TextView
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textAllCaps="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Email"/>
-            <EditText android:id="@+id/input_email"
+            <EditText
+                android:textSize="15sp"
+                android:textColor="@color/white"
+                android:background="@drawable/et_bg"
+                android:id="@+id/input_email"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:inputType="textEmailAddress"
-                android:hint="Enter mail" />
+                android:hint="Enter mail"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"/>
 
             <TextView
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textAllCaps="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Phone"/>
             <EditText android:id="@+id/input_phone"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:inputType="textCapWords"
-                android:hint="Enter phone" />
+                android:hint="Enter phone"
+                android:textSize="15sp"
+                android:textColor="@color/white"
+                android:background="@drawable/et_bg"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                />
 
             <TextView
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textAllCaps="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_gender"
                 android:text="Gender: "/>
             <RadioGroup
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/et_bg"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:textColor="@color/white"
+                android:textSize="15sp"
                 android:id="@+id/radio_Gender"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:orientation="horizontal"
                 android:layout_below="@+id/tv_gender"
                 android:weightSum="2">
@@ -90,26 +139,47 @@
             </RadioGroup>
 
             <TextView
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textAllCaps="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="PassWord"/>
-            <EditText android:id="@+id/input_passWord"
+            <EditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:textSize="15sp"
+                android:textColor="@color/white"
+                android:background="@drawable/et_bg"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:id="@+id/input_passWord"
                 android:inputType="textPassword"
                 android:hint="Enter password" />
 
             <TextView
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textAllCaps="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Confirm PassWord"/>
             <EditText android:id="@+id/input_confirmPassWord"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:textSize="15sp"
+                android:textColor="@color/white"
+                android:background="@drawable/et_bg"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
                 android:inputType="textPassword"
                 android:hint="Enter Confirm password" />
 
