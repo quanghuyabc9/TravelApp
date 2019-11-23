@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.travelguide.R;
 import com.example.travelguide.network.UserService;
+import com.example.travelguide.utils.EditTool;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,8 +27,9 @@ public class registerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        getSupportActionBar().setTitle("Sign up");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setTitle("Sign up");
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        EditTool.CustomizeActionBar("Sign up", registerActivity.this);
         AnhXa();
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override

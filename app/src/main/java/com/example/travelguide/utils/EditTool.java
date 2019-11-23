@@ -1,8 +1,13 @@
 package com.example.travelguide.utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
@@ -11,8 +16,10 @@ import androidx.core.content.ContextCompat;
 
 import com.example.travelguide.R;
 
-public class ActionBarEdit extends AppCompatActivity {
-    public static void Customize(String title, AppCompatActivity context) {
+import static com.facebook.FacebookSdk.getApplicationContext;
+
+public class EditTool {
+    public static void CustomizeActionBar(String title, AppCompatActivity context) {
         //Customize the ActionBar
         final ActionBar abar = context.getSupportActionBar();
         View viewActionBar = context.getLayoutInflater().inflate(R.layout.abs_layout, null);
@@ -29,5 +36,21 @@ public class ActionBarEdit extends AppCompatActivity {
 //        abar.setDisplayHomeAsUpEnabled(true);
 //        abar.setIcon(R.color.white);
 //        abar.setHomeButtonEnabled(false);
+
+        Drawable upArrow = context.getResources().getDrawable(R.drawable.back_button);
+        Bitmap bitmap = ((BitmapDrawable) upArrow).getBitmap();
+        upArrow = new BitmapDrawable(context.getResources(), Bitmap.createScaledBitmap(bitmap, 50, 50, true));
+        abar.setHomeAsUpIndicator(upArrow);
+    }
+
+    public static void HideSoftKeyboard(Context context) {
+        try {
+            // use application level context to avoid unnecessary leaks.
+            InputMethodManager inputManager = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            assert inputManager != null;
+            inputManager.hideSoftInputFromWindow(((Activity)context).getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -9,7 +9,6 @@
 
    <style name="AppTheme" parent="Theme.AppCompat.Light">
        <item name ="colorPrimary">@color/WindowTitleBackground</item>
-<!--       <item name="android:textColorPrimary">@color/white</item>-->
-       <item name="android:icon">@color/white</item>
+       <item name ="colorPrimaryDark">@color/colorPrimaryDark</item>
    </style>
 </resources>
