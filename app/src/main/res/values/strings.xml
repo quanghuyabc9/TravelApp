@@ -35,4 +35,8 @@
         <item>Other</item>
     </string-array>
 
+    <!-- String for Settings Fragment -->
+    <string name="edit_profile_button_name">Edit profile</string>
+    <string name="setting_language_text_view">Language</string>
+
 </resources>
