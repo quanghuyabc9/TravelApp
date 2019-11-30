@@ -9,24 +9,20 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.TokenWatcher;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.travelguide.R;
@@ -37,12 +33,9 @@ import com.example.travelguide.model.LoginResponse;
 import com.example.travelguide.network.MyAPIClient;
 import com.example.travelguide.network.UserService;
 import com.example.travelguide.utils.EditTool;
-import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -50,7 +43,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.Scopes;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.Task;
@@ -65,7 +57,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -86,6 +77,7 @@ public class LoginActivity extends AppCompatActivity {
     private RelativeLayout relLayout_SignInFormWithAppName, relLayout_SignUpForgotPwBtn;
     private ProgressDialog progressDialog;
     private GoogleSignInClient mGoogleSignInClient;
+    private Button  button_forgotPassword;
     //private SignInButton signInButton_Google;
     private ImageButton signInButton_Google;
     Handler handler = new Handler();
@@ -116,6 +108,18 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        //Forgot password
+        button_forgotPassword = findViewById(R.id.btn_ForgotPassword);
+        button_forgotPassword.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity_Step1.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                    }
+                }
+        );
 
 
         //Sign up

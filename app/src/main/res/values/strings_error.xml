@@ -9,5 +9,6 @@
     <string name="error_backend_error">Có lỗi hệ thống, vui lòng thử lại sau.</string>
     <string name="error_invalid_confirmPassword">Confirmpassword không khớp</string>
     <string name="error_invalid_phone">Số điện thoại không hợp lệ</string>
+    <string name="error_invalid_verify_code">Verify Code is invalid</string>
 
 </resources>

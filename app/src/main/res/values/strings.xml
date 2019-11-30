@@ -25,4 +25,13 @@
     <string name="edit_profile_button_name">Edit profile</string>
     <string name="setting_language_text_view">Language</string>
 
+    <!-- String for Forgot password activity -->
+    <string name="forgot_password_guide">Select which contact details should we use to reset your password:</string>
+    <string name="via_sms_button">Via sms</string>
+    <string name="via_email_button">Via email</string>
+    <string name="next_button">Next</string>
+    <string name="verification">Enter the code that you received</string>
+    <string name="enter_new_password">Enter your new password</string>
+    <string name="update_password_successfully">Congratulation! Your password is updated successfully</string>
+    <string name="continue_button">Continue</string>
 </resources>

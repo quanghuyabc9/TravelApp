@@ -40,14 +40,16 @@
         </activity>
         <activity android:name=".view.MainActivity" />
         <activity android:name=".view.CreateTourActivity" />
-        <activity android:name=".view.LoginActivity" />
         <activity android:name=".view.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".view.LoginActivity" />
+        <activity android:name=".view.ForgotPasswordActivity_Step1" android:parentActivityName=".view.LoginActivity"/>
+        <activity android:name=".view.ForgotPasswordActivity_Step2" />
+        <activity android:name=".view.ForgotPasswordActivity_Step3" />
     </application>
 
 </manifest>
