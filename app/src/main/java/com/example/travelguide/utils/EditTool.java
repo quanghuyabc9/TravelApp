@@ -16,6 +16,8 @@ import androidx.core.content.ContextCompat;
 
 import com.example.travelguide.R;
 
+import java.util.regex.Pattern;
+
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class EditTool {
@@ -52,5 +54,13 @@ public class EditTool {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static boolean isValidEmail(String email) {
+        return Pattern.matches("^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$", email);
+    }
+
+    public static boolean isValidPassword(String password){
+        return password.length() >= 4;
     }
 }

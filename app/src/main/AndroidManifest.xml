@@ -39,6 +39,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.MainActivity" />
+        <activity android:name=".view.EditProfileActivity" android:parentActivityName=".view.MainActivity" />
         <activity android:name=".view.CreateTourActivity" />
         <activity android:name=".view.SplashActivity">
             <intent-filter>

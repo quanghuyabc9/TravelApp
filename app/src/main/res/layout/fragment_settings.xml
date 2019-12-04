@@ -28,8 +28,12 @@
             android:layout_toEndOf="@+id/relLayout_AccountAvatar"
             android:layout_below="@+id/textView_UserName"
             android:text="@string/edit_profile_button_name"
+            android:textSize="15sp"
             android:layout_marginTop="5dp"
-            android:textAllCaps="false">
+            android:textAllCaps="false"
+            android:textColor="#808080"
+            android:gravity="center_vertical"
+            android:foreground="?attr/selectableItemBackground">
         </Button>
         <RelativeLayout
             android:id="@+id/relLayout_AccountAvatar"
@@ -66,7 +70,7 @@
         android:id="@+id/separator1"
         android:layout_width="match_parent"
         android:layout_height="5dp"
-        android:background="#E0E0E0"
+        android:background="@color/grey"
         android:layout_below="@+id/relLayout_ProfileForm"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"/>
@@ -89,18 +93,19 @@
             android:layout_marginBottom="20dp"/>
         <Spinner
             android:id="@+id/spinner_SettingLanguage"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="22dp"
             android:layout_marginBottom="20dp"
-            android:layout_marginStart="50dp" />
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="20dp"/>
     </LinearLayout>
 
     <View
         android:id="@+id/separator2"
         android:layout_width="match_parent"
         android:layout_height="5dp"
-        android:background="#E0E0E0"
+        android:background="@color/grey"
         android:layout_below="@+id/linearLayout_SettingLanguageForm"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"/>
