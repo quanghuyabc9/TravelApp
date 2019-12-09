@@ -8,6 +8,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.example.travelguide.R;
@@ -18,10 +20,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class registerActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity {
     private EditText edt_name, edt_mail, edt_phone, edt_password, edt_confirmPassword;
     private Button btn_register;
     private UserService userService;
+    private ScrollView signUpForm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +32,14 @@ public class registerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 //        getSupportActionBar().setTitle("Sign up");
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        EditTool.CustomizeActionBar("Sign up", registerActivity.this);
+        EditTool.CustomizeActionBar("Sign up", RegisterActivity.this);
         AnhXa();
+        signUpForm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditTool.HideSoftKeyboard(RegisterActivity.this);
+            }
+        });
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,21 +58,21 @@ public class registerActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                             if (response.isSuccessful()) {
-                                Toast.makeText(registerActivity.this, "register Success :)", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(registerActivity.this, LoginActivity.class);
+                                Toast.makeText(RegisterActivity.this, "register Success :)", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                                 startActivity(intent);
                             } else {
                                 if (response.code() == 400) {
-                                    Toast.makeText(registerActivity.this, "Mail or phone has register:(", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(RegisterActivity.this, "Mail or phone has register:(", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Toast.makeText(registerActivity.this, "register not correct:(", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(RegisterActivity.this, "register not correct:(", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }
 
                         @Override
                         public void onFailure(Call<UserResponse> call, Throwable t) {
-                            Toast.makeText(registerActivity.this, " fail:(", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this, " fail:(", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -78,6 +87,7 @@ public class registerActivity extends AppCompatActivity {
         edt_password = (EditText) findViewById(R.id.input_passWord);
         edt_confirmPassword = (EditText) findViewById(R.id.input_confirmPassWord);
         btn_register = (Button) findViewById(R.id.register);
+        signUpForm = findViewById(R.id.scrollview_register_signupform);
     }
 
     private boolean isCheckInformation(){

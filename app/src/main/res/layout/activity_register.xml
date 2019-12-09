@@ -2,14 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:background="@drawable/grad_bg"
     android:animateLayoutChanges="true"
-    tools:context=".view.registerActivity">
+    tools:context=".view.RegisterActivity">
 
     <ScrollView
+        android:id="@+id/scrollview_register_signupform"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">

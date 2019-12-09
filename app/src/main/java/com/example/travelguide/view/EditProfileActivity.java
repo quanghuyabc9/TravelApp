@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,6 +47,7 @@ public class EditProfileActivity extends AppCompatActivity {
     RadioButton genderMale;
     RadioButton genderFemale;
     Button update;
+    LinearLayout updateForm;
 
     //User information
     String strAuthorization = null;
@@ -72,6 +74,7 @@ public class EditProfileActivity extends AppCompatActivity {
         genderMale =findViewById(R.id.radiobutton_editprofile_male);
         genderFemale = findViewById(R.id.radiobutton_editprofile_female);
         update = findViewById(R.id.button_editprofile_update);
+        updateForm = findViewById(R.id.linearlayout_editprofile_updateform);
 
         SharedPreferences  sharedPref = getSharedPreferences(getString(R.string.shared_pref_name), Context.MODE_PRIVATE);
         strAuthorization = sharedPref.getString(getString(R.string.saved_access_token), null);
@@ -125,6 +128,12 @@ public class EditProfileActivity extends AppCompatActivity {
                 attemptUpdate();
             }
         });
+        updateForm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditTool.HideSoftKeyboard(EditProfileActivity.this);
+            }
+        });
     }
 
     private void getUserInformation() {
@@ -172,7 +181,7 @@ public class EditProfileActivity extends AppCompatActivity {
                                 if (strDob != "null")
                                     dob.setText(strDob);
                                 if(intGender == 0) genderMale.setChecked(true);
-                                if(intGender == 1) genderMale.setChecked(true);
+                                if(intGender == 1) genderFemale.setChecked(true);
                             }
                         });
                     }
