@@ -1,12 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <TextView
-        android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+        android:id="@+id/relLayout_ProfileForm"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="SETTINGS FRAGMENT"
-        android:textSize="30dp"
-        android:layout_centerInParent="true"/>
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp">
+        <TextView
+            android:id="@+id/textView_UserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/relLayout_AccountAvatar"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+        <Button
+            android:id="@+id/button_EditProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_bg_black_border"
+            android:layout_toEndOf="@+id/relLayout_AccountAvatar"
+            android:layout_below="@+id/textView_UserName"
+            android:text="@string/edit_profile_button_name"
+            android:textSize="15sp"
+            android:layout_marginTop="5dp"
+            android:textAllCaps="false"
+            android:textColor="#808080"
+            android:gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:foreground="?attr/selectableItemBackground">
+        </Button>
+        <RelativeLayout
+            android:id="@+id/relLayout_AccountAvatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginRight="20dp">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imageView_AccountProfile"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/user"
+                app:civ_border_color="#CCCCCC"
+                app:civ_border_width="0dp"
+                android:foreground="?attr/selectableItemBackground">
+            </de.hdodenhof.circleimageview.CircleImageView>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/edit"
+                android:layout_alignEnd="@+id/imageView_AccountProfile"
 
+                app:civ_border_color="#ffffff"
+                app:civ_border_width="3dp" >
+            </de.hdodenhof.circleimageview.CircleImageView>
+        </RelativeLayout>
+
+    </RelativeLayout>
+    <View
+        android:id="@+id/separator1"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@color/grey"
+        android:layout_below="@+id/relLayout_ProfileForm"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"/>
+
+    <LinearLayout
+        android:id="@+id/linearLayout_SettingLanguageForm"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_below="@+id/separator1"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        <TextView
+            android:id="@+id/textView_SettingLanguage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/setting_language_text_view"
+            android:textSize="20sp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"/>
+        <Spinner
+            android:id="@+id/spinner_SettingLanguage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="20dp"/>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/separator2"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@color/grey"
+        android:layout_below="@+id/linearLayout_SettingLanguageForm"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"/>
+
+    <Button
+        android:id="@+id/signOutButton"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/rounded_button"
+        android:textColor="#FFFFFF"
+        android:textAllCaps="false"
+        android:text="@string/sign_out_button_name"
+        android:textSize="16sp"
+        android:layout_below="@+id/separator2"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"/>
 </RelativeLayout>

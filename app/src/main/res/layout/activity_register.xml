@@ -2,126 +2,215 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
     android:background="@drawable/grad_bg"
     android:animateLayoutChanges="true"
-    tools:context=".view.registerActivity">
+    tools:context=".view.RegisterActivity">
 
     <ScrollView
+        android:id="@+id/scrollview_register_signupform"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
+
         <LinearLayout
+            android:id="@+id/LayoutRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/LayoutRegister">
-            <ImageView
-                android:id="@+id/imgView_logo"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter"
-                android:src="@drawable/around" />
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:orientation="vertical">
+
+<!--            <ImageView-->
+<!--                android:id="@+id/imgView_logo"-->
+<!--                android:layout_width="80dp"-->
+<!--                android:layout_height="80dp"-->
+<!--                android:adjustViewBounds="true"-->
+<!--                android:scaleType="fitCenter"-->
+<!--                android:src="@drawable/around" />-->
+
             <TextView
+                android:id="@+id/tvName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="20dp"
+                android:paddingBottom="8dp"
                 android:text="FULL NAME"
-                android:id="@+id/tvName"/>
-            <EditText android:id="@+id/input_fullName"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/input_fullName"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:background="@drawable/et_bg"
                 android:inputType="textCapWords"
-                android:hint="Enter full Name" />
+                android:textCursorDrawable="@drawable/color_cursor_login"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Email"/>
-            <EditText android:id="@+id/input_email"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:text="Email"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/input_email"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:background="@drawable/et_bg"
                 android:inputType="textEmailAddress"
-                android:hint="Enter mail" />
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textCursorDrawable="@drawable/color_cursor_login"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Phone"/>
-            <EditText android:id="@+id/input_phone"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:text="Phone"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/input_phone"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:background="@drawable/et_bg"
+                android:textCursorDrawable="@drawable/color_cursor_login"
                 android:inputType="textCapWords"
-                android:hint="Enter phone" />
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
 
             <TextView
+                android:id="@+id/tv_gender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/tv_gender"
-                android:text="Gender: "/>
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:text="Gender: "
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
             <RadioGroup
                 android:id="@+id/radio_Gender"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_height="40dp"
                 android:layout_below="@+id/tv_gender"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/et_bg"
+                android:orientation="horizontal"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:textColor="@color/white"
+                android:textSize="15sp"
                 android:weightSum="2">
+
                 <RadioButton
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Male"
                     android:id="@+id/radio_male"
-                    android:checked="true"/>
-                <RadioButton
-                    android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Female"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="Male"
+                    android:textColor="@color/white"/>
+
+                <RadioButton
                     android:id="@+id/radio_female"
-                    android:checked="false"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="false"
+                    android:text="Female"
+                    android:textColor="@color/white"/>
             </RadioGroup>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="PassWord"/>
-            <EditText android:id="@+id/input_passWord"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:text="PassWord"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/input_passWord"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:background="@drawable/et_bg"
+                android:textCursorDrawable="@drawable/color_cursor_login"
                 android:inputType="textPassword"
-                android:hint="Enter password" />
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Confirm PassWord"/>
-            <EditText android:id="@+id/input_confirmPassWord"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:text="Confirm PassWord"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/input_confirmPassWord"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:background="@drawable/et_bg"
+                android:textCursorDrawable="@drawable/color_cursor_login"
                 android:inputType="textPassword"
-                android:hint="Enter Confirm password" />
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
 
             <Button
-                android:layout_gravity="center_horizontal"
+                android:id="@+id/register"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="24dp"
-                android:padding="12dp"
+                android:background="@drawable/btn_bg"
+                android:paddingLeft="65dp"
+                android:paddingRight="65dp"
                 android:text="Register"
-                android:id="@+id/register"/>
+                android:textColor="@color/white"/>
         </LinearLayout>
     </ScrollView>
 

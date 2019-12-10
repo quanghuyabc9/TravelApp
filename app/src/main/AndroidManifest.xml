@@ -26,9 +26,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.registerActivity"></activity>
         <activity
             android:name=".view.CreateStopsActivity" />
+        <activity android:name=".view.RegisterActivity" android:parentActivityName=".view.LoginActivity"></activity>
+        <activity android:name=".view.CreateStops" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -53,12 +54,11 @@
         <activity
             android:name=".view.MainActivity"
             android:windowSoftInputMode="adjustNothing"/>
+        <activity android:name=".view.EditProfileActivity" android:parentActivityName=".view.MainActivity" />
         <activity android:name=".view.CreateTourActivity" />
-        <activity android:name=".view.LoginActivity" />
         <activity android:name=".view.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -67,6 +67,10 @@
 
         <meta-data android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version"/>
+        <activity android:name=".view.LoginActivity" />
+        <activity android:name=".view.ForgotPasswordActivity_Step1" android:parentActivityName=".view.LoginActivity"/>
+        <activity android:name=".view.ForgotPasswordActivity_Step2" />
+        <activity android:name=".view.ForgotPasswordActivity_Step3" />
     </application>
 
 </manifest>

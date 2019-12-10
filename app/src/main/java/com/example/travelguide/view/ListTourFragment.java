@@ -168,8 +168,4 @@ public class ListTourFragment extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
         return view;
     }
-
-
-
-
 }

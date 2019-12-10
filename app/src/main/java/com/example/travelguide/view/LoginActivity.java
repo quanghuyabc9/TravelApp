@@ -9,24 +9,20 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.TokenWatcher;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.travelguide.R;
@@ -36,12 +32,10 @@ import com.example.travelguide.model.LoginRequest;
 import com.example.travelguide.model.LoginResponse;
 import com.example.travelguide.network.MyAPIClient;
 import com.example.travelguide.network.UserService;
-import com.facebook.AccessToken;
+import com.example.travelguide.utils.EditTool;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -49,7 +43,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.Scopes;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.Task;
@@ -64,7 +57,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -85,6 +77,7 @@ public class LoginActivity extends AppCompatActivity {
     private RelativeLayout relLayout_SignInFormWithAppName, relLayout_SignUpForgotPwBtn;
     private ProgressDialog progressDialog;
     private GoogleSignInClient mGoogleSignInClient;
+    private Button  button_forgotPassword;
     //private SignInButton signInButton_Google;
     private ImageButton signInButton_Google;
     Handler handler = new Handler();
@@ -100,17 +93,41 @@ public class LoginActivity extends AppCompatActivity {
     private LoginButton signInButton_Facebook;
     private ImageButton signInButton_Facebook_Fake;
     private Button btn_signUp;
+    private RelativeLayout relLayout_LoginActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        relLayout_LoginActivity = findViewById(R.id.relLayout_LoginActivity);
+        relLayout_LoginActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditTool.HideSoftKeyboard(LoginActivity.this);
+            }
+        });
+
+        //Forgot password
+        button_forgotPassword = findViewById(R.id.btn_ForgotPassword);
+        button_forgotPassword.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity_Step1.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                    }
+                }
+        );
+
+
         //Sign up
         btn_signUp=(Button)findViewById(R.id.btn_SignUp);
         btn_signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent =new Intent(LoginActivity.this,registerActivity.class);
+                Intent intent =new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }
         });
@@ -238,9 +255,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    //passwordView.requestFocus();
-                    hideKeyboard();
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    passwordView.requestFocus();
                     handled = true;
                 }
                 return handled;
@@ -253,8 +269,7 @@ public class LoginActivity extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handled = false;
                 if(actionId == EditorInfo.IME_ACTION_DONE) {
-                    //attemptLogin();
-                    hideKeyboard();
+                    EditTool.HideSoftKeyboard(LoginActivity.this);
                     handled = true;
                 }
                 return handled;
@@ -383,8 +398,12 @@ public class LoginActivity extends AppCompatActivity {
         boolean cancel = false;
 //        View focusView = null;
 
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        // Check for a valid password
+        if (TextUtils.isEmpty((password))) {
+            passwordView.setError(getString(R.string.error_field_required));
+            cancel =true;
+        }
+        else if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
             passwordView.setError(getString(R.string.error_invalid_password));
             //focusView = mPasswordView;
             cancel = true;
@@ -465,17 +484,6 @@ public class LoginActivity extends AppCompatActivity {
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
         return password.length() > 4;
-    }
-
-    private void hideKeyboard() {
-        try {
-            // use application level context to avoid unnecessary leaks.
-            InputMethodManager inputManager = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            assert inputManager != null;
-            inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public static void printHashKey(Context pContext) {

@@ -19,7 +19,16 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="sign_out_button_name">Sign out</string>
+    <string-array name="province">
+        <item>Hồ chí Minh</item>
+        <item>Hà Nội</item>
+        <item>Bình Định</item>
+        <item>Khánh Hòa </item>
+        <item>Đà nẵng</item>
+    </string-array>
 
+<<<<<<< HEAD
     <!-- Map type-->
     <string name="map_type_normal">Normal</string>
     <string name="map_type_terrain">Terrain</string>
@@ -29,4 +38,37 @@
     <!-- Search-->
     <string name="search">Search</string>
 
+=======
+    <string-array name="serviceName">
+        <item>Restaurant</item>
+        <item>Hotel</item>
+        <item>Rest Station</item>
+        <item>Other</item>
+    </string-array>
+
+    <!-- String for Settings Fragment -->
+    <string name="edit_profile_button_name">Edit profile ></string>
+    <string name="setting_language_text_view">Language</string>
+
+    <!-- String for Forgot password activity -->
+    <string name="forgot_password_guide">Select which contact details should we use to reset your password:</string>
+    <string name="via_sms_button">Via sms</string>
+    <string name="via_email_button">Via email</string>
+    <string name="next_button">Next</string>
+    <string name="verification">Enter the code that you received</string>
+    <string name="enter_new_password">Enter your new password</string>
+    <string name="update_password_successfully">Congratulation! Your password is updated successfully</string>
+    <string name="continue_button">Continue</string>
+
+    <!-- String for Edit profile activity -->
+    <string name="edit_profile_full_name">Full name</string>
+    <string name="edit_profile_email">Email</string>
+    <string name="edit_profile_phone">Phone</string>
+    <string name="edit_profile_gender">Gender</string>
+    <string name="edit_profile_gender_male">Male</string>
+    <string name="edit_profile_gender_female">Female</string>
+    <string name="edit_profile_dob">Date of birth</string>
+    <string name="edit_profile_address">Address</string>
+    <string name="edit_profile_update_button">Update</string>
+>>>>>>> 043359fba8e6fe0b66b529a58f6dbac63467a699
 </resources>

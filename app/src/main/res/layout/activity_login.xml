@@ -2,10 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_horizontal"
     android:background="@drawable/grad_bg"
     android:animateLayoutChanges="true"
+    android:id="@+id/relLayout_LoginActivity"
     tools:context="com.example.travelguide.view.LoginActivity">
 
     <!-- Sign In progress -->
@@ -21,7 +21,7 @@
             android:layout_height="80dp"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
-            android:src="@drawable/around" />
+            android:src="@drawable/app_icon" />
 
         <RelativeLayout
             android:id="@+id/relLayout_SignInFromWithAppName"
@@ -67,12 +67,12 @@
                         android:paddingRight="15dp"
                         android:textColor="@color/white"
                         android:textCursorDrawable="@drawable/color_cursor_login"
-                        android:textSize="15dp"
+                        android:textSize="15sp"
                         android:inputType="text"
                         android:maxLines="1"
                         android:singleLine="true"
                         android:background="@drawable/et_bg"
-                        android:imeOptions="actionDone"/>
+                        android:imeOptions="actionNext"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -119,7 +119,7 @@
                 android:textStyle="bold"
                 android:paddingLeft="65dp"
                 android:paddingRight="65dp"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 android:layout_centerHorizontal="true" />
             <LinearLayout
                 android:id="@+id/separator"
@@ -171,7 +171,7 @@
                     android:id="@+id/signInButton_Facebook_Fake"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:src="@drawable/facebook_button"
+                    android:src="@drawable/facebook_button_2"
                     android:scaleType="fitCenter"
                     android:background="@color/transparent"
                     android:layout_marginLeft="10dp"
@@ -195,17 +195,20 @@
             android:background="@color/transparent"
             android:text="Sign Up"
             android:textAllCaps="true"
-            android:textColor="@color/white">
+            android:textColor="@color/white"
+            android:foreground="?android:attr/selectableItemBackground">
         </Button>
 
         <Button
+            android:id="@+id/btn_ForgotPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/transparent"
             android:text="Forgot Password"
             android:textAllCaps="true"
             android:textColor="@color/white"
-            android:layout_alignParentRight="true">
+            android:layout_alignParentRight="true"
+            android:foreground="?android:attr/selectableItemBackground">
         </Button>
     </RelativeLayout>
 </RelativeLayout>
