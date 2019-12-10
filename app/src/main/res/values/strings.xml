@@ -28,7 +28,6 @@
         <item>Đà nẵng</item>
     </string-array>
 
-<<<<<<< HEAD
     <!-- Map type-->
     <string name="map_type_normal">Normal</string>
     <string name="map_type_terrain">Terrain</string>
@@ -38,7 +37,6 @@
     <!-- Search-->
     <string name="search">Search</string>
 
-=======
     <string-array name="serviceName">
         <item>Restaurant</item>
         <item>Hotel</item>
@@ -70,5 +68,4 @@
     <string name="edit_profile_dob">Date of birth</string>
     <string name="edit_profile_address">Address</string>
     <string name="edit_profile_update_button">Update</string>
->>>>>>> 043359fba8e6fe0b66b529a58f6dbac63467a699
 </resources>
