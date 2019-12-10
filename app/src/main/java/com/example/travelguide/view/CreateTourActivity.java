@@ -21,7 +21,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -32,15 +31,11 @@ import com.android.volley.toolbox.Volley;
 import com.example.travelguide.R;
 import com.example.travelguide.utils.ActionBarEdit;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -239,7 +234,7 @@ public class CreateTourActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("Res: ", response.toString());
-                        Intent intent = new Intent(CreateTourActivity.this, CreateStops.class);
+                        Intent intent = new Intent(CreateTourActivity.this, CreateStopsActivity.class);
                         startActivity(intent);
                         finish();
                     }

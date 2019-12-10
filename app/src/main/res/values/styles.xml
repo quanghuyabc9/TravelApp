@@ -12,4 +12,9 @@
 <!--       <item name="android:textColorPrimary">@color/white</item>-->
        <item name="android:icon">@color/white</item>
    </style>
+    <style name="AppThemeNoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name ="colorPrimary">@color/WindowTitleBackground</item>
+        <!--       <item name="android:textColorPrimary">@color/white</item>-->
+        <item name="android:icon">@color/white</item>
+    </style>
 </resources>

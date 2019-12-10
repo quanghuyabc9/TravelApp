@@ -9,6 +9,17 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="com.example.mapexample.permission.MAPS_RECEIVE"/>
+    <uses-permission android:name="com.google.android.providers.gsf.permissions.READ_GSERVICE"/>
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+    <uses-feature android:glEsVersion="0x00020000"
+        android:required="true"/>
+
     <application
         android:name=".manager.MyApplication"
         android:allowBackup="true"
@@ -16,7 +27,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".view.registerActivity"></activity>
-        <activity android:name=".view.CreateStops" />
+        <activity
+            android:name=".view.CreateStopsActivity" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -38,7 +50,9 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.MainActivity" />
+        <activity
+            android:name=".view.MainActivity"
+            android:windowSoftInputMode="adjustNothing"/>
         <activity android:name=".view.CreateTourActivity" />
         <activity android:name=".view.LoginActivity" />
         <activity android:name=".view.SplashActivity">
@@ -48,6 +62,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <meta-data android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyBrjqNhzvoK_t6Cyf1Svc6orgRoDmfAarE"/>
+
+        <meta-data android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
     </application>
 
 </manifest>

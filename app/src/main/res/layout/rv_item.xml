@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="7dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
 
     app:cardCornerRadius="10dp">
 
@@ -16,9 +18,9 @@
         <ImageView
             android:id="@+id/tour_imview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxHeight="500dp"
+            android:layout_height="150dp"
             android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
             android:layout_marginBottom="4dp" />
 
         <LinearLayout

@@ -78,7 +78,6 @@ public class ListTourFragment extends Fragment {
         //get token from login
         SharedPreferences sharedPref = getContext().getApplicationContext().getSharedPreferences(getString(R.string.shared_pref_name), 0);
         final String accessToken = sharedPref.getString(getString(R.string.saved_access_token),null);
-
         final ArrayList<TourItem> tourItems = new ArrayList<>();
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 
@@ -92,7 +91,7 @@ public class ListTourFragment extends Fragment {
                     tv.setText(response.getString("total"));
 
                      JSONArray listTour = response.getJSONArray("tours");
-                     for (int i=0;i < listTour.length(); i++){
+                     for (int i = 0; i < listTour.length(); i++){
                          JSONObject o = listTour.getJSONObject(i);
                          String img = o.getString("avatar");
                          if (img == null){

@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 Fragment selectedFragment = null;
+                if (menuItem.isChecked()) return true;
                 switch (menuItem.getItemId()){
                     case R.id.nav_list_tour:
                         ActionBarEdit.Customize("List Tour", MainActivity.this);

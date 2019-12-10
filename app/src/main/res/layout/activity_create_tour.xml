@@ -122,7 +122,9 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:digits="0123456789"
-                android:inputType="numberDecimal"/>
+                android:inputType="numberDecimal"
+                android:hint="0"
+                android:textColorHint="#000000"/>
         </LinearLayout>
         <LinearLayout
             android:layout_weight="1"
@@ -146,7 +148,9 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:digits="0123456789"
-                android:inputType="numberDecimal"/>
+                android:inputType="numberDecimal"
+                android:hint="0"
+                android:textColorHint="#000000"/>
         </LinearLayout>
 
     </LinearLayout>
@@ -179,7 +183,9 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:digits="0123456789"
-                android:inputType="numberDecimal"/>
+                android:inputType="numberDecimal"
+                android:hint="0"
+                android:textColorHint="#000000"/>
         </LinearLayout>
         <LinearLayout
             android:layout_weight="1"
@@ -203,7 +209,9 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:digits="0123456789"
-                android:inputType="numberDecimal"/>
+                android:inputType="numberDecimal"
+                android:hint="0"
+                android:textColorHint="#000000"/>
         </LinearLayout>
 
     </LinearLayout>
