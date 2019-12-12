@@ -42,7 +42,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-import de.hdodenhof.circleimageview.CircleImageView;
+//import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -59,7 +59,7 @@ public class SettingsFragment extends Fragment {
     private Spinner spinner_SettingLanguage;
     private TextView textView_UserName;
     private Button button_EditProfile;
-    private CircleImageView imageView_AccountProfile;
+//    private CircleImageView imageView_AccountProfile;
 
     private static int RESULT_LOAD_IMAGE = 1;
     private String accessToken = null;
@@ -72,7 +72,7 @@ public class SettingsFragment extends Fragment {
         textView_UserName = view.findViewById(R.id.textView_UserName);
         signOutButton = view.findViewById(R.id.signOutButton);
         button_EditProfile = view.findViewById(R.id.button_EditProfile);
-        imageView_AccountProfile = view.findViewById(R.id.imageView_AccountProfile);
+//        imageView_AccountProfile = view.findViewById(R.id.imageView_AccountProfile);
 
 
         signOutButton.setOnClickListener(new View.OnClickListener() {
@@ -102,14 +102,14 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        imageView_AccountProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                photoPickerIntent.setType("image/*");
-                startActivityForResult(photoPickerIntent, RESULT_LOAD_IMAGE);
-            }
-        });
+//        imageView_AccountProfile.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+//                photoPickerIntent.setType("image/*");
+//                startActivityForResult(photoPickerIntent, RESULT_LOAD_IMAGE);
+//            }
+//        });
 
         spinner_SettingLanguage = view.findViewById(R.id.spinner_SettingLanguage);
 
@@ -155,9 +155,9 @@ public class SettingsFragment extends Fragment {
                             public void run() {
                                 if(fullName != "null")
                                     textView_UserName.setText(fullName);
-                                if(avatar != "null")
-                                    new DownloadImageTask((imageView_AccountProfile))
-                                        .execute(avatar);
+//                                if(avatar != "null")
+//                                    new DownloadImageTask((imageView_AccountProfile))
+//                                            .execute(avatar);
                             }
                         });
                     }
@@ -173,7 +173,7 @@ public class SettingsFragment extends Fragment {
                     }
                 }
             });
-       }
+        }
         return view;
     }
 
@@ -221,8 +221,8 @@ public class SettingsFragment extends Fragment {
             RequestBody requestBody = new MultipartBuilder()
                     .type(MultipartBuilder.FORM)
                     .addPart(
-                        Headers.of("Content-Disposition", "form-data; name=\"file\"; filename=\"" + filePath + "\""),
-                        RequestBody.create(MEDIA_TYPE_IMAGE, new File(filePath))
+                            Headers.of("Content-Disposition", "form-data; name=\"file\"; filename=\"" + filePath + "\""),
+                            RequestBody.create(MEDIA_TYPE_IMAGE, new File(filePath))
                     )
                     .build();
 
@@ -271,11 +271,11 @@ public class SettingsFragment extends Fragment {
     }
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        CircleImageView bmImage;
+//        CircleImageView bmImage;
 
-        public DownloadImageTask(CircleImageView bmImage) {
-            this.bmImage = bmImage;
-        }
+//        public DownloadImageTask(CircleImageView bmImage) {
+//            this.bmImage = bmImage;
+//        }
 
         protected Bitmap doInBackground(String... urls) {
             String urlDisplay = urls[0];
@@ -290,11 +290,10 @@ public class SettingsFragment extends Fragment {
             return mIcon11;
         }
 
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
+//        protected void onPostExecute(Bitmap result) {
+//            bmImage.setImageBitmap(result);
+//        }
     }
 
 
 }
-

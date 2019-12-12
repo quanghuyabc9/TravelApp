@@ -12,13 +12,16 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.MatrixCursor;
+import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -44,14 +47,17 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-public class CreateStopsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class CreateStopsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, AddStopPointDialog.AddStopPointDialogListener {
 
     //Map
+    SupportMapFragment mapFragment;
     GoogleMap mGoogleMap;
     GoogleApiClient mGoogleApiClient;
     //Custom action bar
@@ -60,6 +66,9 @@ public class CreateStopsActivity extends AppCompatActivity implements OnMapReady
     //Alert Dialog when click Cancel
     AlertDialog alertDialog;
     AlertDialog.Builder builder;
+
+    //List Stop Points
+    ArrayList<StopPointInfo> listSP;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +84,7 @@ public class CreateStopsActivity extends AppCompatActivity implements OnMapReady
             Toast.makeText(this, "Failed to initmap!!!", Toast.LENGTH_SHORT).show();
         }
 
+        listSP = new ArrayList<>();
         //Set custom action bar
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -131,7 +141,7 @@ public class CreateStopsActivity extends AppCompatActivity implements OnMapReady
 
     //Init map
     private void initMap() {
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
@@ -151,7 +161,7 @@ public class CreateStopsActivity extends AppCompatActivity implements OnMapReady
         }
         else
         {
-            Toast.makeText(this,"Cant connect to play service", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Can't connect to play service", Toast.LENGTH_SHORT).show();
         }
         return false;
     }
@@ -163,10 +173,24 @@ public class CreateStopsActivity extends AppCompatActivity implements OnMapReady
 
         if (mGoogleMap != null)
         {
+            mGoogleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(LatLng latLng) {
+                    setMarker(latLng.latitude, latLng.longitude);
+                    Toast.makeText(CreateStopsActivity.this, getCompleteAddressString(latLng.latitude, latLng.longitude), Toast.LENGTH_LONG).show();
+                }
+            });
             mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 @Override
                 public boolean onMarkerClick(Marker marker) {
-
+                    AddStopPointDialog addStopPointDialog = new AddStopPointDialog();
+                    Bundle bundle = new Bundle();
+                    LatLng latLng = marker.getPosition();
+                    bundle.putString("Address", getCompleteAddressString(latLng.latitude, latLng.longitude));
+                    bundle.putDouble("Latitude", latLng.latitude);
+                    bundle.putDouble("Longitude", latLng.longitude);
+                    addStopPointDialog.setArguments(bundle);
+                    addStopPointDialog.show(getSupportFragmentManager(), "Add stop point dialog");
                     return false;
                 }
             });
@@ -186,15 +210,7 @@ public class CreateStopsActivity extends AppCompatActivity implements OnMapReady
                     Geocoder gc = new Geocoder(CreateStopsActivity.this);
                     LatLng ll = marker.getPosition();
                     List<Address> list = null;
-                    try {
-                        list = gc.getFromLocation(ll.latitude, ll.longitude, 1);
-                        Address add = list.get(0);
-                        Toast.makeText(getApplicationContext(), add.getLocality(), Toast.LENGTH_LONG).show();
-                        marker.setTitle(add.getLocality());
-                        marker.showInfoWindow();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    Toast.makeText(getApplicationContext(), getCompleteAddressString(ll.latitude, ll.longitude), Toast.LENGTH_SHORT).show();
 
                 }
             });
@@ -209,6 +225,17 @@ public class CreateStopsActivity extends AppCompatActivity implements OnMapReady
 //                                .addOnConnectionFailedListener(this)
 //                                .build();
 //        mGoogleApiClient.connect();
+
+//
+//        FloatingActionButton mCurrentLocation = findViewById(R.id.my_cr_location);
+//        mCurrentLocation.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                LatLng latLng = new LatLng(Double.parseDouble(getLatitude()), Double.parseDouble(getLongitude()));
+//                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 18);
+//                mGoogleMap.animateCamera(cameraUpdate);
+//            }
+//        });
 
     }
 
@@ -227,25 +254,28 @@ public class CreateStopsActivity extends AppCompatActivity implements OnMapReady
         List<Address> list;
         try {
             list = gc.getFromLocationName(location,1);
+            if (list.size() == 0){
+                Toast.makeText(this, "No location match", Toast.LENGTH_LONG).show();
+                return;
+            }
             Address address = list.get(0);
-            String locality = address.getLocality();
-            Toast.makeText(this, locality, Toast.LENGTH_LONG).show();
 
             double lat = address.getLatitude();
             double lng = address.getLongitude();
+            Toast.makeText(this, getCompleteAddressString(lat, lng), Toast.LENGTH_LONG).show();
             goToLocationZoom(lat, lng,16);
 
-            setMarker(locality, lat, lng);
+            setMarker(lat, lng);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void setMarker(String locality, double lat, double lng) {
+    private void setMarker(double lat, double lng) {
         if (marker != null){
             marker.remove();
         }
-        MarkerOptions options = new MarkerOptions().title(locality).draggable(true).position(new LatLng(lat, lng));
+        MarkerOptions options = new MarkerOptions().draggable(true).position(new LatLng(lat, lng));
         marker = mGoogleMap.addMarker(options);
     }
 
@@ -329,4 +359,32 @@ public class CreateStopsActivity extends AppCompatActivity implements OnMapReady
         return super.dispatchTouchEvent(ev);
     }
 
+    @Override
+    public void applyData(StopPointInfo stopPointInfo) {
+        listSP.add(stopPointInfo);
+        Log.d("LIST SP -----> ", listSP.toString());
+    }
+    private String getCompleteAddressString(double LATITUDE, double LONGITUDE) {
+        String strAdd = "";
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(LATITUDE, LONGITUDE, 1);
+            if (addresses != null) {
+                Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnedAddress = new StringBuilder("");
+
+                for (int i = 0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i));
+                }
+                strAdd = strReturnedAddress.toString();
+                Log.w("loction address", strReturnedAddress.toString());
+            } else {
+                Log.w("loction address", "No Address returned!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.w("loction address", "Canont get Address!");
+        }
+        return strAdd;
+    }
 }
