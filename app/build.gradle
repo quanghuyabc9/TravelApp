@@ -4,7 +4,7 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
-        applicationId "com.example.travelguide"
+        applicationId "com.ygaps.travelapp"
         minSdkVersion 19
         targetSdkVersion 29
         multiDexEnabled true
@@ -40,4 +40,5 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
     implementation "com.squareup.okhttp3:logging-interceptor:4.0.1"
     implementation 'de.hdodenhof:circleimageview:3.0.0'
+
 }
