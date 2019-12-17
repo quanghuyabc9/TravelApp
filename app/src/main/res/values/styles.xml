@@ -16,4 +16,5 @@
         <!--       <item name="android:textColorPrimary">@color/white</item>-->
         <item name="android:icon">@color/white</item>
     </style>
+
 </resources>

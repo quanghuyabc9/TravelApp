@@ -1,21 +1,54 @@
 package com.example.travelguide.view;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class StopPointInfo {
-    private String spname;
+    @SerializedName("name")
+    @Expose
+    private String name;
+
+    @SerializedName("address")
+    @Expose
     private String address;
+
+    @SerializedName("provinceId")
+    @Expose
     private int provinceId;
-    private double latitude;
-    private double longitude;
+
+    @SerializedName("lat")
+    @Expose
+    private String lat;
+
+    @SerializedName("long")
+    @Expose
+    private String longitude;
+
+    @SerializedName("arrivalAt")
+    @Expose
     private long arriveAt;
+
+    @SerializedName("leaveAt")
+    @Expose
     private long leaveAt;
+
+    @SerializedName("serviceTypeId")
+    @Expose
     private int serviceTypeId;
+
+    @SerializedName("minCost")
+    @Expose
     private long minCost;
+
+    @SerializedName("maxCost")
+    @Expose
     private long maxCost;
-    StopPointInfo(String spname, String address, int provinceId, double latitude, double longitude, long arriveAt, long leaveAt, int serviceTypeId, long minCost, long maxCost){
-        this.spname = spname;
+
+    StopPointInfo(String name, String address, int provinceId, String lat, String longitude, long arriveAt, long leaveAt, int serviceTypeId, long minCost, long maxCost){
+        this.name = name;
         this.address = address;
         this.provinceId = provinceId;
-        this.latitude = latitude;
+        this.lat = lat;
         this.longitude = longitude;
         this.arriveAt = arriveAt;
         this.leaveAt = leaveAt;
@@ -24,8 +57,8 @@ public class StopPointInfo {
         this.maxCost = maxCost;
     }
 
-    public void setSpname(String spname) {
-        this.spname = spname;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setAddress(String address) {
@@ -36,11 +69,11 @@ public class StopPointInfo {
         this.provinceId = provinceId;
     }
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
+    public void setLat(String lat) {
+        this.lat = lat;
     }
 
-    public void setLongitude(double longitude) {
+    public void setLongitude(String longitude) {
         this.longitude = longitude;
     }
 
@@ -64,8 +97,8 @@ public class StopPointInfo {
         this.maxCost = maxCost;
     }
 
-    public String getSpname() {
-        return spname;
+    public String getName() {
+        return name;
     }
 
     public String getAddress() {
@@ -80,11 +113,11 @@ public class StopPointInfo {
         return serviceTypeId;
     }
 
-    public double getLatitude() {
-        return latitude;
+    public String getLat() {
+        return lat;
     }
 
-    public double getLongitude() {
+    public String getLongitude() {
         return longitude;
     }
 

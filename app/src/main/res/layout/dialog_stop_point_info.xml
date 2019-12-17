@@ -16,17 +16,20 @@
         android:id="@+id/line_title"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="10dp">
+
         <TextView
             android:id="@+id/stop_point_info_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="Add stop point"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="0dp"
+            android:text="Stop Point Information"
             android:textColor="#000000"
-            android:textStyle="bold"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textStyle="bold" />
         <ImageButton
-            android:id="@+id/cancel_add"
+            android:id="@+id/cancel_add_info"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_centerVertical="true"
@@ -64,13 +67,15 @@
                     android:layout_marginBottom="7dp"
                     android:textColor="#000000"/>
 
-                <EditText
-                    android:id="@+id/stop_point_name"
+                <TextView
+                    android:id="@+id/stop_point_name_info"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="40dp"
                     android:padding="5dip"
-                    android:maxLines="1"
                     android:singleLine="true"
+                    android:textColor="#000000"
+                    android:gravity="center_vertical"
                     android:background="@drawable/rounded_edittext_states" />
             </LinearLayout>
             <LinearLayout
@@ -89,22 +94,17 @@
                     android:layout_marginBottom="7dp"
                     android:textColor="#000000"/>
 
-                <RelativeLayout
-                    android:id="@+id/frame_service_type"
+                <TextView
+                    android:id="@+id/frame_service_type_info"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:paddingRight="5dp"
                     android:paddingLeft="5dp"
                     android:background="@drawable/rounded_edittext_states"
-                    android:focusable="true">
+                    android:textColor="#000000"
+                    android:gravity="center_vertical">
 
-                    <Spinner
-                        android:id="@+id/spinner_service_type"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentRight="true"/>
-
-                </RelativeLayout>
+                </TextView>
 
             </LinearLayout>
             <LinearLayout
@@ -123,13 +123,14 @@
                     android:layout_marginBottom="7dp"
                     android:textColor="#000000"/>
 
-                <EditText
-                    android:id="@+id/address"
+                <TextView
+                    android:id="@+id/address_info"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="40dp"
                     android:padding="5dip"
-                    android:maxLines="1"
-                    android:singleLine="true"
+                    android:textColor="#000000"
+                    android:gravity="center_vertical"
                     android:background="@drawable/rounded_edittext_states" />
             </LinearLayout>
             <LinearLayout
@@ -148,21 +149,17 @@
                     android:layout_marginBottom="7dp"
                     android:textColor="#000000"/>
 
-                <RelativeLayout
+                <TextView
+                    android:id="@+id/frame_province_type_info"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:paddingRight="5dp"
                     android:paddingLeft="5dp"
                     android:background="@drawable/rounded_edittext_states"
-                    android:focusable="true">
+                    android:textColor="#000000"
+                    android:gravity="center_vertical">
 
-                    <Spinner
-                        android:id="@+id/spinner_province"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentRight="true"/>
-
-                </RelativeLayout>
+                </TextView>
             </LinearLayout>
 
             <LinearLayout
@@ -179,7 +176,7 @@
                     android:orientation="vertical"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp">
->
+                    >
                     <TextView
                         android:layout_marginBottom="7dp"
                         android:layout_width="match_parent"
@@ -187,18 +184,14 @@
                         android:text="Min cost"
                         android:textColor="#000000"/>
 
-                    <EditText
-                        android:id="@+id/min_cost"
+                    <TextView
+                        android:id="@+id/min_cost_info"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:padding="5dip"
                         android:background="@drawable/rounded_edittext_states"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:digits="0123456789"
-                        android:inputType="numberDecimal"
-                        android:hint="0"
-                        android:textColorHint="#000000"/>
+                        android:textColor="#000000"
+                        android:gravity="center_vertical"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_weight="1"
@@ -215,18 +208,14 @@
                         android:text="Max cost"
                         android:textColor="#000000"/>
 
-                    <EditText
-                        android:id="@+id/max_cost"
+                    <TextView
+                        android:id="@+id/max_cost_info"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:padding="5dip"
                         android:background="@drawable/rounded_edittext_states"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:digits="0123456789"
-                        android:inputType="numberDecimal"
-                        android:hint="0"
-                        android:textColorHint="#000000"/>
+                        android:textColor="#000000"
+                        android:gravity="center_vertical"/>
                 </LinearLayout>
 
             </LinearLayout>
@@ -255,59 +244,16 @@
                         android:paddingRight="7dp">
 
                         <TextView
-                            android:id="@+id/arrive_time"
+                            android:id="@+id/arrive_datetime_info"
                             android:layout_width="fill_parent"
                             android:layout_height="40dp"
                             android:padding="5dip"
                             android:textColor="#000000"
                             android:background="@drawable/rounded_edittext_states"
-                            android:gravity="center"
-                            android:hint="Time"
-                            android:focusable="true"
-                            android:layout_toLeftOf="@+id/arrive_time_btn"/>
-                        <ImageButton
-                            android:id="@+id/arrive_time_btn"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:layout_centerVertical="true"
-                            android:adjustViewBounds="true"
-                            android:scaleType="fitXY"
-                            android:background="@color/transparent"
-                            android:layout_alignParentRight="true"
-                            android:src="@drawable/icons8_time_machine_100"
-                            android:layout_marginLeft="5dp"/>
+                            android:gravity="center_vertical" />
 
                     </RelativeLayout>
-                    <RelativeLayout
-                        android:layout_weight="1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="7dp">
 
-                        <TextView
-                            android:id="@+id/arrive_date"
-                            android:layout_width="fill_parent"
-                            android:layout_height="40dp"
-                            android:padding="5dip"
-                            android:textColor="#000000"
-                            android:background="@drawable/rounded_edittext_states"
-                            android:gravity="center"
-                            android:layout_toLeftOf="@+id/arrive_date_btn"
-                            android:hint="Select date"
-                            android:focusable="true" />
-                        <ImageButton
-                            android:id="@+id/arrive_date_btn"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:layout_centerVertical="true"
-                            android:adjustViewBounds="true"
-                            android:scaleType="fitXY"
-                            android:background="@color/transparent"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginRight="5dp"
-                            android:src="@drawable/icons8_calendar_48"/>
-                    </RelativeLayout>
 
                 </LinearLayout>
 
@@ -338,71 +284,27 @@
                         android:paddingRight="7dp">
 
                         <TextView
-                            android:id="@+id/leave_time"
+                            android:id="@+id/leave_datetime_info"
                             android:layout_width="fill_parent"
                             android:layout_height="40dp"
                             android:padding="5dip"
                             android:textColor="#000000"
                             android:background="@drawable/rounded_edittext_states"
-                            android:gravity="center"
-                            android:hint="Time"
-                            android:focusable="true"
-                            android:layout_toLeftOf="@+id/leave_time_btn"/>
-                        <ImageButton
-                            android:id="@+id/leave_time_btn"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:layout_centerVertical="true"
-                            android:adjustViewBounds="true"
-                            android:scaleType="fitXY"
-                            android:background="@color/transparent"
-                            android:layout_alignParentRight="true"
-                            android:src="@drawable/icons8_time_machine_100"
-                            android:layout_marginLeft="5dp"/>
+                            android:gravity="center_vertical" />
 
-                    </RelativeLayout>
-                    <RelativeLayout
-                        android:layout_weight="1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="7dp">
-
-                        <TextView
-                            android:id="@+id/leave_date"
-                            android:layout_width="fill_parent"
-                            android:layout_height="40dp"
-                            android:padding="5dip"
-                            android:textColor="#000000"
-                            android:background="@drawable/rounded_edittext_states"
-                            android:gravity="center"
-                            android:layout_toLeftOf="@+id/leave_date_btn"
-                            android:hint="Select date"
-                            android:focusable="true" />
-                        <ImageButton
-                            android:id="@+id/leave_date_btn"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:layout_centerVertical="true"
-                            android:adjustViewBounds="true"
-                            android:scaleType="fitXY"
-                            android:background="@color/transparent"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginRight="5dp"
-                            android:src="@drawable/icons8_calendar_48"/>
                     </RelativeLayout>
 
                 </LinearLayout>
 
             </LinearLayout>
             <Button
-                android:id="@+id/add_sp_submit"
+                android:id="@+id/add_sp_delete_info"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@drawable/rounded_button"
+                android:background="@drawable/rounded_button_discard"
                 android:textColor="#FFFFFF"
                 android:textAllCaps="false"
-                android:text="Add"
+                android:text="Delete"
                 android:textSize="16sp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
