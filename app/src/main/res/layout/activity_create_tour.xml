@@ -22,13 +22,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Tour Name (*)"
-            android:layout_marginBottom="7dp"/>
+            android:layout_marginBottom="7dp"
+            android:textColor="#000000"/>
 
         <EditText
             android:id="@+id/create_tour_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:height="40dp"
+            android:layout_height="40dp"
             android:padding="5dip"
             android:maxLines="1"
             android:singleLine="true"
@@ -51,13 +51,13 @@
                 android:layout_marginBottom="7dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Start date (*)"/>
+                android:text="Start date (*)"
+                android:textColor="#000000"/>
 
             <TextView
                 android:id="@+id/create_tour_start_date"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:height="40dp"
+                android:layout_height="40dp"
                 android:padding="5dip"
                 android:textColor="#000000"
                 android:background="@drawable/rounded_edittext_states"
@@ -76,13 +76,13 @@
                 android:layout_marginBottom="7dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="End date (*)"/>
+                android:text="End date (*)"
+                android:textColor="#000000"/>
 
             <TextView
                 android:id="@+id/create_tour_end_date"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:height="40dp"
+                android:layout_height="40dp"
                 android:padding="5dip"
                 android:textColor="#000000"
                 android:background="@drawable/rounded_edittext_states"
@@ -110,19 +110,21 @@
                 android:layout_marginBottom="7dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Adults"/>
+                android:text="Adults"
+                android:textColor="#000000"/>
 
             <EditText
                 android:id="@+id/create_tour_adults"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:height="40dp"
+                android:layout_height="40dp"
                 android:padding="5dip"
                 android:background="@drawable/rounded_edittext_states"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:digits="0123456789"
-                android:inputType="numberDecimal"/>
+                android:inputType="numberDecimal"
+                android:hint="0"
+                android:textColorHint="#000000"/>
         </LinearLayout>
         <LinearLayout
             android:layout_weight="1"
@@ -134,19 +136,21 @@
                 android:layout_marginBottom="7dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Children"/>
+                android:text="Children"
+                android:textColor="#000000"/>
 
             <EditText
                 android:id="@+id/create_tour_children"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:height="40dp"
+                android:layout_height="40dp"
                 android:padding="5dip"
                 android:background="@drawable/rounded_edittext_states"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:digits="0123456789"
-                android:inputType="numberDecimal"/>
+                android:inputType="numberDecimal"
+                android:hint="0"
+                android:textColorHint="#000000"/>
         </LinearLayout>
 
     </LinearLayout>
@@ -167,19 +171,21 @@
                 android:layout_marginBottom="7dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Min cost"/>
+                android:text="Min cost"
+                android:textColor="#000000"/>
 
             <EditText
                 android:id="@+id/create_tour_min_cost"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:height="40dp"
+                android:layout_height="40dp"
                 android:padding="5dip"
                 android:background="@drawable/rounded_edittext_states"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:digits="0123456789"
-                android:inputType="numberDecimal"/>
+                android:inputType="numberDecimal"
+                android:hint="0"
+                android:textColorHint="#000000"/>
         </LinearLayout>
         <LinearLayout
             android:layout_weight="1"
@@ -191,19 +197,21 @@
                 android:layout_marginBottom="7dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Max cost"/>
+                android:text="Max cost"
+                android:textColor="#000000"/>
 
             <EditText
                 android:id="@+id/create_tour_max_cost"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:height="40dp"
+                android:layout_height="40dp"
                 android:padding="5dip"
                 android:background="@drawable/rounded_edittext_states"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:digits="0123456789"
-                android:inputType="numberDecimal"/>
+                android:inputType="numberDecimal"
+                android:hint="0"
+                android:textColorHint="#000000"/>
         </LinearLayout>
 
     </LinearLayout>
@@ -233,6 +241,7 @@
             android:layout_alignParentRight="true"
             android:background="@color/transparent"
             android:text="+"
+            android:textColor="#fc8c03"
             android:textSize="30sp"
             android:gravity="right|center_vertical"
             android:paddingRight="20dp"

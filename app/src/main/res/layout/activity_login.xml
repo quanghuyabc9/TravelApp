@@ -6,7 +6,7 @@
     android:background="@drawable/grad_bg"
     android:animateLayoutChanges="true"
     android:id="@+id/relLayout_LoginActivity"
-    tools:context="com.example.travelguide.view.LoginActivity">
+    tools:context="com.ygaps.travelapp.view.LoginActivity">
 
     <!-- Sign In progress -->
     <RelativeLayout

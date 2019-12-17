@@ -71,6 +71,8 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:clickable="true"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
         app:maxImageSize="56dp"
         app:srcCompat="@drawable/add_butt_715x715" />
 
