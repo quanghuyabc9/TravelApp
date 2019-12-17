@@ -59,6 +59,9 @@
         <activity
             android:name="com.ygaps.travelapp.view.MainActivity"
             android:windowSoftInputMode="adjustNothing"/>
+        <activity
+            android:name="com.ygaps.travelapp.view.EditProfileActivity"
+            android:parentActivityName="com.ygaps.travelapp.view.MainActivity" />
         <activity android:name="com.ygaps.travelapp.view.CreateTourActivity" />
         <activity android:name="com.ygaps.travelapp.view.LoginActivity" />
         <activity android:name="com.ygaps.travelapp.view.SplashActivity">

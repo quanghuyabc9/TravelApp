@@ -186,7 +186,12 @@ public class EditProfileActivity extends AppCompatActivity {
                         });
                     }
                     catch (JSONException e) {
-                        Toast.makeText(EditProfileActivity.this, e.toString(),Toast.LENGTH_SHORT).show();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(EditProfileActivity.this, "Get profile failed",Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 }
             }

@@ -173,12 +173,11 @@ public class LoginActivity extends AppCompatActivity {
             public void onSuccess(LoginResult loginResult) {
                 // App code
                 Toast.makeText(LoginActivity.this, "Sign in with Facebook success", Toast.LENGTH_LONG).show();
-                Log.i(TAG, "access_token_facebook: " + loginResult.getAccessToken().getToken());
+                //Log.i(TAG, "access_token_facebook: " + loginResult.getAccessToken().getToken());
                 SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.shared_pref_name),0);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString(getString(R.string.saved_access_token_facebook), loginResult.getAccessToken().getToken());
                 editor.apply();
-                // Build request to get access token of Google account
                 OkHttpClient client = new OkHttpClient();
                 RequestBody requestBody = new FormEncodingBuilder()
                         .add("accessToken", loginResult.getAccessToken().getToken())
@@ -191,7 +190,12 @@ public class LoginActivity extends AppCompatActivity {
                         .enqueue(new com.squareup.okhttp.Callback() {
                             @Override
                             public void onFailure(Request request, IOException e) {
-                                Log.e(TAG, e.toString());
+                                LoginActivity.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(LoginActivity.this, "Sign in with facebook failed", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                             }
 
                             @Override
@@ -206,7 +210,6 @@ public class LoginActivity extends AppCompatActivity {
                                     Log.i(TAG, accessToken);
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(intent);
                                     finish();
                                 } catch (JSONException e) {
