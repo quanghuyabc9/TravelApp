@@ -66,7 +66,12 @@ public class ForgotPasswordActivity_Step2 extends AppCompatActivity {
                         client.newCall(request).enqueue(new Callback() {
                             @Override
                             public void onFailure(Request request, IOException e) {
-                                Toast.makeText(ForgotPasswordActivity_Step2.this, "Update password failed", Toast.LENGTH_SHORT).show();
+                                ForgotPasswordActivity_Step2.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(ForgotPasswordActivity_Step2.this, "Update password failed", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                             }
 
                             @Override
@@ -79,15 +84,25 @@ public class ForgotPasswordActivity_Step2 extends AppCompatActivity {
                                 }else if(response.code() == 403) {
                                     try {
                                         JSONObject jsonObject = new JSONObject(response.body().string());
-                                        String message = jsonObject.getString("message");
-                                        editText_VerifyCode.setError(message);
+                                        final String message = jsonObject.getString("message");
+                                        ForgotPasswordActivity_Step2.this.runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                editText_VerifyCode.setError(message);
+                                            }
+                                        });
                                     }
                                     catch (JSONException e) {
                                         e.printStackTrace();
                                     }
                                 }
                                 else {
-                                    Toast.makeText(ForgotPasswordActivity_Step2.this, "Update password error", Toast.LENGTH_SHORT).show();
+                                    ForgotPasswordActivity_Step2.this.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(ForgotPasswordActivity_Step2.this, "Update password error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
                                 }
                             }
                         });

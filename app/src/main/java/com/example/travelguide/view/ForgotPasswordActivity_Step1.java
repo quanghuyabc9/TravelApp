@@ -85,7 +85,12 @@ public class ForgotPasswordActivity_Step1 extends AppCompatActivity {
                     client.newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(Request request, IOException e) {
-                            Toast.makeText(ForgotPasswordActivity_Step1.this, "Submit failed", Toast.LENGTH_SHORT).show();
+                            ForgotPasswordActivity_Step1.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(ForgotPasswordActivity_Step1.this, "Submit failed", Toast.LENGTH_SHORT).show();
+                                }
+                            });
                             progressDialog.dismiss();
                         }
 
@@ -106,13 +111,24 @@ public class ForgotPasswordActivity_Step1 extends AppCompatActivity {
                             } else if(response.code() == 404) {
                                 try {
                                     JSONObject jsonObject = new JSONObject(response.body().string());
-                                    String message = jsonObject.getString("message");
-                                    editText_Destination.setError(message);
+                                    final String message = jsonObject.getString("message");
+                                    ForgotPasswordActivity_Step1.this.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            editText_Destination.setError(message);
+                                        }
+                                    });
+
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
                             } else {
-                                Toast.makeText(ForgotPasswordActivity_Step1.this, "Submit failed", Toast.LENGTH_SHORT).show();
+                                ForgotPasswordActivity_Step1.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(ForgotPasswordActivity_Step1.this, "Submit failed", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                             }
                             progressDialog.dismiss();
                         }
