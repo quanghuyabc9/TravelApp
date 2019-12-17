@@ -1,4 +1,4 @@
-package com.example.travelguide.view;
+package com.ygaps.travelapp.view;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.travelguide.R;
+import com.ygaps.travelapp.R;
 
 import java.util.ArrayList;
 

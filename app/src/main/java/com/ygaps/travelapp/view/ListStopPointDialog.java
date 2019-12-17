@@ -1,4 +1,4 @@
-package com.example.travelguide.view;
+package com.ygaps.travelapp.view;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -21,7 +21,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.travelguide.R;
+import com.ygaps.travelapp.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

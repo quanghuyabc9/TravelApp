@@ -1,4 +1,4 @@
-package com.example.travelguide.view;
+package com.ygaps.travelapp.view;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;

@@ -1,4 +1,4 @@
-package com.example.travelguide.view;
+package com.ygaps.travelapp.view;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -19,7 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
-import com.example.travelguide.R;
+import com.ygaps.travelapp.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

@@ -1,4 +1,4 @@
-package com.example.travelguide.view;
+package com.ygaps.travelapp.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;

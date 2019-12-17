@@ -1,10 +1,10 @@
-package com.example.travelguide.view;
+package com.ygaps.travelapp.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 
-import com.example.travelguide.R;
+import com.ygaps.travelapp.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Marker;

@@ -1,4 +1,4 @@
-package com.example.travelguide.view;
+package com.ygaps.travelapp.view;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,7 +26,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.travelguide.R;
+import com.ygaps.travelapp.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
@@ -68,11 +68,11 @@ public class HistoryFragment extends Fragment {
         final ArrayList<TourItem> tourItems = new ArrayList<>();
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 
-        String url="http://35.197.153.192:3000/tour/history-user?pageSize=30&pageIndex=1";
+        String url="http://35.197.153.192:3000/tour/history-user?pageSize=100&pageIndex=1";
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Log.d("Res: ", response.toString());
+
                 try {
                     TextView tv= (TextView) view.findViewById(R.id.tour_num_history);
                     tv.setText(response.getString("total"));
