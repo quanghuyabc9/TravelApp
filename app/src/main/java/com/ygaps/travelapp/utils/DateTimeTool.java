@@ -1,4 +1,4 @@
-package com.example.travelguide.utils;
+package com.ygaps.travelapp.utils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

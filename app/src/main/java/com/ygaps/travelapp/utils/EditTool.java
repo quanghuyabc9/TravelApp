@@ -36,7 +36,7 @@ public class EditTool {
         abar.setDisplayShowCustomEnabled(true);
         abar.setDisplayShowTitleEnabled(false);
 //        abar.setDisplayHomeAsUpEnabled(true);
-//        abar.setIcon(R.color.white);
+//        abar.setIcon(R.drawable.app_icon);
 //        abar.setHomeButtonEnabled(false);
 
         Drawable upArrow = context.getResources().getDrawable(R.drawable.back_button);

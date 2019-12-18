@@ -26,7 +26,7 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 
 import static android.widget.ArrayAdapter.createFromResource;
-import static com.example.travelguide.utils.DateTimeTool.convertMillisToDateTime;
+import static com.ygaps.travelapp.utils.DateTimeTool.convertMillisToDateTime;
 
 public class InfoStopPointDialog extends AppCompatDialogFragment {
     private InfoStopPointDialog.InfoStopPointDialogListener listener;

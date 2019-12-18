@@ -3,6 +3,7 @@
     <string name="title_activity_signin">Sign in</string>
     <string name="shared_pref_name">MyPref</string>
     <string name="token_info_key">TokenInfo</string>
+    <string name="image_description">Image</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
