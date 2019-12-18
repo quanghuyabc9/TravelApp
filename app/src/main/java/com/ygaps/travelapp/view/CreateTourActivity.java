@@ -118,7 +118,7 @@ public class CreateTourActivity extends AppCompatActivity {
         mDateSetListener1 = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                month = month +1;
+                month = month + 1;
                 String date = dayOfMonth + "/" + month + "/" + year;
                 editStartDate.setText(date);
             }
@@ -126,7 +126,7 @@ public class CreateTourActivity extends AppCompatActivity {
         mDateSetListener2 = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                month = month +1;
+                month = month + 1;
                 String date = dayOfMonth + "/" + month + "/" + year;
                 editEndDate.setText(date);
             }
@@ -239,8 +239,15 @@ public class CreateTourActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         Log.d("Res: ", response.toString());
                         Intent intent = new Intent(CreateTourActivity.this, CreateStopsActivity.class);
-                        startActivity(intent);
-                        finish();
+                        try {
+                            int tourId = response.getInt("id");
+                            intent.putExtra("tourId", tourId);
+                            Toast.makeText(v.getContext(), "Created. Choose Stop points", Toast.LENGTH_SHORT).show();
+                            startActivity(intent);
+                            finish();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Response.ErrorListener() {
                     @Override

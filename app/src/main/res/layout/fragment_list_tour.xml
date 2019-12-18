@@ -60,7 +60,9 @@
         android:layout_below="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFFFF"/>
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/custom_ripple" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/create_tour_btn"

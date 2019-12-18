@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="40dp"
+    android:paddingBottom="40dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:background="@drawable/rounded_dialog">
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/line_title_list_sp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp">
+        <TextView
+            android:id="@+id/list_stop_point_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="List Stop points"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:textSize="20sp" />
+        <ImageButton
+            android:id="@+id/cancel_list_stop_point"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icons8_cancel_48"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:background="@color/transparent"
+            android:layout_alignParentRight="true"
+            android:layout_alignBottom="@+id/stop_point_info_title"/>
+
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="5dp"
+        android:id="@+id/rv_list_sp_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/line_title_list_sp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/custom_ripple"
+        android:layout_above="@+id/sp_list_confirm"/>
+    <Button
+        android:id="@+id/sp_list_confirm"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/rounded_button"
+        android:textColor="#FFFFFF"
+        android:textAllCaps="false"
+        android:text="Confirm"
+        android:textSize="16sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginLeft="7dp" />
+
+</RelativeLayout>

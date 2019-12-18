@@ -62,4 +62,10 @@ public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapte
     public int getItemCount() {
         return tourItems.size();
     }
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> 0979ce5453843332c4887f4d07491317ffd65642
 }

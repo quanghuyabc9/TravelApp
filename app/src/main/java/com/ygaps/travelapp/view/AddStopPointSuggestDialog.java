@@ -30,59 +30,59 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.ygaps.travelapp.R;
-
-import org.json.JSONObject;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class AddStopPointDialog extends AppCompatDialogFragment {
-    private AddStopPointDialogListener listener;
+public class AddStopPointSuggestDialog extends AppCompatDialogFragment {
+    private AddStopPointSuggestDialog.AddStopPointDialogSuggestListener listener;
+
+    private StopPointInfo suggestedPointInfo;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        final View view = inflater.inflate(R.layout.dialog_add_stop_point_layout, null);
+        final View view = inflater.inflate(R.layout.dialog_add_stop_point_suggested_layout, null);
 
-        //Spinner service type
-        final Spinner spinner1 = view.findViewById(R.id.spinner_service_type);
-        ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(getContext(),R.array.serviceName, android.R.layout.simple_spinner_item);
-        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner1.setAdapter(adapter1);
-        final RelativeLayout frameServiceType = view.findViewById(R.id.frame_service_type);
-        spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String JsonDataString = getArguments().getString("JSONPointInfo");
+        suggestedPointInfo = new Gson().fromJson(JsonDataString, new TypeToken<StopPointInfo>(){}.getType());
 
-            }
+        final TextView txtSpName = view.findViewById(R.id.stop_point_name_suggest);
+        final TextView txtServiceID = view.findViewById(R.id.frame_service_type_suggest);
+        final TextView txtAddress = view.findViewById(R.id.address_suggest);
+        final TextView txtProvinceID = view.findViewById(R.id.frame_province_type_suggest);
+        final TextView txtMinCost = view.findViewById(R.id.min_cost_suggest);
+        final TextView txtMaxCost = view.findViewById(R.id.max_cost_suggest);
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+        txtSpName.setText(suggestedPointInfo.getName());
+        txtAddress.setText(suggestedPointInfo.getAddress());
+        txtMinCost.setText(Long.toString(suggestedPointInfo.getMinCost()));
+        txtMaxCost.setText(Long.toString(suggestedPointInfo.getMaxCost()));
 
-            }
-        });
-        //Spinner province
-        final Spinner spinner2 = view.findViewById(R.id.spinner_province);
-        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(getContext(),R.array.province, android.R.layout.simple_spinner_item);
-        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner2.setAdapter(adapter2);
-        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String[] province = getResources().getStringArray(R.array.province);
+        String[] serviceType = getResources().getStringArray(R.array.serviceName);
+        int indexSvId = suggestedPointInfo.getServiceTypeId() - 1;
+        int indexProvinceId = suggestedPointInfo.getProvinceId() - 1;
 
-            }
+        if (indexSvId >= serviceType.length || indexSvId < 0){
+            indexSvId = 0;
+        }
+        if (indexProvinceId >= province.length || indexProvinceId < 0){
+            indexProvinceId = 0;
+        }
+        txtServiceID.setText(serviceType[indexSvId]);
+        txtProvinceID.setText(province[indexProvinceId]);
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        final ImageButton cancelbtn = view.findViewById(R.id.cancel_add);
+        //Cancel button
+        final ImageButton cancelbtn = view.findViewById(R.id.cancel_add_suggest);
         cancelbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,8 +91,8 @@ public class AddStopPointDialog extends AppCompatDialogFragment {
         });
 
         //Set arrive time picker
-        final TextView arriveTimeText = view.findViewById(R.id.arrive_time);
-        ImageButton setTimeBtn =  view.findViewById(R.id.arrive_time_btn);
+        final TextView arriveTimeText = view.findViewById(R.id.arrive_time_suggest);
+        ImageButton setTimeBtn =  view.findViewById(R.id.arrive_time_btn_suggest);
         setTimeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,8 +120,8 @@ public class AddStopPointDialog extends AppCompatDialogFragment {
             }
         });
         //Set arrive date picker
-        final TextView arriveDateText = view.findViewById(R.id.arrive_date);
-        ImageButton arriveDateBtn = view.findViewById(R.id.arrive_date_btn);
+        final TextView arriveDateText = view.findViewById(R.id.arrive_date_suggest);
+        ImageButton arriveDateBtn = view.findViewById(R.id.arrive_date_btn_suggest);
         arriveDateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,8 +150,8 @@ public class AddStopPointDialog extends AppCompatDialogFragment {
         });
 
         //Set leave date picker
-        final TextView leaveDateText = view.findViewById(R.id.leave_date);
-        ImageButton leaveDateBtn = view.findViewById(R.id.leave_date_btn);
+        final TextView leaveDateText = view.findViewById(R.id.leave_date_suggest);
+        ImageButton leaveDateBtn = view.findViewById(R.id.leave_date_btn_suggest);
         leaveDateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -179,8 +179,8 @@ public class AddStopPointDialog extends AppCompatDialogFragment {
         });
 
         //Set leave time picker
-        final TextView leaveTimeText = view.findViewById(R.id.leave_time);
-        ImageButton leaveTimeBtn =  view.findViewById(R.id.leave_time_btn);
+        final TextView leaveTimeText = view.findViewById(R.id.leave_time_suggest);
+        ImageButton leaveTimeBtn =  view.findViewById(R.id.leave_time_btn_suggest);
         leaveTimeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -208,45 +208,12 @@ public class AddStopPointDialog extends AppCompatDialogFragment {
             }
         });
 
-        //Set address text by data from activity
-        final EditText edAddress = view.findViewById(R.id.address);
-        Bundle bundle = getArguments();
-        edAddress.setText(bundle.getString("Address", ""));
-        //Set lat, lng
-        final double latitude = bundle.getDouble("Latitude",0);
-        final double longitude = bundle.getDouble("Longitude", 0);
-
-        Button submitBtn = view.findViewById(R.id.add_sp_submit);
-        final EditText edSpname = view.findViewById(R.id.stop_point_name);
-        final EditText edMinCost = view.findViewById(R.id.min_cost);
-        final EditText edMaxCost = view.findViewById(R.id.max_cost);
+        Button submitBtn = view.findViewById(R.id.add_sp_submit_suggest);
         //arriveDateText, arriveTimeText, leaveDateText, leaveTimeText, address
 
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String spname = edSpname.getText().toString();
-                int serviceTypeId = spinner1.getSelectedItemPosition() + 1;
-                String address = edAddress.getText().toString();
-                int provinceId = spinner2.getSelectedItemPosition() + 1;
-
-                String strMinCost = edMinCost.getText().toString();
-                String strMaxCost = edMaxCost.getText().toString();
-                long minCost, maxCost;
-                if (TextUtils.isEmpty(strMinCost)){
-                    minCost = 0;
-                }
-                else {
-                    minCost = Long.parseLong(strMinCost);
-                }
-
-                if (TextUtils.isEmpty(strMaxCost)){
-                    maxCost = 0;
-                }
-                else {
-                    maxCost = Long.parseLong(strMaxCost);
-                }
-
                 String strArrTime = arriveTimeText.getText().toString();
                 String strArrDate = arriveDateText.getText().toString();
                 String strLeaveTime = leaveTimeText.getText().toString();
@@ -254,14 +221,6 @@ public class AddStopPointDialog extends AppCompatDialogFragment {
 
                 //Check isEmpty in fields: name, date, address
                 boolean isValid = true;
-                if (TextUtils.isEmpty(spname)){
-                    edSpname.setError("Please enter the name");
-                    isValid = false;
-                }
-                if (TextUtils.isEmpty(address)){
-                    edAddress.setError("Please enter address");
-                    isValid = false;
-                }
                 if (TextUtils.isEmpty(strArrTime)){
                     arriveTimeText.setError("Please choose Arrive Time");
                     isValid = false;
@@ -304,23 +263,14 @@ public class AddStopPointDialog extends AppCompatDialogFragment {
                 long millisLeaveDate = leaveDate.getTime();
 
                 //Send to a StopPointInfo object
-                StopPointInfo stopPointInfo = new StopPointInfo(spname, address, provinceId, Double.toString(latitude), Double.toString(longitude), millisArriveDate, millisLeaveDate, serviceTypeId, minCost, maxCost);
-                listener.applyData(stopPointInfo);
-                listener.fixedMarker(spname, serviceTypeId);
+                suggestedPointInfo.setArriveAt(millisArriveDate);
+                suggestedPointInfo.setLeaveAt(millisLeaveDate);
+                listener.applyDataSuggest(suggestedPointInfo);
+                listener.fixedMarkerSuggest(new LatLng(Double.parseDouble(suggestedPointInfo.getLat()), Double.parseDouble(suggestedPointInfo.getLongitude())), suggestedPointInfo.getName(), suggestedPointInfo.getServiceTypeId());
                 dismiss();
             }
         });
 
-//        builder.setTitle("Login").setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//
-//            }
-//        }).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//            }
-//        });
         builder.setView(view);
 
         return builder.create();
@@ -333,7 +283,7 @@ public class AddStopPointDialog extends AppCompatDialogFragment {
         super.onAttach(context);
 
         try {
-            listener = (AddStopPointDialogListener) context;
+            listener = (AddStopPointSuggestDialog.AddStopPointDialogSuggestListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + "must implement DialogListener");
         }
@@ -351,10 +301,9 @@ public class AddStopPointDialog extends AppCompatDialogFragment {
     }
 
 
-    public interface AddStopPointDialogListener{
-        void applyData(StopPointInfo stopPointInfo);
-        void fixedMarker(String spName, int serviceTypeId);
+    public interface AddStopPointDialogSuggestListener{
+        void applyDataSuggest(StopPointInfo stopPointInfo);
+        void fixedMarkerSuggest(LatLng position, String spName, int serviceTypeId);
 
     }
-
 }
