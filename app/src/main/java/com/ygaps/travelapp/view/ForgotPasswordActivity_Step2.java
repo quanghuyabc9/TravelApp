@@ -31,6 +31,7 @@ public class ForgotPasswordActivity_Step2 extends AppCompatActivity {
     EditText editText_VerifyCode;
     EditText editText_NewPassword;
     Button button_Next;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +70,7 @@ public class ForgotPasswordActivity_Step2 extends AppCompatActivity {
                                 ForgotPasswordActivity_Step2.this.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Toast.makeText(ForgotPasswordActivity_Step2.this, "Update password failed", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(ForgotPasswordActivity_Step2.this, getString(R.string.error_unknown), Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }
@@ -100,13 +101,12 @@ public class ForgotPasswordActivity_Step2 extends AppCompatActivity {
                                     ForgotPasswordActivity_Step2.this.runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Toast.makeText(ForgotPasswordActivity_Step2.this, "Update password error", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(ForgotPasswordActivity_Step2.this, getString(R.string.error_unknown), Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                 }
                             }
                         });
-
                     }
                 }
             }
