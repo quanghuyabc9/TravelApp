@@ -2,9 +2,14 @@ package com.ygaps.travelapp.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Base64;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -16,11 +21,14 @@ import androidx.core.content.ContextCompat;
 
 import com.ygaps.travelapp.R;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.regex.Pattern;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class EditTool {
+    private static String TAG ="Your hash key: ";
     public static void CustomizeActionBar(String title, AppCompatActivity context) {
         //Customize the ActionBar
         final ActionBar abar = context.getSupportActionBar();
@@ -62,5 +70,21 @@ public class EditTool {
 
     public static boolean isValidPassword(String password){
         return password.length() >= 4;
+    }
+
+    public static void printHashKey(Context pContext) {
+        try {
+            PackageInfo info = pContext.getPackageManager().getPackageInfo(pContext.getPackageName(), PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                String hashKey = new String(Base64.encode(md.digest(), 0));
+                Log.i(TAG, "printHashKey() Hash Key: " + hashKey);
+            }
+        } catch (NoSuchAlgorithmException e) {
+            Log.e(TAG, "printHashKey()", e);
+        } catch (Exception e) {
+            Log.e(TAG, "printHashKey()", e);
+        }
     }
 }
