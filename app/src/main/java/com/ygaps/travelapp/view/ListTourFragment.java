@@ -44,7 +44,7 @@ import java.util.Map;
 public class ListTourFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
-        private RecyclerView.Adapter mAdapter;
+    private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManger;
 
     private View.OnClickListener createTour = new View.OnClickListener() {

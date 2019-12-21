@@ -39,7 +39,7 @@ public class MyMarkerItem implements ClusterItem {
         return mSnippet;
     }
 
-    public  int getInfoPos(){
+    public int getInfoPos(){
         return infoPos;
     }
 }

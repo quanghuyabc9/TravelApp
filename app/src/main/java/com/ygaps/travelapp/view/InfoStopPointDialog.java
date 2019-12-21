@@ -26,7 +26,7 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 
 import static android.widget.ArrayAdapter.createFromResource;
-import static com.example.travelguide.utils.DateTimeTool.convertMillisToDateTime;
+import static com.ygaps.travelapp.utils.DateTimeTool.convertMillisToDateTime;
 
 public class InfoStopPointDialog extends AppCompatDialogFragment {
     private InfoStopPointDialog.InfoStopPointDialogListener listener;
@@ -67,10 +67,10 @@ public class InfoStopPointDialog extends AppCompatDialogFragment {
         String[] serviceType = getResources().getStringArray(R.array.serviceName);
         int indexSvId = pointInfo.getServiceTypeId() - 1;
         int indexProvinceId = pointInfo.getProvinceId() - 1;
-        if (indexSvId > serviceType.length || indexSvId <0){
+        if (indexSvId >= serviceType.length || indexSvId <0){
             indexSvId = 0;
         }
-        if (indexProvinceId > province.length || indexProvinceId < 0){
+        if (indexProvinceId >= province.length || indexProvinceId < 0){
             indexProvinceId = 0;
         }
         txtServiceID.setText(serviceType[indexSvId]);

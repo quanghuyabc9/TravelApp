@@ -4,8 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -15,6 +18,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.MatrixCursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -135,6 +139,8 @@ public class CreateStopsActivity extends AppCompatActivity
     // Declare a variable for the cluster manager.
     private ClusterManager<MyMarkerItem> mClusterManager;
 
+    public final int Request_User_Location_Code = 99;
+
     GoogleMap.OnMarkerClickListener eventMarkerClicked = new GoogleMap.OnMarkerClickListener() {
         @Override
         public boolean onMarkerClick(Marker marker) {
@@ -181,6 +187,7 @@ public class CreateStopsActivity extends AppCompatActivity
         //Init map
         if(googleServicesAvailable()){
             setContentView(R.layout.activity_create_stops);
+            checkUserLocationPermission();
             initMap();
         }
         else
@@ -333,7 +340,14 @@ public class CreateStopsActivity extends AppCompatActivity
 
         goToLocationZoom(10.763182, 106.682494, 12);
 
-        mGoogleMap.setMyLocationEnabled(true);
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            googleMap.setMyLocationEnabled(true);
+            googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+        } else {
+            //Toast.makeText(getActivity(), "Cannot access location", Toast.LENGTH_LONG).show();
+        }
         final View locationButton = ((View) mapFragment.getView().findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
 
         if(locationButton != null)
@@ -355,7 +369,6 @@ public class CreateStopsActivity extends AppCompatActivity
 //                                .addOnConnectionFailedListener(this)
 //                                .build();
 //        mGoogleApiClient.connect();
-
 
     }
 
@@ -671,14 +684,10 @@ public class CreateStopsActivity extends AppCompatActivity
 
     private void addItems() {
 
-
-        // Add ten cluster items in close proximity, for purposes of this example.
         //Add suggest makers to map
         for(int i = 0; i < listSuggestPointInfo.size(); i++){
             StopPointInfo cItem = listSuggestPointInfo.get(i);
             LatLng ll =  new LatLng(Double.parseDouble(cItem.getLat()), Double.parseDouble(cItem.getLongitude()));
-
-
             MyMarkerItem item = new MyMarkerItem(Double.parseDouble(cItem.getLat()), Double.parseDouble(cItem.getLongitude()), i);
             mClusterManager.addItem(item);
 
@@ -783,5 +792,40 @@ public class CreateStopsActivity extends AppCompatActivity
             return true;
         }
         return super.onKeyUp(keyCode, event);
+    }
+
+    public boolean checkUserLocationPermission(){
+        if (ContextCompat.checkSelfPermission( this, Manifest.permission.ACCESS_FINE_LOCATION )!=PackageManager.PERMISSION_GRANTED){
+            if (ActivityCompat.shouldShowRequestPermissionRationale( this,Manifest.permission.ACCESS_FINE_LOCATION )){
+                ActivityCompat.requestPermissions( this,new String[] {Manifest.permission.ACCESS_FINE_LOCATION},Request_User_Location_Code);
+            }
+            else {
+                ActivityCompat.requestPermissions( this,new String[] {Manifest.permission.ACCESS_FINE_LOCATION},Request_User_Location_Code);
+            }
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        switch (requestCode)
+        {
+            case Request_User_Location_Code:
+                if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    if (ContextCompat.checkSelfPermission( this, Manifest.permission.ACCESS_FINE_LOCATION )==PackageManager.PERMISSION_GRANTED)
+                    {
+                        mGoogleMap.setMyLocationEnabled( true );
+                    }
+                }
+                else
+                {
+                    Toast.makeText(this,"Permission Denied",Toast.LENGTH_SHORT ).show();
+                }
+                return;
+        }
     }
 }
