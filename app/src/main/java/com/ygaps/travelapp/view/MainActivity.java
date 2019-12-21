@@ -13,9 +13,13 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.ygaps.travelapp.R;
 import com.ygaps.travelapp.utils.EditTool;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.ygaps.travelapp.utils.MyFirebaseService;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,8 +27,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         EditTool.CustomizeActionBar("List Tour", MainActivity.this);
+
+        MyFirebaseService myFirebaseService = new MyFirebaseService();
+        myFirebaseService.sendRegistrationToServer(FirebaseInstanceId.getInstance().getToken());
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ListTourFragment()).commit();
 
@@ -59,8 +65,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-
     }
 
     @Override

@@ -1,7 +1,9 @@
 package com.ygaps.travelapp.manager;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.provider.Settings;
 import android.text.TextUtils;
 
 import com.ygaps.travelapp.R;
@@ -13,8 +15,16 @@ import com.google.gson.reflect.TypeToken;
 public class MyApplication extends Application {
     private LoginResponse tokenInfo; //use LoginResponse as tokenInfo
 
+    public static String deviceId = null;
+
     public LoginResponse getTokenInfo() {
         return tokenInfo;
+    }
+
+    public static String token = null;
+
+    public static String getToken() {
+        return token;
     }
 
     public void setTokenInfo(LoginResponse tokenInfo) {
@@ -33,6 +43,7 @@ public class MyApplication extends Application {
 
         }else {
             tokenInfo = new Gson().fromJson(tokenStr, new TypeToken<LoginResponse>() {}.getType());
+            token = tokenInfo.getToken();
         }
     }
 
@@ -40,6 +51,9 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         loadTokenInfo();
+        deviceId = Settings.Secure.getString(getApplicationContext().getContentResolver(),
+                Settings.Secure.ANDROID_ID);
     }
+
 }
 

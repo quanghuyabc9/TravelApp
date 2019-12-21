@@ -88,7 +88,7 @@ public class ForgotPasswordActivity_Step1 extends AppCompatActivity {
                             ForgotPasswordActivity_Step1.this.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(ForgotPasswordActivity_Step1.this, "Submit failed", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ForgotPasswordActivity_Step1.this, getString(R.string.error_unknown), Toast.LENGTH_SHORT).show();
                                 }
                             });
                             progressDialog.dismiss();
@@ -126,7 +126,7 @@ public class ForgotPasswordActivity_Step1 extends AppCompatActivity {
                                 ForgotPasswordActivity_Step1.this.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Toast.makeText(ForgotPasswordActivity_Step1.this, "Submit failed", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(ForgotPasswordActivity_Step1.this, getString(R.string.error_unknown), Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }

@@ -1,8 +1,9 @@
 <resources>
-    <string name="app_name">Travel Guide</string>
+    <string name="app_name">Travel App</string>
     <string name="title_activity_signin">Sign in</string>
     <string name="shared_pref_name">MyPref</string>
     <string name="token_info_key">TokenInfo</string>
+    <string name="image_description">Image</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -108,14 +109,14 @@
     <string name="setting_language_text_view">Language</string>
 
     <!-- String for Forgot password activity -->
-    <string name="forgot_password_guide">Select which contact details should we use to reset your password:</string>
-    <string name="via_sms_button">Via sms</string>
-    <string name="via_email_button">Via email</string>
-    <string name="next_button">Next</string>
-    <string name="verification">Enter the code that you received</string>
-    <string name="enter_new_password">Enter your new password</string>
-    <string name="update_password_successfully">Congratulation! Your password is updated successfully</string>
-    <string name="continue_button">Continue</string>
+    <string name="forgotpassword_guide">Select which contact details should we use to reset your password:</string>
+    <string name="forgotpassword_via_sms">Via sms</string>
+    <string name="forgotpassword_via_email">Via email</string>
+    <string name="forgotpassword_nextbutton">Next</string>
+    <string name="forgotpassword_verification">Enter the code that you received</string>
+    <string name="forgotpassword_enter_new_password">Enter your new password</string>
+    <string name="forgotpassword_successfully">Congratulation! Your password is updated successfully</string>
+    <string name="forgotpassword_continuebutton">Continue</string>
 
     <!-- String for Edit profile activity -->
     <string name="edit_profile_full_name">Full name</string>

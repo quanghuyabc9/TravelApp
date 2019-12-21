@@ -78,6 +78,7 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private GoogleSignInClient mGoogleSignInClient;
     private Button  button_forgotPassword;
+
     //private SignInButton signInButton_Google;
     private ImageButton signInButton_Google;
     Handler handler = new Handler();
@@ -89,6 +90,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     };
     private CallbackManager callbackManager;
+
     //private LoginButton signInButton_Facebook;
     private LoginButton signInButton_Facebook;
     private ImageButton signInButton_Facebook_Fake;
@@ -123,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
         //Sign up
-        btn_signUp=(Button)findViewById(R.id.btn_SignUp);
+        btn_signUp = findViewById(R.id.btn_SignUp);
         btn_signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,11 +133,10 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
         //printHashKey(this);
-
         getSupportActionBar().hide();
+
+        /* --------------------------------------------------------------------------------------------- */
 
         /* Sign in with Google*/
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -143,10 +144,8 @@ public class LoginActivity extends AppCompatActivity {
                 .requestServerAuthCode(Constants.Google_ClientID)
                 .requestEmail()
                 .build();
-
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
         signInButton_Google = findViewById(R.id.signInButton_Google);
         //signInButton_Google.setSize(SignInButton.SIZE_WIDE);
         signInButton_Google.setOnClickListener(new View.OnClickListener() {
@@ -156,10 +155,10 @@ public class LoginActivity extends AppCompatActivity {
                     case R.id.signInButton_Google:
                         signIn();
                         break;
-                    // ...
                 }
             }
         });
+
         /* --------------------------------------------------------------------------------------------- */
 
         /*Sign in with Facebook*/
@@ -241,6 +240,8 @@ public class LoginActivity extends AppCompatActivity {
                 signInButton_Facebook.performClick();
             }
         });
+
+        /* --------------------------------------------------------------------------------------------- */
 
         /* Animation */
         relLayout_SignInFormWithAppName = findViewById(R.id.relLayout_SignInFromWithAppName);

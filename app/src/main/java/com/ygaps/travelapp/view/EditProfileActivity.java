@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.IpSecManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -146,7 +147,14 @@ public class EditProfileActivity extends AppCompatActivity {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                    Toast.makeText(EditProfileActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                final IOException fe = e;
+                EditProfileActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(EditProfileActivity.this, fe.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
             }
 
             @Override

@@ -16,16 +16,11 @@ import com.ygaps.travelapp.network.MyAPIClient;
 import java.util.Date;
 
 public class SplashActivity extends AppCompatActivity {
-
-
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
         getSupportActionBar().hide();
-
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.shared_pref_name), 0);
         String accessToken = sharedPref.getString(getString(R.string.saved_access_token), null);
         long time = sharedPref.getLong(getString(R.string.saved_access_token_time), (long) 0);
@@ -54,7 +49,6 @@ public class SplashActivity extends AppCompatActivity {
                     //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
-                    return;
                 }
             }, 500);
         }else{
@@ -66,7 +60,6 @@ public class SplashActivity extends AppCompatActivity {
                     //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
-                    return;
                 }
             }, 500);
         }
