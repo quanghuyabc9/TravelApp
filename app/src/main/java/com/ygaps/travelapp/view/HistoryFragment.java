@@ -119,7 +119,8 @@ public class HistoryFragment extends Fragment {
                             quantity = numAdults + " adults, " + numChilds + " childs";
                         }
                         String price = o.getString("minCost") + " - " + o.getString("maxCost");
-                        tourItems.add(new TourItem(R.drawable.alternative_view, location, date, quantity, price));
+                        int id = o.getInt("id");
+                        tourItems.add(new TourItem(R.drawable.alternative_view, location, date, quantity, price, id));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -155,6 +156,7 @@ public class HistoryFragment extends Fragment {
             public void onItemClick(int position, View v) {
 
                 Intent intent = new Intent(getActivity(), TourDetailActivity.class);
+                intent.putExtra("id", tourItems.get(position).getId());
                 startActivity(intent);
             }
 

@@ -2,25 +2,42 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="?attr/actionBarSize"
     android:orientation="horizontal"
     android:background="@color/WindowTitleBackground">
 
-    <SearchView
+    <RelativeLayout
         android:layout_weight="8"
         android:id="@+id/search_location_explore"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:queryHint="Search location ..."
-        android:iconifiedByDefault="false"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
+        android:clickable="true"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:background="@drawable/rounded_search_place"
-        android:queryBackground="@color/transparent"/>
+        android:paddingLeft="20dp"
+        android:paddingRight="15dp"
+       >
+        <ImageView
+            android:id="@+id/icon_search"
+            android:layout_centerVertical="true"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/icons8_search_50"
+            />
 
+        <TextView
+            android:paddingLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Search location ..."
+            android:gravity="center_vertical"
+            android:textSize="16sp"
+            android:layout_toRightOf="@+id/icon_search"
+
+            />
+    </RelativeLayout>
 
 </LinearLayout>

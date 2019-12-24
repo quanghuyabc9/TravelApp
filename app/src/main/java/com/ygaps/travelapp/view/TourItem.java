@@ -6,13 +6,15 @@ public class TourItem {
     private String date;
     private String quantity;
     private String price;
+    private int id;
 
-    public TourItem(Integer img_src, String location, String date, String quantity, String price){
+    public TourItem(Integer img_src, String location, String date, String quantity, String price, int id){
         this.img_src = img_src;
         this.location = location;
         this.date = date;
         this.quantity = quantity;
         this.price = price;
+        this.id = id;
     }
 
     public void setImg_src(Integer img_src){
@@ -29,6 +31,10 @@ public class TourItem {
     }
     public void setPrice(String price){
         this.price = price;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public Integer getImg_src() {
@@ -49,6 +55,10 @@ public class TourItem {
 
     public String getQuantity() {
         return quantity;
+    }
+
+    public int getId() {
+        return id;
     }
 }
 

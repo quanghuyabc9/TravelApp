@@ -44,7 +44,7 @@ import java.util.Map;
 public class ListTourFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private RecyclerDataAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManger;
 
     private View.OnClickListener createTour = new View.OnClickListener() {
@@ -80,7 +80,7 @@ public class ListTourFragment extends Fragment {
         final ArrayList<TourItem> tourItems = new ArrayList<>();
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 
-        String url="http://35.197.153.192:3000/tour/list?rowPerPage=20&pageNum=1";
+        String url="http://35.197.153.192:3000/tour/list?rowPerPage=100&pageNum=1&isDesc=true";
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -131,7 +131,8 @@ public class ListTourFragment extends Fragment {
                              quantity = numAdults + " adults, " + numChilds + " childs";
                          }
                          String price = o.getString("minCost") + " - " + o.getString("maxCost");
-                         tourItems.add(new TourItem(R.drawable.alternative_view, location, date, quantity, price));
+                         int id = o.getInt("id");
+                         tourItems.add(new TourItem(R.drawable.alternative_view, location, date, quantity, price, id));
                      }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -162,6 +163,20 @@ public class ListTourFragment extends Fragment {
         mLayoutManger = new LinearLayoutManager(getActivity());
 
         mAdapter = new RecyclerDataAdapter(tourItems);
+        mAdapter.setOnItemClickListener(new RecyclerDataAdapter.ClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
+
+                Intent intent = new Intent(getActivity(), TourDetailActivity.class);
+                intent.putExtra("id", tourItems.get(position).getId());
+                startActivity(intent);
+            }
+
+            @Override
+            public void onItemLongClick(int position, View v) {
+
+            }
+        });
 
         mRecyclerView.setLayoutManager(mLayoutManger);
         mRecyclerView.setAdapter(mAdapter);

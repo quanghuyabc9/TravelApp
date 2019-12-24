@@ -63,8 +63,8 @@
                 android:background="@drawable/rounded_edittext_states"
                 android:gravity="center"
                 android:hint="Select date"
-                android:focusable="true"
-                android:focusableInTouchMode="true"/>
+                android:focusableInTouchMode="true"
+                android:clickable="true"/>
         </LinearLayout>
         <LinearLayout
             android:layout_weight="1"
@@ -88,8 +88,7 @@
                 android:background="@drawable/rounded_edittext_states"
                 android:gravity="center"
                 android:hint="Select date"
-                android:focusable="true"
-                android:focusableInTouchMode="true"/>
+                android:clickable="true"/>
         </LinearLayout>
 
     </LinearLayout>
