@@ -4,6 +4,7 @@
     <string name="shared_pref_name">MyPref</string>
     <string name="token_info_key">TokenInfo</string>
     <string name="image_description">Image</string>
+    <string name="successful">Successful</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -128,4 +129,21 @@
     <string name="edit_profile_dob">Date of birth</string>
     <string name="edit_profile_address">Address</string>
     <string name="edit_profile_update_button">Update</string>
+
+    <!-- String for Tour detail activity -->
+    <string name="tourdetail_tourname">Tour Name</string>
+    <string name="tourdetail_startdate">Start date</string>
+    <string name="tourdetail_enddate">End date</string>
+    <string name="tourdetail_adults">Adults</string>
+    <string name="tourdetail_children">Children</string>
+    <string name="tourdetail_mincost">Min cost</string>
+    <string name="tourdetail_maxcost">Max const</string>
+    <string name="tourdetail_changetourimage">Change tour image</string>
+    <string name="tourdetail_isprivatetrip">Is that your private trip?</string>
+    <string name="tourdetail_status">Status</string>
+    <string name="tourdetail_status_canceled">Canceled</string>
+    <string name="tourdetail_status_open">Open</string>
+    <string name="tourdetail_status_started">Started</string>
+    <string name="tourdetail_status_closed">Closed</string>
+    <string name="tourdetail_update">Update</string>
 </resources>
