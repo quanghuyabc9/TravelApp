@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="7dp"
+        android:paddingRight="7dp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="name User"
+            android:layout_marginBottom="7dp"
+            android:textColor="#000000"/>
+
+        <EditText
+            android:id="@+id/invitedUser"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:padding="5dip"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:background="@drawable/rounded_edittext_states" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="7dp"
+        android:paddingRight="7dp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="page Index"
+            android:layout_marginBottom="7dp"
+            android:textColor="#000000"/>
+
+        <EditText
+            android:id="@+id/pageIndex"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:padding="5dip"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:background="@drawable/rounded_edittext_states" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="7dp"
+        android:paddingRight="7dp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="page Size"
+            android:layout_marginBottom="7dp"
+            android:textColor="#000000"/>
+
+        <EditText
+            android:id="@+id/pageSize"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:padding="5dip"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:background="@drawable/rounded_edittext_states" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="7dp"
+        android:paddingRight="7dp"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/btn_bg"
+            android:paddingLeft="65dp"
+            android:paddingRight="65dp"
+            android:text="Confirm"
+            android:textColor="@color/white"/>
+     </LinearLayout>
+
+
+
+</LinearLayout>
