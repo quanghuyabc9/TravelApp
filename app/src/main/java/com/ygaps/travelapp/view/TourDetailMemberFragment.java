@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.ygaps.travelapp.R;
+import com.ygaps.travelapp.utils.EditTool;
 
 public class TourDetailMemberFragment extends Fragment {
 
@@ -23,6 +24,7 @@ public class TourDetailMemberFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_tourdetail_member, container, false);
+        EditTool.HideSoftKeyboard(view.getContext());
         return view;
     }
 }

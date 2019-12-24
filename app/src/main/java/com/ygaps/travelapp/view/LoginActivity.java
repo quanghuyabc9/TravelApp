@@ -372,7 +372,7 @@ public class LoginActivity extends AppCompatActivity {
                                 final String message = jsonObject.toString(5);
                                 String accessToken = jsonObject.getString("access_token");
                                 // This is access token of Google account
-                                Log.i(TAG, accessToken);
+                                // Log.i(TAG, accessToken);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
