@@ -6,12 +6,14 @@ import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -32,12 +34,19 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ygaps.travelapp.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.facebook.FacebookSdk.fullyInitialize;
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.ygaps.travelapp.utils.DateTimeTool.convertMillisToDateTime;
 
@@ -119,6 +128,7 @@ public class StopPointDialogTab1 extends Fragment {
                 mCancelSendFb.setVisibility(View.GONE);
             }
         });
+
         mRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
@@ -158,7 +168,6 @@ public class StopPointDialogTab1 extends Fragment {
                     Toast.makeText(getActivity(), "Please fill in feedback text box", Toast.LENGTH_LONG).show();
                 } else {
 
-                    //Send request create tour to server
                     RequestQueue requestQueue = Volley.newRequestQueue(view.getContext());
                     String url="http://35.197.153.192:3000/tour/add/feedback-service";
                     //Create request's body
@@ -175,7 +184,6 @@ public class StopPointDialogTab1 extends Fragment {
                     JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, jsonBody, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            Log.d("Res: ", response.toString());
                             mFeedback.setText("");
                             mRatingScale.setVisibility(View.GONE);
                             mContainerFeedback.setVisibility(View.GONE);
@@ -206,6 +214,87 @@ public class StopPointDialogTab1 extends Fragment {
                 }
             }
         });
+
+        //Get statistic of feedback service
+        final RatingBar ratingBarIndicator = view.findViewById(R.id.rating_num_of_stars_explore);
+        final TextView txtNumStars = view.findViewById(R.id.num_of_stars_explore);
+        final ProgressBar progressBar1 = view.findViewById(R.id.progressBar1);
+        final ProgressBar progressBar2 = view.findViewById(R.id.progressBar2);
+        final ProgressBar progressBar3 = view.findViewById(R.id.progressBar3);
+        final ProgressBar progressBar4 = view.findViewById(R.id.progressBar4);
+        final ProgressBar progressBar5 = view.findViewById(R.id.progressBar5);
+        RequestQueue requestQueue = Volley.newRequestQueue(view.getContext());
+        String url="http://35.197.153.192:3000/tour/get/feedback-point-stats?serviceId="+pointInfo.getId();
+        //Set request
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d("Res: ", response.toString());
+                ArrayList<Integer> arrayStars = new ArrayList<>();
+                try {
+                    JSONArray arrayStarsJson = response.getJSONArray("pointStats");
+                    float averageStars = 0;
+                    float sumStars = 0;
+                    for (int i=0; i<5; i++){
+                        arrayStars.add(Integer.parseInt(arrayStarsJson.getJSONObject(i).optString("total", "0")));
+
+                    }
+                    for (int i=0; i<5; i++){
+                        sumStars += arrayStars.get(i);
+                        averageStars += (i+1)*arrayStars.get(i);
+                    }
+                    if (sumStars != 0) {
+                        averageStars /= sumStars;
+
+                        int maxStars = Collections.max(arrayStars);
+                        int progress1 = Math.round(arrayStars.get(0)*100/maxStars) ;
+                        progressBar1.setProgress(progress1);
+                        int progress2 = Math.round(arrayStars.get(1)*100/maxStars) ;
+                        progressBar2.setProgress(progress2);
+                        int progress3 = Math.round(arrayStars.get(2)*100/maxStars) ;
+                        progressBar3.setProgress(progress3);
+                        int progress4 = Math.round(arrayStars.get(3)*100/maxStars) ;
+                        progressBar4.setProgress(progress4);
+                        int progress5 = Math.round(arrayStars.get(4)*100/maxStars) ;
+                        progressBar5.setProgress(progress5);
+                    }
+                    else {
+                        progressBar1.setProgress(0);
+                        progressBar2.setProgress(0);
+                        progressBar3.setProgress(0);
+                        progressBar4.setProgress(0);
+                        progressBar5.setProgress(0);
+
+                    }
+                    ratingBarIndicator.setRating(averageStars);
+                    DecimalFormat df = new DecimalFormat("#.#");
+                    df.setRoundingMode(RoundingMode.HALF_UP);
+                    txtNumStars.setText(df.format(averageStars));
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Authorization",accessToken);
+                return headers;
+            }
+        };
+        //Add request to Queue
+        requestQueue.add(req);
+
 
         return view;
     }

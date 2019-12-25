@@ -47,6 +47,9 @@ public class HistoryFragment extends Fragment {
     private RecyclerDataAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManger;
 
+    ArrayList<TourItem> tourItems;
+    ArrayList<TourItem> holderTourItems;
+
 
     @Nullable
     @Override
@@ -65,10 +68,11 @@ public class HistoryFragment extends Fragment {
         //get token from login
         SharedPreferences sharedPref = getContext().getApplicationContext().getSharedPreferences(getString(R.string.shared_pref_name), 0);
         final String accessToken = sharedPref.getString(getString(R.string.saved_access_token),null);
-        final ArrayList<TourItem> tourItems = new ArrayList<>();
+        tourItems = new ArrayList<>();
+        holderTourItems = new ArrayList<>();
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 
-        String url="http://35.197.153.192:3000/tour/history-user?pageSize=100&pageIndex=1";
+        String url="http://35.197.153.192:3000/tour/history-user?pageSize=200&pageIndex=1";
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -122,6 +126,65 @@ public class HistoryFragment extends Fragment {
                         int id = o.getInt("id");
                         tourItems.add(new TourItem(R.drawable.alternative_view, location, date, quantity, price, id));
                     }
+                    holderTourItems.addAll(tourItems);
+                    mRecyclerView = view.findViewById(R.id.rview_history);
+                    mRecyclerView.setHasFixedSize(true);
+                    mLayoutManger = new LinearLayoutManager(getActivity());
+
+                    mAdapter = new RecyclerDataAdapter(tourItems);
+                    mAdapter.setOnItemClickListener(new RecyclerDataAdapter.ClickListener() {
+                        @Override
+                        public void onItemClick(int position, View v) {
+
+                            Intent intent = new Intent(getActivity(), TourDetailActivity.class);
+                            intent.putExtra("id", tourItems.get(position).getId());
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void onItemLongClick(int position, View v) {
+
+                        }
+                    });
+
+
+                    mRecyclerView.setLayoutManager(mLayoutManger);
+                    mRecyclerView.setAdapter(mAdapter);
+
+                    final TextView notFound = view.findViewById(R.id.no_found_tour_location_history);
+
+                    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                        @Override
+                        public boolean onQueryTextSubmit(String query) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onQueryTextChange(String newText) {
+                            tourItems.clear();
+
+                            int len = holderTourItems.size();
+                            if (newText.equals("")){
+                                tourItems.addAll(holderTourItems);
+                            }
+                            else {
+                                for (int i = 0; i < len; i++) {
+                                    if (holderTourItems.get(i).getLocation().toUpperCase().contains(newText.toUpperCase())) {
+                                        tourItems.add(holderTourItems.get(i));
+                                    }
+                                }
+                            }
+                            mAdapter.notifyDataSetChanged();
+
+                            if (tourItems.size() == 0){
+                                notFound.setVisibility(View.VISIBLE);
+                            }
+                            else {
+                                notFound.setVisibility(View.GONE);
+                            }
+                            return false;
+                        }
+                    });
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -146,32 +209,7 @@ public class HistoryFragment extends Fragment {
 
         requestQueue.add(req);
 
-        mRecyclerView = view.findViewById(R.id.rview_history);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManger = new LinearLayoutManager(getActivity());
 
-        mAdapter = new RecyclerDataAdapter(tourItems);
-        mAdapter.setOnItemClickListener(new RecyclerDataAdapter.ClickListener() {
-            @Override
-            public void onItemClick(int position, View v) {
-
-                Intent intent = new Intent(getActivity(), TourDetailActivity.class);
-                String tourId = Integer.toString(tourItems.get(position).getId());
-                String tourName = tourItems.get(position).getLocation();
-                intent.putExtra("TourId", tourId);
-                intent.putExtra("TourName", tourName);
-                startActivity(intent);
-            }
-
-            @Override
-            public void onItemLongClick(int position, View v) {
-
-            }
-        });
-
-
-        mRecyclerView.setLayoutManager(mLayoutManger);
-        mRecyclerView.setAdapter(mAdapter);
 
         return view;
     }

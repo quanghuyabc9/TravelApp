@@ -43,7 +43,8 @@
             android:background="@drawable/rounded_edittext"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
-            android:maxLines="1"/>
+            android:maxLines="1"
+            android:singleLine="true"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -63,6 +64,7 @@
             android:inputType="text"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
+            android:singleLine="true"
             android:maxLines="1"/>
     </LinearLayout>
     <LinearLayout

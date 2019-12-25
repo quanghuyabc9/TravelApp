@@ -19,7 +19,11 @@
 
     <style name="MyRatingBar" parent="Widget.AppCompat.RatingBar">
         <item name="colorControlNormal">@color/WindowTitleBackground</item>
-        <item name="colorControlActivated">@color/design_default_color_primary_dark</item>
+        <item name="colorControlActivated">@color/WindowTitleBackground</item>
+    </style>
+    <style name="MyRatingBar2" parent="Widget.AppCompat.RatingBar.Indicator">
+        <item name="colorControlNormal">@color/WindowTitleBackground</item>
+        <item name="colorControlActivated">@color/WindowTitleBackground</item>
     </style>
     <style name="TabLayoutTextStyle">
         <item name="android:textColor">@color/white</item>
