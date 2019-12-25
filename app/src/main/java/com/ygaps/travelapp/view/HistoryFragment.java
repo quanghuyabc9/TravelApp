@@ -157,7 +157,9 @@ public class HistoryFragment extends Fragment {
 
                 Intent intent = new Intent(getActivity(), TourDetailActivity.class);
                 String tourId = Integer.toString(tourItems.get(position).getId());
+                String tourName = tourItems.get(position).getLocation();
                 intent.putExtra("TourId", tourId);
+                intent.putExtra("TourName", tourName);
                 startActivity(intent);
             }
 

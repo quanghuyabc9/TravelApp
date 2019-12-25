@@ -1,11 +1,13 @@
 package com.ygaps.travelapp.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -36,8 +38,10 @@ public class TourDetailActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private LinearLayout mainContainer;
     private ImageButton deleleTourBtn;
+    private TextView textView_tourName;
     //data
     private String tourId = null;
+    private String tourName = null;
     private String authorization = null;
 
     @Override
@@ -51,6 +55,7 @@ public class TourDetailActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.viewpaper_tourdetail_mainview);
         mainContainer = findViewById(R.id.linearlayout_tourdetail_maincontainer);
         deleleTourBtn = findViewById(R.id.imagebutton_tourdetail_deletetour);
+        textView_tourName = findViewById(R.id.textView_tourDetail_tourName);
         mainContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,6 +64,8 @@ public class TourDetailActivity extends AppCompatActivity {
         });
         //Initialize data
         tourId = getIntent().getStringExtra("TourId");
+        tourName = getIntent().getStringExtra("TourName");
+        textView_tourName.setText(tourName);
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.shared_pref_name), Context.MODE_PRIVATE);
         authorization = sharedPreferences.getString(getString(R.string.saved_access_token), null);
         deleleTourBtn.setOnClickListener(new View.OnClickListener() {
@@ -97,6 +104,10 @@ public class TourDetailActivity extends AppCompatActivity {
                                     Toast.makeText(TourDetailActivity.this, getString(R.string.successful), Toast.LENGTH_SHORT).show();
                                 }
                             });
+                            Intent intent = new Intent(TourDetailActivity.this, MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            TourDetailActivity.this.finish();
                         }
                         else if(response.code() == 404 || response.code() == 403 || response.code() == 500) {
                             try {

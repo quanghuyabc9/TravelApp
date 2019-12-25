@@ -72,7 +72,7 @@
     <View
         android:id="@+id/separator1"
         android:layout_width="match_parent"
-        android:layout_height="5dp"
+        android:layout_height="2dp"
         android:background="@color/grey"
         android:layout_below="@+id/relLayout_ProfileForm"
         android:layout_marginStart="5dp"
@@ -107,7 +107,7 @@
     <View
         android:id="@+id/separator2"
         android:layout_width="match_parent"
-        android:layout_height="5dp"
+        android:layout_height="2dp"
         android:background="@color/grey"
         android:layout_below="@+id/linearLayout_SettingLanguageForm"
         android:layout_marginStart="5dp"

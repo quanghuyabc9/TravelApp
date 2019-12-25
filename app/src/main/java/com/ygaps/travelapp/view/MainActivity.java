@@ -28,12 +28,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         EditTool.CustomizeActionBar("List Tour", MainActivity.this);
-
         MyFirebaseService myFirebaseService = new MyFirebaseService();
         myFirebaseService.sendRegistrationToServer(FirebaseInstanceId.getInstance().getToken());
-
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ListTourFragment()).commit();
-
         BottomNavigationView bottomNav = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
             @Override
