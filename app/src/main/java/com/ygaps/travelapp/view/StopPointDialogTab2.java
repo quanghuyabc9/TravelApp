@@ -1,12 +1,18 @@
 package com.ygaps.travelapp.view;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -81,8 +87,71 @@ public class StopPointDialogTab2 extends Fragment {
                     mRecyclerView = view.findViewById(R.id.rview_reviews_explore);
                     mRecyclerView.setHasFixedSize(true);
                     mLayoutManger = new LinearLayoutManager(getActivity());
+                    //Set event button report click
+                    mAdapter = new RecyclerStopPointsReviewsAdapter(reviewsInfoItems, new RecyclerStopPointsReviewsAdapter.RecyclerStopPointsReviewsAdapterListener() {
+                        @Override
+                        public void iconButtonReportOnClick(View v, final int position) {
+                            final View mView = LayoutInflater.from(getActivity()).inflate(R.layout.popup_report_layout, null);
+                            final PopupWindow popUp = new PopupWindow(mView, 200, LinearLayout.LayoutParams.WRAP_CONTENT, false);
+                            popUp.setTouchable(true);
+                            popUp.setFocusable(true);
+                            popUp.setOutsideTouchable(true);
 
-                    mAdapter = new RecyclerStopPointsReviewsAdapter(reviewsInfoItems);
+                            //Solution
+                            popUp.showAsDropDown(v.findViewById(R.id.btn_report_review_explore), 0,2, Gravity.BOTTOM);
+                            ((TextView) mView.findViewById(R.id.cancel_popup_review_explore)).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    popUp.dismiss();
+                                }
+                            });
+                            ((TextView) mView.findViewById(R.id.send_report_review_explore)).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+                                    JSONObject jsonBody = new JSONObject();
+                                    try {
+                                        jsonBody.put("feedbackId", reviewsInfoItems.get(position).getId());
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    String url = "http://35.197.153.192:3000/tour/report/feedback";
+                                    JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, jsonBody, new Response.Listener<JSONObject>() {
+                                        @Override
+                                        public void onResponse(JSONObject response) {
+                                            Log.d("Res: ", response.toString());
+                                            Toast.makeText(getActivity(),"Report sent", Toast.LENGTH_SHORT).show();
+                                            popUp.dismiss();
+                                        }
+                                    }, new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            VolleyLog.d("Err", "Error: " + error.getMessage());
+                                            Log.e("Err", "Site Info Error: " + error.getMessage());
+                                            Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                                            popUp.dismiss();
+
+                                        }
+                                    }) {
+                                        @Override
+                                        public Map<String, String> getHeaders() throws AuthFailureError {
+                                            HashMap<String, String> headers = new HashMap<String, String>();
+                                            headers.put("Authorization", accessToken);
+                                            return headers;
+                                        }
+                                    };
+
+                                    requestQueue.add(req);
+
+                                }
+                            });
+
+
+
+                        }
+                    });
 
                     mRecyclerView.setLayoutManager(mLayoutManger);
                     mRecyclerView.setAdapter(mAdapter);

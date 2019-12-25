@@ -55,24 +55,13 @@
                 app:civ_border_width="0dp"
                 android:foreground="?attr/selectableItemBackground">
             </de.hdodenhof.circleimageview.CircleImageView>
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:src="@drawable/edit"
-                android:layout_alignEnd="@+id/imageView_AccountProfile"
-
-                app:civ_border_color="#ffffff"
-                app:civ_border_width="3dp" >
-            </de.hdodenhof.circleimageview.CircleImageView>
         </RelativeLayout>
 
     </RelativeLayout>
     <View
         android:id="@+id/separator1"
         android:layout_width="match_parent"
-        android:layout_height="5dp"
+        android:layout_height="2dp"
         android:background="@color/grey"
         android:layout_below="@+id/relLayout_ProfileForm"
         android:layout_marginStart="5dp"
@@ -107,7 +96,7 @@
     <View
         android:id="@+id/separator2"
         android:layout_width="match_parent"
-        android:layout_height="5dp"
+        android:layout_height="2dp"
         android:background="@color/grey"
         android:layout_below="@+id/linearLayout_SettingLanguageForm"
         android:layout_marginStart="5dp"

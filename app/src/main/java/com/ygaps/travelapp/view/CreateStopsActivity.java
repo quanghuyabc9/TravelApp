@@ -106,12 +106,14 @@ public class CreateStopsActivity extends AppCompatActivity
         implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener,
         AddStopPointDialog.AddStopPointDialogListener,
         ListStopPointDialog.ListStopPointDialogListener,
         AddStopPointSuggestDialog.AddStopPointDialogSuggestListener,
-        InfoStopPointDialog.InfoStopPointDialogListener
+        InfoStopPointDialog.InfoStopPointDialogListener,
+        com.google.android.gms.location.LocationListener
 {
+
+    private GoogleApiClient googleApiClient;
 
     private String accessToken;
     //Map
@@ -818,6 +820,10 @@ public class CreateStopsActivity extends AppCompatActivity
                 {
                     if (ContextCompat.checkSelfPermission( this, Manifest.permission.ACCESS_FINE_LOCATION )==PackageManager.PERMISSION_GRANTED)
                     {
+                        if (googleApiClient==null)
+                        {
+                            buildGoogleApiClient();
+                        }
                         mGoogleMap.setMyLocationEnabled( true );
                     }
                 }
@@ -827,5 +833,13 @@ public class CreateStopsActivity extends AppCompatActivity
                 }
                 return;
         }
+    }
+    protected synchronized void buildGoogleApiClient(){
+        googleApiClient = new GoogleApiClient.Builder( this )
+                .addConnectionCallbacks( this )
+                .addOnConnectionFailedListener( this )
+                .addApi( LocationServices.API )
+                .build();
+        googleApiClient.connect();
     }
 }

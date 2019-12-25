@@ -1,6 +1,7 @@
 package com.ygaps.travelapp.view;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -23,7 +24,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,6 +37,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -76,13 +80,20 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
+import static android.app.Activity.RESULT_OK;
 import static com.facebook.FacebookSdk.getApplicationContext;
+
 
 public class ExploreFragment extends Fragment
         implements OnMapReadyCallback,
-        GoogleApiClient.OnConnectionFailedListener
-{
+        GoogleApiClient.OnConnectionFailedListener,
+        GoogleApiClient.ConnectionCallbacks,
+        com.google.android.gms.location.LocationListener {
     private String accessToken;
+    protected Activity mActivity;
+
+    private GoogleApiClient googleApiClient;
+
     //Map
     SupportMapFragment mapFragment;
     GoogleMap mGoogleMap;
@@ -121,41 +132,33 @@ public class ExploreFragment extends Fragment
             initMap();
 
             //Set custom action bar
-            ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
+            ActionBar actionBar = ((AppCompatActivity)mActivity).getSupportActionBar();
             actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
             actionBar.setDisplayShowCustomEnabled(true);
             actionBar.setCustomView(R.layout.custom_explore_actionbar);
             actionBarView = actionBar.getCustomView();
 
             //Set search view for place
-            final SearchView searchView = actionBarView.findViewById(R.id.search_location_explore);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    searchView.clearFocus();
-                }
-            }, 300);
+            final RelativeLayout searchView = actionBarView.findViewById(R.id.search_location_explore);
 
-            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            searchView.setOnClickListener(new SearchView.OnClickListener() {
                 @Override
-                public boolean onQueryTextSubmit(String query) {
-                    geoLocate(query);
-                    return false;
-                }
+                public void onClick(View v) {
+                    Intent intent = new Intent(mActivity, SearchLocationActivity.class);
 
-                @Override
-                public boolean onQueryTextChange(String newText) {
-                    return false;
+                    //intent.putExtra("title",foundItems.get(i).lvTitle );
+
+                    startActivityForResult(intent,2);
                 }
             });
             return view;
         }
         else
         {
-            Toast.makeText(getActivity(), "Failed to initmap!!!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mActivity, "Failed to initmap!!!", Toast.LENGTH_SHORT).show();
         }
         listSuggestPointInfo = new ArrayList<>();
-        mClusterManager = new ClusterManager<>(getActivity(), mGoogleMap);
+        mClusterManager = new ClusterManager<>(mActivity, mGoogleMap);
 
         return inflater.inflate(R.layout.fragment_explore, container, false);
 
@@ -168,20 +171,20 @@ public class ExploreFragment extends Fragment
     //Check google services
     public boolean googleServicesAvailable(){
         GoogleApiAvailability api = GoogleApiAvailability.getInstance();
-        int isAvailable = api.isGooglePlayServicesAvailable(getActivity());
+        int isAvailable = api.isGooglePlayServicesAvailable(mActivity);
         if(isAvailable == ConnectionResult.SUCCESS)
         {
             return true;
         }
         else if (api.isUserResolvableError(isAvailable))
         {
-            Dialog dialog = api.getErrorDialog(getActivity(), isAvailable, 0);
+            Dialog dialog = api.getErrorDialog(mActivity, isAvailable, 0);
             dialog.show();
 
         }
         else
         {
-            Toast.makeText(getActivity(),"Can't connect to play service", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mActivity,"Can't connect to play service", Toast.LENGTH_SHORT).show();
         }
         return false;
     }
@@ -195,20 +198,20 @@ public class ExploreFragment extends Fragment
         {
             //Disable Map Toolbar:
             mGoogleMap.getUiSettings().setMapToolbarEnabled(false);
+            listSuggestPointInfo = new ArrayList<>();
             getSuggestPoints();
-            //Log.d("Size", Integer.toString(listSuggestPointInfo.size()));
 
             //mGoogleMap.setOnMarkerClickListener(eventMarkerClicked);
         }
 
         goToLocationZoom(10.763182, 106.682494, 12);
 
-        if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-            ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(mActivity, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(mActivity, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             googleMap.setMyLocationEnabled(true);
             googleMap.getUiSettings().setMyLocationButtonEnabled(true);
         } else {
-            //Toast.makeText(getActivity(), "Cannot access location", Toast.LENGTH_LONG).show();
+            //Toast.makeText(mActivity, "Cannot access location", Toast.LENGTH_LONG).show();
         }
 
         final View locationButton = ((View) Objects.requireNonNull(mapFragment.getView()).findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
@@ -279,7 +282,7 @@ public class ExploreFragment extends Fragment
 
                     final String jsonResBody = response.body().string();
 
-                    getActivity().runOnUiThread(new Runnable()  {
+                    mActivity.runOnUiThread(new Runnable()  {
                         @Override
                         public void run() {
                             JSONObject responseJSON = null;
@@ -313,12 +316,12 @@ public class ExploreFragment extends Fragment
         SearchView sv = myview.findViewById(R.id.place_search);
         String location = query;
 
-        Geocoder gc = new Geocoder(getActivity());
+        Geocoder gc = new Geocoder(mActivity);
         List<Address> list;
         try {
             list = gc.getFromLocationName(location,1);
             if (list.size() == 0){
-                Toast.makeText(getActivity(), "No location match", Toast.LENGTH_LONG).show();
+                Toast.makeText(mActivity, "No location match", Toast.LENGTH_LONG).show();
                 return;
             }
             Address address = list.get(0);
@@ -332,18 +335,11 @@ public class ExploreFragment extends Fragment
     }
 
 
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
-
-        private void setUpClusterer() {
+    private void setUpClusterer() {
 
         // Initialize the manager with the context and the map.
         // (Activity extends context, so we can pass 'this' in the constructor.)
-        mClusterManager = new ClusterManager<MyMarkerItem>(getActivity(), mGoogleMap);
+        mClusterManager = new ClusterManager<MyMarkerItem>(mActivity, mGoogleMap);
 
         // Point the map's listeners at the listeners implemented by the cluster manager.
         mGoogleMap.setOnCameraIdleListener(mClusterManager);
@@ -402,12 +398,12 @@ public class ExploreFragment extends Fragment
     }
 
     public boolean checkUserLocationPermission(){
-        if (ContextCompat.checkSelfPermission( getActivity(),Manifest.permission.ACCESS_FINE_LOCATION )!=PackageManager.PERMISSION_GRANTED){
-            if (ActivityCompat.shouldShowRequestPermissionRationale( getActivity(),Manifest.permission.ACCESS_FINE_LOCATION )){
-                ActivityCompat.requestPermissions( getActivity(),new String[] {Manifest.permission.ACCESS_FINE_LOCATION},Request_User_Location_Code);
+        if (ContextCompat.checkSelfPermission( mActivity,Manifest.permission.ACCESS_FINE_LOCATION )!=PackageManager.PERMISSION_GRANTED){
+            if (ActivityCompat.shouldShowRequestPermissionRationale( mActivity,Manifest.permission.ACCESS_FINE_LOCATION )){
+                ActivityCompat.requestPermissions( mActivity,new String[] {Manifest.permission.ACCESS_FINE_LOCATION},Request_User_Location_Code);
             }
             else {
-                ActivityCompat.requestPermissions( getActivity(),new String[] {Manifest.permission.ACCESS_FINE_LOCATION},Request_User_Location_Code);
+                ActivityCompat.requestPermissions( mActivity,new String[] {Manifest.permission.ACCESS_FINE_LOCATION},Request_User_Location_Code);
             }
             return false;
         }
@@ -424,18 +420,90 @@ public class ExploreFragment extends Fragment
             case Request_User_Location_Code:
                 if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 {
-                    if (ContextCompat.checkSelfPermission( getActivity(), Manifest.permission.ACCESS_FINE_LOCATION )==PackageManager.PERMISSION_GRANTED)
+                    if (ContextCompat.checkSelfPermission( mActivity, Manifest.permission.ACCESS_FINE_LOCATION )==PackageManager.PERMISSION_GRANTED)
                     {
+                        if (googleApiClient==null)
+                        {
+                            buildGoogleApiClient();
+                        }
                         mGoogleMap.setMyLocationEnabled( true );
                     }
                 }
                 else
                 {
-                    Toast.makeText(getActivity(),"Permission Denied",Toast.LENGTH_SHORT ).show();
+                        Toast.makeText(mActivity,"Permission Denied",Toast.LENGTH_SHORT ).show();
                 }
                 return;
         }
     }
 
+    //On result searching
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK  && requestCode == 2){
+            if (data.hasExtra("id")){
+                int spId = data.getExtras().getInt("id");
+                //Log.d("listSuggestPointInfo",Integer.toString(listSuggestPointInfo.size()) );
+                for (int i=0; i<listSuggestPointInfo.size(); i++){
+                    final StopPointInfo cur = listSuggestPointInfo.get(i);
+                    if (cur.getId() == spId) {
+                        LatLng ll = new LatLng(Double.parseDouble(cur.getLat()), Double.parseDouble(cur.getLongitude()));
+                        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(ll, 12);
+                        mGoogleMap.animateCamera(cameraUpdate);
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                StopPointDialog stopPointDialog = new StopPointDialog();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("JSONPointInfo", new Gson().toJsonTree(cur).getAsJsonObject().toString());
+                                stopPointDialog.setArguments(bundle);
+                                stopPointDialog.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+
+                                stopPointDialog.show(getChildFragmentManager(), "Stop point dialog");
+                            }
+                        }, 1000);
+
+                    }
+                }
+
+            }
+        }
+    }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mActivity = (Activity) context;
+    }
+
+    protected synchronized void buildGoogleApiClient(){
+        googleApiClient = new GoogleApiClient.Builder( ExploreFragment.super.getContext())
+                .addConnectionCallbacks( this )
+                .addOnConnectionFailedListener( this )
+                .addApi( LocationServices.API )
+                .build();
+        googleApiClient.connect();
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
 
 }

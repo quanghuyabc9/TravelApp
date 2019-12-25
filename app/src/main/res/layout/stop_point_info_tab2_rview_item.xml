@@ -28,6 +28,20 @@
             android:textColor="#000000"
             android:textStyle="bold"
             android:textSize="16sp" />
+        <ImageButton
+            android:id="@+id/btn_report_review_explore"
+            android:layout_width="33dp"
+            android:layout_height="33dp"
+            android:src="@drawable/icons8_more_48"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:background="@color/transparent"
+            android:layout_marginRight="4dp"
+            android:padding="10dp"
+            android:focusable="true"
+            />
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -76,7 +90,6 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/container_star_review_explore"
-            android:text="26/03/1999"
             />
     </RelativeLayout>
 
@@ -86,15 +99,15 @@
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_container_gray"
         android:paddingRight="15dp"
-        android:paddingLeft="15dp">
+        android:paddingLeft="15dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp">
         <TextView
             android:id="@+id/feedback_review_explore"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:minHeight="50dp"
             android:textSize="16sp"
-            android:text="Tour nay that tuyet voi"
             android:textColor="#000000" />
     </RelativeLayout>
 

@@ -22,6 +22,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.ygaps.travelapp.R;
+import com.ygaps.travelapp.utils.EditTool;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,6 +47,7 @@ public class TourDetailMemberFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_tourdetail_member, container, false);
+<<<<<<< HEAD
 
         //Get userId
         name= view.findViewById(R.id.invitedUser);
@@ -144,6 +146,9 @@ public class TourDetailMemberFragment extends Fragment {
             }
         });
 
+=======
+        EditTool.HideSoftKeyboard(view.getContext());
+>>>>>>> e3374517491f207f4b9e43194caf3f9dd9be0ed8
         return view;
     }
 }

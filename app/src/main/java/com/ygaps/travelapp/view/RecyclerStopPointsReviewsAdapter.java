@@ -3,6 +3,7 @@ package com.ygaps.travelapp.view;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,6 +21,8 @@ public class RecyclerStopPointsReviewsAdapter extends RecyclerView.Adapter<Recyc
 
     private ArrayList<ReviewsInfo> reviewsInfoItems;
 
+    public RecyclerStopPointsReviewsAdapterListener onClickListener;
+
     public class ReviewDataHolder extends RecyclerView.ViewHolder{
 
         private ImageView userAvatar;
@@ -27,6 +30,7 @@ public class RecyclerStopPointsReviewsAdapter extends RecyclerView.Adapter<Recyc
         ArrayList<ImageView> stars;
         private TextView createDate;
         private TextView feedBack;
+        private ImageButton report;
 
 
         public ReviewDataHolder(@NonNull View itemView) {
@@ -42,11 +46,20 @@ public class RecyclerStopPointsReviewsAdapter extends RecyclerView.Adapter<Recyc
 
             createDate = itemView.findViewById(R.id.create_date_review_explore);
             feedBack = itemView.findViewById(R.id.feedback_review_explore);
+            report = itemView.findViewById(R.id.btn_report_review_explore);
+
+            report.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onClickListener.iconButtonReportOnClick(v, getAdapterPosition());
+                }
+            });
         }
     }
 
-    public RecyclerStopPointsReviewsAdapter(ArrayList<ReviewsInfo> reviewInfoItems){
+    public RecyclerStopPointsReviewsAdapter(ArrayList<ReviewsInfo> reviewInfoItems, RecyclerStopPointsReviewsAdapterListener onClickListener){
         this.reviewsInfoItems = reviewInfoItems;
+        this.onClickListener = onClickListener;
     }
 
     @NonNull
@@ -73,6 +86,12 @@ public class RecyclerStopPointsReviewsAdapter extends RecyclerView.Adapter<Recyc
     @Override
     public int getItemCount() {
         return reviewsInfoItems.size();
+    }
+
+
+    public interface RecyclerStopPointsReviewsAdapterListener {
+
+        void iconButtonReportOnClick(View v, int position);
     }
 
 }

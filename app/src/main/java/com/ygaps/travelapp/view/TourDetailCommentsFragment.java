@@ -26,6 +26,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.JsonObject;
 import com.ygaps.travelapp.R;
+import com.ygaps.travelapp.utils.EditTool;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,6 +59,7 @@ public class TourDetailCommentsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_tourdetail_comments, container, false);
+<<<<<<< HEAD
 
         cmd=view.findViewById(R.id.invitedChat);
         btn_send=view.findViewById(R.id.btn_send);
@@ -190,6 +192,9 @@ public class TourDetailCommentsFragment extends Fragment {
             }
         });
 
+=======
+        EditTool.HideSoftKeyboard(view.getContext());
+>>>>>>> e3374517491f207f4b9e43194caf3f9dd9be0ed8
         return view;
     }
 }
