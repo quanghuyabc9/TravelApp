@@ -146,7 +146,8 @@ public class TourDetailActivity extends AppCompatActivity {
 
         TourDetailViewPageAdapter adapter = new TourDetailViewPageAdapter(getSupportFragmentManager());
         Bundle bundle_tourId = new Bundle();
-        bundle_tourId.putString("tourId", tourId);
+        bundle_tourId.putString("TourId", tourId);
+        bundle_tourId.putString("TourName", tourName);
 
         TourDetailInfoFragment tourDetailInfoFragment = new TourDetailInfoFragment();
         tourDetailInfoFragment.setArguments(bundle_tourId);
@@ -159,5 +160,4 @@ public class TourDetailActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
     }
-
 }

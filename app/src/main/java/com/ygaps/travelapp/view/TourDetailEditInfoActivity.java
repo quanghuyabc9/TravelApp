@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -17,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -51,7 +53,8 @@ public class TourDetailEditInfoActivity extends AppCompatActivity {
     private Button update;
     // Tour detail data
     private String authorization = null;
-    private String tourId = null;
+    private String tourId = null,
+                   tourName = null;
 
     private boolean isPrivate_data = false;
 
@@ -66,7 +69,8 @@ public class TourDetailEditInfoActivity extends AppCompatActivity {
         // Initialize tour detail data here
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.shared_pref_name), Context.MODE_PRIVATE);
         authorization = sharedPreferences.getString(getString(R.string.saved_access_token), null);
-        tourId = getIntent().getStringExtra("tourId");
+        tourId = getIntent().getStringExtra("TourId");
+        tourName = getIntent().getStringExtra("TourName");
         // Get view
         tourname = findViewById(R.id.editext_tourdetail_tourname);
         startdate = findViewById(R.id.textview_tourdetail_startdate);
@@ -394,5 +398,16 @@ public class TourDetailEditInfoActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Intent intent = new Intent(TourDetailEditInfoActivity.this, TourDetailActivity.class);
+        intent.putExtra("TourId", tourId);
+        intent.putExtra("TourName", tourName);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        TourDetailEditInfoActivity.this.finish();
+        return true;
     }
 }

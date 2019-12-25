@@ -61,7 +61,9 @@ public class TourDetailInfoFragment extends Fragment {
 
     // Tour detail data
     String authorization = null;
-    private String tourId = null;
+    private String tourId = null,
+                   tourName = null;
+
 
     public TourDetailInfoFragment() {
 
@@ -75,7 +77,8 @@ public class TourDetailInfoFragment extends Fragment {
         SharedPreferences sharedPreferences = view.getContext().getSharedPreferences(getString(R.string.shared_pref_name), Context.MODE_PRIVATE);
         authorization = sharedPreferences.getString(getString(R.string.saved_access_token), null);
         //tourId = "300";
-        tourId = getArguments().getString("tourId");
+        tourId = getArguments().getString("TourId");
+        tourName = getArguments().getString("TourName");
         // Get view
         textView_date = view.findViewById(R.id.textview_tourdetail_editinfo_date);
         textView_people = view.findViewById(R.id.textview_tourdetail_editinfo_people);
@@ -86,7 +89,8 @@ public class TourDetailInfoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(view.getContext(), TourDetailEditInfoActivity.class);
-                intent.putExtra("tourId", tourId);
+                intent.putExtra("TourId", tourId);
+                intent.putExtra("TourName", tourName);
                 startActivity(intent);
             }
         });
