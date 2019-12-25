@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import static com.ygaps.travelapp.utils.DateTimeTool.convertMillisToDateTime;
 
+
 public class RecyclerStopPointsDataAdapter extends RecyclerView.Adapter< RecyclerStopPointsDataAdapter.spDataViewHolder> {
 
     private ArrayList<StopPointInfo> spDataItems;

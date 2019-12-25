@@ -13,18 +13,16 @@ import com.ygaps.travelapp.R;
 
 import java.util.ArrayList;
 
-public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapter.DataViewHolder>{
+public class RecyclerDataAdapter1 extends RecyclerView.Adapter<RecyclerDataAdapter1.DataViewHolder>{
 
-    private ArrayList<TourItem> tourItems;
+    private ArrayList<CommentItem> commentItems;
     private ClickListener clickListener;
 
     public class DataViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
 
-        private ImageView mImageView;
-        private TextView location;
-        private TextView date;
-        private TextView quantity;
-        private TextView price;
+        private TextView name;
+        private TextView comment;
+        private TextView onTime;
 
 
         public DataViewHolder(@NonNull View itemView) {
@@ -33,11 +31,9 @@ public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapte
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
 
-            mImageView = itemView.findViewById(R.id.tour_imview);
-            location = itemView.findViewById(R.id.tour_location);
-            date = itemView.findViewById(R.id.tour_date);
-            quantity = itemView.findViewById(R.id.tour_quantity);
-            price = itemView.findViewById(R.id.tour_price);
+            name = itemView.findViewById(R.id.tour_location);
+            onTime = itemView.findViewById(R.id.tour_date);
+            comment=itemView.findViewById(R.id.)
         }
 
         @Override

@@ -45,7 +45,7 @@ import java.util.Map;
 public class HistoryFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private RecyclerDataAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManger;
 
 
@@ -151,9 +151,24 @@ public class HistoryFragment extends Fragment {
         mLayoutManger = new LinearLayoutManager(getActivity());
 
         mAdapter = new RecyclerDataAdapter(tourItems);
+        mAdapter.setOnItemClickListener(new RecyclerDataAdapter.ClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
+
+                Intent intent = new Intent(getActivity(), TourDetailActivity.class);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onItemLongClick(int position, View v) {
+
+            }
+        });
+
 
         mRecyclerView.setLayoutManager(mLayoutManger);
         mRecyclerView.setAdapter(mAdapter);
+
         return view;
     }
 }

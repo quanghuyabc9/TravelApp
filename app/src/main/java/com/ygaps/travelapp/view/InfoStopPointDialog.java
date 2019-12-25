@@ -67,10 +67,10 @@ public class InfoStopPointDialog extends AppCompatDialogFragment {
         String[] serviceType = getResources().getStringArray(R.array.serviceName);
         int indexSvId = pointInfo.getServiceTypeId() - 1;
         int indexProvinceId = pointInfo.getProvinceId() - 1;
-        if (indexSvId > serviceType.length || indexSvId <0){
+        if (indexSvId >= serviceType.length || indexSvId <0){
             indexSvId = 0;
         }
-        if (indexProvinceId > province.length || indexProvinceId < 0){
+        if (indexProvinceId >= province.length || indexProvinceId < 0){
             indexProvinceId = 0;
         }
         txtServiceID.setText(serviceType[indexSvId]);

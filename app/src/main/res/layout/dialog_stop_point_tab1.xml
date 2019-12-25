@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="10dp"
+    >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <LinearLayout
+                android:orientation="vertical"
+                android:paddingBottom="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/container_info_explore_tab1"
+                android:padding="10dp"
+                >
+                <TextView
+                    android:id="@+id/sp_name_explore"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
+                    android:textSize="20dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginBottom="4dp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:id="@+id/icon_service_type_explore"/>
+
+                    <TextView
+                        android:id="@+id/stop_point_type_explore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:textColor="#000000" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/icons8_marker_48"/>
+
+                    <TextView
+                        android:id="@+id/stop_point_address_explore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:textColor="#000000" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="center_vertical">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/icon_province"/>
+                    <TextView
+                        android:id="@+id/stop_point_province_explore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:textColor="#000000"
+                        />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="5dp"
+                    android:paddingBottom="5dp"
+                    android:gravity="center_vertical">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/icons8_pricing_48"/>
+
+                    <TextView
+                        android:id="@+id/stop_point_price_explore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="Price"
+                        android:textStyle="bold"
+                        android:textColor="#FFA000"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <View
+                android:id="@+id/divider_review_explore_tab1"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="?android:attr/listDivider"
+                android:layout_below="@id/container_info_explore_tab1"/>
+
+            <RelativeLayout
+                android:layout_below="@+id/divider_review_explore_tab1"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/rating_title_review_explore_tab1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
+                    android:text="Rate this point"
+                    android:layout_marginBottom="10dp"/>
+
+                <RatingBar
+                    android:id="@+id/rating_bar_review_explore_tab1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/rating_title_review_explore_tab1"
+                    android:numStars="5"
+                    android:stepSize="1"
+                    android:theme="@style/MyRatingBar"/>
+                <TextView
+                    android:id="@+id/tvRatingScale_explore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Awesome. I love it"
+                    android:textSize="14sp"
+                    android:layout_below="@id/rating_bar_review_explore_tab1"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="5dp"
+                    android:textColor="#000000"
+                    android:visibility="gone"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/container_edit_feedback_review_explore"
+                    android:background="@drawable/rounded_edittext_states"
+                    android:layout_below="@+id/tvRatingScale_explore"
+                    android:padding="7dp"
+                    android:visibility="gone">
+                    <EditText
+                        android:id="@+id/edit_feedback_review_explore"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine"
+                        android:background="@color/transparent"
+                        android:lines="4"
+                        android:hint="Tell us what you loved"
+                        android:gravity="top"/>
+                </RelativeLayout>
+
+
+                <Button
+                    android:id="@+id/btnSubmit_review_explore_tab1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/rounded_button"
+                    android:text="Send feedback"
+                    android:textColor="@android:color/white"
+                    android:layout_below="@+id/container_edit_feedback_review_explore"
+                    android:visibility="gone"/>
+                <Button
+                    android:id="@+id/btnCancelSubmit_review_explore_tab1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/rounded_button_discard"
+                    android:text="Cancel"
+                    android:textColor="@android:color/white"
+                    android:layout_below="@+id/btnSubmit_review_explore_tab1"
+                    android:visibility="gone"/>
+
+            </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
+
+
+
+
+
+
+
+</RelativeLayout>

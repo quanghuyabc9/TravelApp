@@ -50,8 +50,7 @@ public class MainActivity extends AppCompatActivity {
                         selectedFragment = new HistoryFragment();
                         break;
                     case R.id.nav_map:
-                        EditTool.CustomizeActionBar("Map", MainActivity.this);
-                        selectedFragment = new MapFragment();
+                        selectedFragment = new ExploreFragment();
                         break;
                     case R.id.nav_noti:
                         EditTool.CustomizeActionBar("Notifications", MainActivity.this);
