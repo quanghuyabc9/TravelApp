@@ -47,6 +47,9 @@ public class ListTourFragment extends Fragment {
     private RecyclerDataAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManger;
 
+    ArrayList<TourItem> tourItems;
+    ArrayList<TourItem> holderTourItems;
+
     private View.OnClickListener createTour = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -76,64 +79,120 @@ public class ListTourFragment extends Fragment {
 
         //get token from login
         SharedPreferences sharedPref = getContext().getApplicationContext().getSharedPreferences(getString(R.string.shared_pref_name), 0);
-        final String accessToken = sharedPref.getString(getString(R.string.saved_access_token),null);
-        final ArrayList<TourItem> tourItems = new ArrayList<>();
+        final String accessToken = sharedPref.getString(getString(R.string.saved_access_token), null);
+        tourItems = new ArrayList<>();
+        holderTourItems = new ArrayList<>();
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 
-        String url="http://35.197.153.192:3000/tour/list?rowPerPage=100&pageNum=1&isDesc=true";
+        String url = "http://35.197.153.192:3000/tour/list?rowPerPage=200&pageNum=1&isDesc=true";
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d("Res: ", response.toString());
                 try {
-                    TextView tv= (TextView) view.findViewById(R.id.tour_num);
+                    TextView tv = (TextView) view.findViewById(R.id.tour_num);
                     tv.setText(response.getString("total"));
 
-                     JSONArray listTour = response.getJSONArray("tours");
-                     for (int i = 0; i < listTour.length(); i++){
-                         JSONObject o = listTour.getJSONObject(i);
-                         String img = o.getString("avatar");
-                         if (img == null){
+                    JSONArray listTour = response.getJSONArray("tours");
+                    for (int i = 0; i < listTour.length(); i++) {
+                        JSONObject o = listTour.getJSONObject(i);
+                        String img = o.getString("avatar");
+                        if (img == null) {
 //                             img = "@drawable/alternative_view";
-                         }
-                         String location = o.getString("name");
+                        }
+                        String location = o.getString("name");
 
-                         String startDate;
-                         long milisStartDate = o.optLong("startDate", 0);
-                         if (milisStartDate == 0){
-                             startDate = "null";
-                         }
-                         else {
-                             Calendar calendar = Calendar.getInstance();
-                             DateFormat simple = new SimpleDateFormat("dd/MM/yyyy");
-                             Date result = new Date(milisStartDate);
-                             startDate = simple.format(result);
-                         }
-                         String endDate;
-                         long milisEndDate = o.optLong("startDate", 0);
-                         if (milisEndDate == 0){
-                             endDate = "null";
-                         }
-                         else {
-                             Calendar calendar = Calendar.getInstance();
-                             DateFormat simple = new SimpleDateFormat("dd/MM/yyyy");
-                             Date result = new Date(milisEndDate);
-                             endDate = simple.format(result);
-                         }
-                         String date = startDate + " - "+ endDate;
-                         String numAdults = o.getString("adults");
-                         String numChilds = o.getString("childs");
-                         String quantity;
-                         if (numChilds.equals("0")){
-                             quantity = numAdults + " adults";
-                         }
-                         else{
-                             quantity = numAdults + " adults, " + numChilds + " childs";
-                         }
-                         String price = o.getString("minCost") + " - " + o.getString("maxCost");
-                         int id = o.getInt("id");
-                         tourItems.add(new TourItem(R.drawable.alternative_view, location, date, quantity, price, id));
-                     }
+                        String startDate;
+                        long milisStartDate = o.optLong("startDate", 0);
+                        if (milisStartDate == 0) {
+                            startDate = "null";
+                        } else {
+                            Calendar calendar = Calendar.getInstance();
+                            DateFormat simple = new SimpleDateFormat("dd/MM/yyyy");
+                            Date result = new Date(milisStartDate);
+                            startDate = simple.format(result);
+                        }
+                        String endDate;
+                        long milisEndDate = o.optLong("startDate", 0);
+                        if (milisEndDate == 0) {
+                            endDate = "null";
+                        } else {
+                            Calendar calendar = Calendar.getInstance();
+                            DateFormat simple = new SimpleDateFormat("dd/MM/yyyy");
+                            Date result = new Date(milisEndDate);
+                            endDate = simple.format(result);
+                        }
+                        String date = startDate + " - " + endDate;
+                        String numAdults = o.getString("adults");
+                        String numChilds = o.getString("childs");
+                        String quantity;
+                        if (numChilds.equals("0")) {
+                            quantity = numAdults + " adults";
+                        } else {
+                            quantity = numAdults + " adults, " + numChilds + " childs";
+                        }
+                        String price = o.getString("minCost") + " - " + o.getString("maxCost");
+                        int id = o.getInt("id");
+                        tourItems.add(new TourItem(R.drawable.alternative_view, location, date, quantity, price, id));
+                    }
+                    holderTourItems.addAll(tourItems);
+                    mRecyclerView = view.findViewById(R.id.rview);
+                    mRecyclerView.setHasFixedSize(true);
+                    mLayoutManger = new LinearLayoutManager(getActivity());
+
+                    mAdapter = new RecyclerDataAdapter(tourItems);
+                    mAdapter.setOnItemClickListener(new RecyclerDataAdapter.ClickListener() {
+                        @Override
+                        public void onItemClick(int position, View v) {
+
+                            Intent intent = new Intent(getActivity(), TourDetailActivity.class);
+                            intent.putExtra("id", tourItems.get(position).getId());
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void onItemLongClick(int position, View v) {
+
+                        }
+                    });
+
+                    mRecyclerView.setLayoutManager(mLayoutManger);
+                    mRecyclerView.setAdapter(mAdapter);
+
+                    final TextView notFound = view.findViewById(R.id.no_found_tour_location);
+
+                    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                        @Override
+                        public boolean onQueryTextSubmit(String query) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onQueryTextChange(String newText) {
+
+                            int len = holderTourItems.size();
+                            tourItems.clear();
+                            if (newText.equals("")){
+                                tourItems.addAll(holderTourItems);
+                            }
+                            else {
+                                for (int i = 0; i < len; i++) {
+                                    if (holderTourItems.get(i).getLocation().toUpperCase().contains(newText.toUpperCase())) {
+                                        tourItems.add(holderTourItems.get(i));
+                                    }
+                                }
+                            }
+                            mAdapter.notifyDataSetChanged();
+
+                            if (tourItems.size() == 0){
+                                notFound.setVisibility(View.VISIBLE);
+                            }
+                            else {
+                                notFound.setVisibility(View.GONE);
+                            }
+                            return false;
+                        }
+                    });
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -147,39 +206,19 @@ public class ListTourFragment extends Fragment {
                         error.getMessage(), Toast.LENGTH_SHORT).show();
 
             }
-        }){
+        }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization",accessToken);
+                headers.put("Authorization", accessToken);
                 return headers;
             }
         };
 
         requestQueue.add(req);
 
-        mRecyclerView = view.findViewById(R.id.rview);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManger = new LinearLayoutManager(getActivity());
 
-        mAdapter = new RecyclerDataAdapter(tourItems);
-        mAdapter.setOnItemClickListener(new RecyclerDataAdapter.ClickListener() {
-            @Override
-            public void onItemClick(int position, View v) {
 
-                Intent intent = new Intent(getActivity(), TourDetailActivity.class);
-                intent.putExtra("id", tourItems.get(position).getId());
-                startActivity(intent);
-            }
-
-            @Override
-            public void onItemLongClick(int position, View v) {
-
-            }
-        });
-
-        mRecyclerView.setLayoutManager(mLayoutManger);
-        mRecyclerView.setAdapter(mAdapter);
         return view;
     }
 }
