@@ -1,6 +1,5 @@
 package com.ygaps.travelapp.view;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -38,14 +37,15 @@ public class TourDetailActivity extends AppCompatActivity {
     private LinearLayout mainContainer;
     private ImageButton deleleTourBtn;
     //data
-    private String tourId;
-    private String authorization;
+    private String tourId = null;
+    private String authorization = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tourdetail);
         EditTool.CustomizeActionBar("Tour Detail", this);
+
         tabLayout = findViewById(R.id.tablayout_tourdetail_tab);
         appBarLayout = findViewById(R.id.appbarlayout_tourdetail_appbar);
         viewPager = findViewById(R.id.viewpaper_tourdetail_mainview);
@@ -58,13 +58,13 @@ public class TourDetailActivity extends AppCompatActivity {
             }
         });
         //Initialize data
-        tourId = "123";
+        tourId = getIntent().getStringExtra("TourId");
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.shared_pref_name), Context.MODE_PRIVATE);
         authorization = sharedPreferences.getString(getString(R.string.saved_access_token), null);
         deleleTourBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(authorization == null)
+                if(authorization == null || tourId == null)
                     return;
                 OkHttpClient client = new OkHttpClient();
                 final RequestBody requestBody = new FormEncodingBuilder()
@@ -134,7 +134,13 @@ public class TourDetailActivity extends AppCompatActivity {
         });
 
         TourDetailViewPageAdapter adapter = new TourDetailViewPageAdapter(getSupportFragmentManager());
-        adapter.AddFragment(new TourDetailInfoFragment(), "Info");
+        Bundle bundle_tourId = new Bundle();
+        bundle_tourId.putString("tourId", tourId);
+
+        TourDetailInfoFragment tourDetailInfoFragment = new TourDetailInfoFragment();
+        tourDetailInfoFragment.setArguments(bundle_tourId);
+
+        adapter.AddFragment(tourDetailInfoFragment, "Info");
         adapter.AddFragment(new TourDetailStoppointFragment(), "Stop points");
         adapter.AddFragment(new TourDetailMemberFragment(), "Member");
         adapter.AddFragment(new TourDetailCommentsFragment(), "Comments");

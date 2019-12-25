@@ -156,7 +156,8 @@ public class HistoryFragment extends Fragment {
             public void onItemClick(int position, View v) {
 
                 Intent intent = new Intent(getActivity(), TourDetailActivity.class);
-                intent.putExtra("id", tourItems.get(position).getId());
+                String tourId = Integer.toString(tourItems.get(position).getId());
+                intent.putExtra("TourId", tourId);
                 startActivity(intent);
             }
 
