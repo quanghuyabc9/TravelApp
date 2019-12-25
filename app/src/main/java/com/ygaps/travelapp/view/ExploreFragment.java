@@ -83,12 +83,16 @@ import java.util.Objects;
 import static android.app.Activity.RESULT_OK;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
+
 public class ExploreFragment extends Fragment
         implements OnMapReadyCallback,
-        GoogleApiClient.OnConnectionFailedListener
-{
+        GoogleApiClient.OnConnectionFailedListener,
+        GoogleApiClient.ConnectionCallbacks,
+        com.google.android.gms.location.LocationListener {
     private String accessToken;
     protected Activity mActivity;
+
+    private GoogleApiClient googleApiClient;
 
     //Map
     SupportMapFragment mapFragment;
@@ -331,13 +335,6 @@ public class ExploreFragment extends Fragment
     }
 
 
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
-
     private void setUpClusterer() {
 
         // Initialize the manager with the context and the map.
@@ -425,6 +422,10 @@ public class ExploreFragment extends Fragment
                 {
                     if (ContextCompat.checkSelfPermission( mActivity, Manifest.permission.ACCESS_FINE_LOCATION )==PackageManager.PERMISSION_GRANTED)
                     {
+                        if (googleApiClient==null)
+                        {
+                            buildGoogleApiClient();
+                        }
                         mGoogleMap.setMyLocationEnabled( true );
                     }
                 }
@@ -474,6 +475,35 @@ public class ExploreFragment extends Fragment
     public void onAttach(Context context) {
         super.onAttach(context);
         mActivity = (Activity) context;
+    }
+
+    protected synchronized void buildGoogleApiClient(){
+        googleApiClient = new GoogleApiClient.Builder( ExploreFragment.super.getContext())
+                .addConnectionCallbacks( this )
+                .addOnConnectionFailedListener( this )
+                .addApi( LocationServices.API )
+                .build();
+        googleApiClient.connect();
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 
 }
