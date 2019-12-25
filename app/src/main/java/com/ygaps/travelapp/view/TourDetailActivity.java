@@ -1,12 +1,13 @@
 package com.ygaps.travelapp.view;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -37,20 +38,24 @@ public class TourDetailActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private LinearLayout mainContainer;
     private ImageButton deleleTourBtn;
+    private TextView textView_tourName;
     //data
-    private String tourId;
-    private String authorization;
+    private String tourId = null;
+    private String tourName = null;
+    private String authorization = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tourdetail);
         EditTool.CustomizeActionBar("Tour Detail", this);
+
         tabLayout = findViewById(R.id.tablayout_tourdetail_tab);
         appBarLayout = findViewById(R.id.appbarlayout_tourdetail_appbar);
         viewPager = findViewById(R.id.viewpaper_tourdetail_mainview);
         mainContainer = findViewById(R.id.linearlayout_tourdetail_maincontainer);
         deleleTourBtn = findViewById(R.id.imagebutton_tourdetail_deletetour);
+        textView_tourName = findViewById(R.id.textView_tourDetail_tourName);
         mainContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,13 +63,15 @@ public class TourDetailActivity extends AppCompatActivity {
             }
         });
         //Initialize data
-        tourId = "123";
+        tourId = getIntent().getStringExtra("TourId");
+        tourName = getIntent().getStringExtra("TourName");
+        textView_tourName.setText(tourName);
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.shared_pref_name), Context.MODE_PRIVATE);
         authorization = sharedPreferences.getString(getString(R.string.saved_access_token), null);
         deleleTourBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(authorization == null)
+                if(authorization == null || tourId == null)
                     return;
                 OkHttpClient client = new OkHttpClient();
                 final RequestBody requestBody = new FormEncodingBuilder()
@@ -97,6 +104,10 @@ public class TourDetailActivity extends AppCompatActivity {
                                     Toast.makeText(TourDetailActivity.this, getString(R.string.successful), Toast.LENGTH_SHORT).show();
                                 }
                             });
+                            Intent intent = new Intent(TourDetailActivity.this, MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            TourDetailActivity.this.finish();
                         }
                         else if(response.code() == 404 || response.code() == 403 || response.code() == 500) {
                             try {
@@ -134,7 +145,13 @@ public class TourDetailActivity extends AppCompatActivity {
         });
 
         TourDetailViewPageAdapter adapter = new TourDetailViewPageAdapter(getSupportFragmentManager());
-        adapter.AddFragment(new TourDetailInfoFragment(), "Info");
+        Bundle bundle_tourId = new Bundle();
+        bundle_tourId.putString("tourId", tourId);
+
+        TourDetailInfoFragment tourDetailInfoFragment = new TourDetailInfoFragment();
+        tourDetailInfoFragment.setArguments(bundle_tourId);
+
+        adapter.AddFragment(tourDetailInfoFragment, "Info");
         adapter.AddFragment(new TourDetailStoppointFragment(), "Stop points");
         adapter.AddFragment(new TourDetailMemberFragment(), "Member");
         adapter.AddFragment(new TourDetailCommentsFragment(), "Comments");
