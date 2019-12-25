@@ -3,7 +3,6 @@ package com.ygaps.travelapp.view;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,9 +30,9 @@ public class RecyclerDataAdapter1 extends RecyclerView.Adapter<RecyclerDataAdapt
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
 
-            name = itemView.findViewById(R.id.tour_location);
-            onTime = itemView.findViewById(R.id.tour_date);
-            comment=itemView.findViewById(R.id.)
+            name = itemView.findViewById(R.id.mTourName);
+            onTime = itemView.findViewById(R.id.tour_time);
+            comment=itemView.findViewById(R.id.tour_comment);
         }
 
         @Override
@@ -48,8 +47,8 @@ public class RecyclerDataAdapter1 extends RecyclerView.Adapter<RecyclerDataAdapt
         }
     }
 
-    public RecyclerDataAdapter(ArrayList<TourItem> tourItems){
-        this.tourItems = tourItems;
+    public RecyclerDataAdapter1(ArrayList<CommentItem> commentItems){
+        this.commentItems=commentItems;
     }
     public void setOnItemClickListener(ClickListener clickListener) {
         this.clickListener = clickListener;
@@ -58,7 +57,7 @@ public class RecyclerDataAdapter1 extends RecyclerView.Adapter<RecyclerDataAdapt
     @NonNull
     @Override
     public DataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.a_item, parent, false);
         DataViewHolder dvh = new DataViewHolder(v);
         return dvh;
 
@@ -66,18 +65,16 @@ public class RecyclerDataAdapter1 extends RecyclerView.Adapter<RecyclerDataAdapt
 
     @Override
     public void onBindViewHolder(@NonNull DataViewHolder holder, int position) {
-        TourItem currentItem = tourItems.get(position);
-        holder.mImageView.setImageResource(currentItem.getImg_src());
-        holder.location.setText(currentItem.getLocation());
-        holder.date.setText(currentItem.getDate());
-        holder.quantity.setText(currentItem.getQuantity());
-        holder.price.setText(currentItem.getPrice());
+        CommentItem currentItem = commentItems.get(position);
+        holder.name.setText(currentItem.getName());
+        holder.onTime.setText(currentItem.getTime());
+        holder.comment.setText(currentItem.getComment());
     }
 
 
     @Override
     public int getItemCount() {
-        return tourItems.size();
+        return commentItems.size();
     }
 
 

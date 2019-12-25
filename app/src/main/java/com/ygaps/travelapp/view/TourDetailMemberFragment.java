@@ -47,7 +47,6 @@ public class TourDetailMemberFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_tourdetail_member, container, false);
-<<<<<<< HEAD
 
         //Get userId
         name= view.findViewById(R.id.invitedUser);
@@ -100,7 +99,7 @@ public class TourDetailMemberFragment extends Fragment {
                 //Gửi request lên server để thêm thành thêm thành viên.
                 RequestQueue requestQueue1 = Volley.newRequestQueue(v.getContext());
                 String url1 = "http://35.197.153.192:3000/tour/add/member";
-                String tourId="3925";
+                String tourId="4872";
                // String userInviteId=name.getText().toString();
                // final Boolean isInvite=false;
                 //create request pagram
@@ -122,7 +121,6 @@ public class TourDetailMemberFragment extends Fragment {
                             String createdOn = response.getString("createdOn");
                             Toast.makeText(v.getContext(), "success !!!", Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
-                            Toast.makeText(v.getContext(), "fail1 !!!", Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
                         }
                     }
@@ -146,9 +144,7 @@ public class TourDetailMemberFragment extends Fragment {
             }
         });
 
-=======
         EditTool.HideSoftKeyboard(view.getContext());
->>>>>>> e3374517491f207f4b9e43194caf3f9dd9be0ed8
         return view;
     }
 }

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -40,62 +41,53 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import retrofit2.http.HEAD;
+
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class TourDetailCommentsFragment extends Fragment {
     private RecyclerView mRecyclerView;
-    private RecyclerDataAdapter mAdapter;
+    private RecyclerDataAdapter1 mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private EditText cmd;
     private Button btn_send;
+    private String tourId;
 
-    View view;
+    ArrayList<CommentItem> commentItems;
+    ArrayList<CommentItem> holderCommentItems;
 
-    public TourDetailCommentsFragment() {
 
-    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_tourdetail_comments, container, false);
-<<<<<<< HEAD
+       final View view = inflater.inflate(R.layout.fragment_tourdetail_comments, container, false);
 
         cmd=view.findViewById(R.id.invitedChat);
         btn_send=view.findViewById(R.id.btn_send);
 
-        final String tourId="4506";
+
         //get token from login
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.shared_pref_name), 0);
         final String accessToken = sharedPref.getString(getString(R.string.saved_access_token), null);
+        tourId ="4506";
         //show list-comment
-        final ArrayList<CommentItem> commentItems = new ArrayList<>();
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-        String URL="http://35.197.153.192:3000/tour/comment-list";
-        Number pageIndex=1;
-        String pageSize="200";
-        JSONObject object=new JSONObject();
-        try {
-            object.put("tourId", tourId);
-            object.put("pageIndex",pageIndex);
-            object.put("pageSize",pageSize);
-        }catch (JSONException e){
-            e.printStackTrace();
-        }
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, URL,object, new Response.Listener<JSONObject>() {
+        commentItems=new ArrayList<>();
+        holderCommentItems=new ArrayList<>();
+        RequestQueue requestQueue = Volley.newRequestQueue(view.getContext());
+        String URL="http://35.197.153.192:3000/tour/comment-list?tourId=4506&pageIndex=1&pageSize=200";
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, URL,null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Log.d("Res: ", response.toString());
                 try {
+                    Toast.makeText(view.getContext(), "get success", Toast.LENGTH_SHORT).show();
                     JSONArray listComment = response.getJSONArray("commentList");
                     for (int i = 0; i < listComment.length(); i++) {
                         JSONObject o = listComment.getJSONObject(i);
                         String comment = o.getString("comment");
 
                         String name = o.getString("name");
-                        if (name == null) {
-                            name = "user";
-                        }
 
                         String onTime;
                         long milisTime = o.optLong("createdOn", 0);
@@ -107,15 +99,25 @@ public class TourDetailCommentsFragment extends Fragment {
                             Date result = new Date(milisTime);
                             onTime = simple.format(result);
                         }
-                        commentItems.add(new CommentItem(name,comment,onTime));
+                        commentItems.add(new CommentItem(name, comment, onTime));
                     }
-                } catch (JSONException e) {
+                    holderCommentItems.addAll(commentItems);
+                    mRecyclerView=view.findViewById(R.id.recycler_view);
+                    mRecyclerView.setHasFixedSize(true);
+                    layoutManager=new LinearLayoutManager(getActivity());
+                    mAdapter=new RecyclerDataAdapter1(commentItems);
+
+                    mRecyclerView.setLayoutManager(layoutManager);
+                    mRecyclerView.setAdapter(mAdapter);
+                }catch (JSONException e){
+                    Toast.makeText(view.getContext(), "get fail", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
             }
         },new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Toast.makeText(view.getContext(), "get error", Toast.LENGTH_SHORT).show();
                 VolleyLog.d("Err", "Error: " + error.getMessage());
                 Log.e("Err", "Site Info Error: " + error.getMessage());
                 Toast.makeText(getActivity(),
@@ -132,12 +134,7 @@ public class TourDetailCommentsFragment extends Fragment {
         };
         requestQueue.add(request);
 
-        mRecyclerView=view.findViewById(R.id.recycler_view);
-        mRecyclerView.setHasFixedSize(true);
-        layoutManager=new LinearLayoutManager(getActivity());
 
-        mAdapter = new RecyclerDataAdapter(commentItems);
-        mRecyclerView.setLayoutManager(layoutManager);
 
 
         //send comment
@@ -192,9 +189,6 @@ public class TourDetailCommentsFragment extends Fragment {
             }
         });
 
-=======
-        EditTool.HideSoftKeyboard(view.getContext());
->>>>>>> e3374517491f207f4b9e43194caf3f9dd9be0ed8
         return view;
     }
 }
