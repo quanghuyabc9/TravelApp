@@ -2,95 +2,429 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
     <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="40dp">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:padding="15dp"
+                android:id="@+id/container_info_tourdetail_info">
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/icons8_calendar_48"
-                    android:layout_marginEnd="10dp"/>
-                <TextView
-                    android:id="@+id/textview_tourdetail_editinfo_date"
+                    android:id="@+id/tour_imview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    android:layout_marginBottom="4dp"
+                    android:src="@drawable/alternative_view"
+                    android:maxHeight="170dp"/>
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="02/02/2019 - 02/02/2019"
-                    android:textSize="18sp"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/icons8_people_52"
-                    android:layout_marginEnd="10dp"/>
-                <TextView
-                    android:id="@+id/textview_tourdetail_editinfo_people"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/icons8_calendar_48"
+                        android:layout_marginEnd="10dp"/>
+                    <TextView
+                        android:id="@+id/textview_tourdetail_editinfo_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="02/02/2019 - 02/02/2019"
+
+                        android:textColor="#000000"/>
+                </LinearLayout>
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2 adults - 3 childs"
-                    android:textSize="18sp"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/icons8_pricing_48"
-                    android:layout_marginEnd="10dp"/>
-                <TextView
-                    android:id="@+id/textview_tourdetail_editinfo_cost"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/icons8_people_52"
+                        android:layout_marginEnd="10dp"/>
+                    <TextView
+                        android:id="@+id/textview_tourdetail_editinfo_people"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2 adults - 3 childs"
+                        android:textColor="#000000"/>
+                </LinearLayout>
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="50 - 40"
-                    android:textSize="18sp"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/shield"
-                    android:layout_marginEnd="10dp"/>
-                <TextView
-                    android:id="@+id/textview_tourdetail_editinfo_security"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/icons8_pricing_48"
+                        android:layout_marginEnd="10dp"/>
+                    <TextView
+                        android:id="@+id/textview_tourdetail_editinfo_cost"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="50 - 40"
+                        android:textColor="@color/window_title_background"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Private"
-                    android:textSize="18sp"/>
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/shield"
+                        android:layout_marginEnd="10dp"/>
+                    <TextView
+                        android:id="@+id/textview_tourdetail_editinfo_security"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Private"
+                        android:textColor="#000000"/>
+
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/imagebutton_tourdetail_editinfo_editbtn"
+                    android:paddingTop="10dp"
+                    android:layout_marginTop="-10dp"
+                    android:paddingBottom="10dp"
+                    android:layout_marginBottom="-10dp"
+                    android:textStyle="italic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:text="Edit Tour Info >"
+                    android:textColor="@color/window_title_background"
+                    android:focusable="true"
+                    android:clickable="true"/>
             </LinearLayout>
-        </LinearLayout>
+            <View
+                android:id="@+id/divider_tourdetail_info"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="?android:attr/listDivider"
+                android:layout_below="@+id/container_info_tourdetail_info" />
+
+            <RelativeLayout
+                android:id="@+id/container_rating_fb_explore_tab1"
+                android:layout_below="@+id/divider_tourdetail_info"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/rating_title_review_explore_tab1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
+                    android:text="Rate this tour"
+                    android:layout_marginBottom="10dp"/>
+
+                <RatingBar
+                    android:id="@+id/rating_bar_review_explore_tab1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/rating_title_review_explore_tab1"
+                    android:numStars="5"
+                    android:stepSize="1"
+                    android:theme="@style/MyRatingBar"
+                    android:focusable="false"
+                    android:clickable="true"/>
+                <TextView
+                    android:id="@+id/tvRatingScale_explore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Awesome. I love it"
+                    android:textSize="14sp"
+                    android:layout_below="@id/rating_bar_review_explore_tab1"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="5dp"
+                    android:textColor="#000000"
+                    android:visibility="gone"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/container_edit_feedback_review_explore"
+                    android:background="@drawable/rounded_edittext_states"
+                    android:layout_below="@+id/tvRatingScale_explore"
+                    android:padding="7dp"
+                    android:visibility="gone">
+                    <EditText
+                        android:id="@+id/edit_feedback_review_explore"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine"
+                        android:background="@color/transparent"
+                        android:lines="4"
+                        android:hint="Tell us what you loved"
+                        android:gravity="top"/>
+                </RelativeLayout>
+
+
+                <Button
+                    android:id="@+id/btnSubmit_review_explore_tab1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/rounded_button"
+                    android:text="Send feedback"
+                    android:textColor="@android:color/white"
+                    android:layout_below="@+id/container_edit_feedback_review_explore"
+                    android:visibility="gone"/>
+                <Button
+                    android:id="@+id/btnCancelSubmit_review_explore_tab1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/rounded_button_discard"
+                    android:text="Cancel"
+                    android:textColor="@android:color/white"
+                    android:layout_below="@+id/btnSubmit_review_explore_tab1"
+                    android:visibility="gone"/>
+
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/divider_tourdetail2_info"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="?android:attr/listDivider"
+                android:layout_below="@+id/container_rating_fb_explore_tab1" />
+            <RelativeLayout
+                android:layout_below="@+id/divider_tourdetail2_info"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rating_title2_review_explore_tab1"
+                    android:layout_marginBottom="10dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#000000"
+                        android:textStyle="bold"
+                        android:text="Rating and reviews"
+                        android:layout_centerVertical="true"/>
+                    <TextView
+                        android:id="@+id/show_tour_review"
+                        android:layout_alignParentRight="true"
+                        android:paddingTop="10dp"
+                        android:layout_marginTop="-10dp"
+                        android:paddingBottom="10dp"
+                        android:layout_marginBottom="-10dp"
+                        android:textStyle="italic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:text="View reviews >"
+                        android:textColor="@color/window_title_background"
+                        android:focusable="true"
+                        android:clickable="true"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_below="@+id/rating_title2_review_explore_tab1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <RelativeLayout
+                        android:id="@+id/container_num_rating"
+                        android:layout_alignParentLeft="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="-55dp"
+                        android:layout_marginRight="-45dp"
+                        >
+                        <TextView
+                            android:id="@+id/num_of_stars_explore"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="60sp"
+                            android:textColor="#000000"
+                            android:textStyle="bold"
+                            android:text="0"
+                            android:layout_centerHorizontal="true"/>
+                        <RatingBar
+                            android:id="@+id/rating_num_of_stars_explore"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:numStars="5"
+                            android:theme="@style/MyRatingBar2"
+                            android:scaleX="0.5"
+                            android:scaleY="0.5"
+                            android:layout_below="@+id/num_of_stars_explore"
+                            android:layout_centerHorizontal="true"
+                            android:isIndicator="true"/>
+                    </RelativeLayout>
+                    <LinearLayout
+                        android:layout_toRightOf="@+id/container_num_rating"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_centerVertical="true"
+                        >
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp">
+                            <TextView
+                                android:gravity="center_vertical"
+                                android:layout_centerVertical="true"
+                                android:id="@+id/rating_1_explore"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:textColor="#000000"
+                                android:layout_marginRight="10dp"
+                                android:text="1"/>
+                            <ProgressBar
+                                android:layout_centerVertical="true"
+                                android:id="@+id/progressBar1"
+                                android:layout_toRightOf="@+id/rating_1_explore"
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:max="100"
+                                android:progressDrawable="@drawable/custom_progress"
+                                />
+
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp">
+                            <TextView
+                                android:gravity="center_vertical"
+                                android:layout_centerVertical="true"
+                                android:id="@+id/rating_2_explore"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:textColor="#000000"
+                                android:layout_marginRight="10dp"
+                                android:text="2"/>
+                            <ProgressBar
+                                android:layout_centerVertical="true"
+                                android:id="@+id/progressBar2"
+                                android:layout_toRightOf="@+id/rating_2_explore"
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:max="100"
+                                android:progressDrawable="@drawable/custom_progress"
+                                />
+
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp">
+                            <TextView
+                                android:gravity="center_vertical"
+                                android:layout_centerVertical="true"
+                                android:id="@+id/rating_3_explore"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:textColor="#000000"
+                                android:layout_marginRight="10dp"
+                                android:text="3"/>
+                            <ProgressBar
+                                android:layout_centerVertical="true"
+                                android:id="@+id/progressBar3"
+                                android:layout_toRightOf="@+id/rating_3_explore"
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:max="100"
+                                android:progressDrawable="@drawable/custom_progress"
+                                />
+
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp">
+                            <TextView
+                                android:gravity="center_vertical"
+                                android:layout_centerVertical="true"
+                                android:id="@+id/rating_4_explore"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:textColor="#000000"
+                                android:layout_marginRight="10dp"
+                                android:text="4"/>
+                            <ProgressBar
+                                android:layout_centerVertical="true"
+                                android:id="@+id/progressBar4"
+                                android:layout_toRightOf="@+id/rating_4_explore"
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:max="100"
+                                android:progressDrawable="@drawable/custom_progress"
+                                />
+
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:gravity="center_vertical"
+                                android:layout_centerVertical="true"
+                                android:id="@+id/rating_5_explore"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:textColor="#000000"
+                                android:layout_marginRight="10dp"
+                                android:text="5"/>
+                            <ProgressBar
+                                android:layout_centerVertical="true"
+                                android:id="@+id/progressBar5"
+                                android:layout_toRightOf="@+id/rating_5_explore"
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:max="100"
+                                android:progressDrawable="@drawable/custom_progress"
+                                />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+            </RelativeLayout>
+
+        </RelativeLayout>
+
     </ScrollView>
-    <ImageButton
-        android:id="@+id/imagebutton_tourdetail_editinfo_editbtn"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="30dp"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/edit_tour"
-        android:background="@color/transparent"/>
 </RelativeLayout>

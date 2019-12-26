@@ -3,10 +3,15 @@ package com.ygaps.travelapp.view;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,8 +41,9 @@ public class TourDetailActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private AppBarLayout appBarLayout;
     private ViewPager viewPager;
-    private LinearLayout mainContainer;
+    private RelativeLayout mainContainer;
     private ImageButton deleleTourBtn;
+    private ImageButton followButton;
     private TextView textView_tourName;
     //data
     private String tourId = null;
@@ -48,13 +54,15 @@ public class TourDetailActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tourdetail);
-        EditTool.CustomizeActionBar("Tour Detail", this);
+        //EditTool.CustomizeActionBar("Tour Detail", this);
+        getSupportActionBar().hide();
 
         tabLayout = findViewById(R.id.tablayout_tourdetail_tab);
         appBarLayout = findViewById(R.id.appbarlayout_tourdetail_appbar);
         viewPager = findViewById(R.id.viewpaper_tourdetail_mainview);
         mainContainer = findViewById(R.id.linearlayout_tourdetail_maincontainer);
         deleleTourBtn = findViewById(R.id.imagebutton_tourdetail_deletetour);
+        followButton = findViewById(R.id.imagebutton_tourdetail_followtour);
         textView_tourName = findViewById(R.id.textView_tourDetail_tourName);
         mainContainer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,6 +151,14 @@ public class TourDetailActivity extends AppCompatActivity {
                 });
             }
         });
+        followButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TourDetailActivity.this, FollowTourActivity.class);
+                intent.putExtra("ToudId", tourId);
+                startActivity(intent);
+            }
+        });
 
         TourDetailViewPageAdapter adapter = new TourDetailViewPageAdapter(getSupportFragmentManager());
         Bundle bundle_tourId = new Bundle();
@@ -150,14 +166,37 @@ public class TourDetailActivity extends AppCompatActivity {
         bundle_tourId.putString("TourName", tourName);
 
         TourDetailInfoFragment tourDetailInfoFragment = new TourDetailInfoFragment();
-        tourDetailInfoFragment.setArguments(bundle_tourId);
+        TourDetailStoppointFragment tourDetailStoppointFragment = new TourDetailStoppointFragment();
+        TourDetailMemberFragment tourDetailMemberFragment = new TourDetailMemberFragment();
+        TourDetailCommentsFragment tourDetailCommentsFragment = new TourDetailCommentsFragment();
 
-        adapter.AddFragment(tourDetailInfoFragment, "Info");
-        adapter.AddFragment(new TourDetailStoppointFragment(), "Stop points");
-        adapter.AddFragment(new TourDetailMemberFragment(), "Member");
-        adapter.AddFragment(new TourDetailCommentsFragment(), "Comments");
+        tourDetailInfoFragment.setArguments(bundle_tourId);
+        tourDetailStoppointFragment.setArguments(bundle_tourId);
+        tourDetailMemberFragment.setArguments(bundle_tourId);
+        tourDetailCommentsFragment.setArguments(bundle_tourId);
+
+        adapter.AddFragment(tourDetailInfoFragment, "General");
+        adapter.AddFragment(tourDetailStoppointFragment, "Stop points");
+        adapter.AddFragment(tourDetailMemberFragment, "Members");
+        adapter.AddFragment(tourDetailCommentsFragment, "Comments");
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
+    }
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if ( v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int)ev.getRawX(), (int)ev.getRawY())) {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent(ev);
     }
 }

@@ -48,8 +48,8 @@ public class HistoryFragment extends Fragment {
     private RecyclerDataAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManger;
 
-    ArrayList<TourItem> tourItems;
-    ArrayList<TourItem> holderTourItems;
+    private ArrayList<TourItem> tourItems;
+    private ArrayList<TourItem> holderTourItems;
 
 
     @Nullable
@@ -139,7 +139,8 @@ public class HistoryFragment extends Fragment {
                         public void onItemClick(int position, View v) {
 
                             Intent intent = new Intent(getActivity(), TourDetailActivity.class);
-                            intent.putExtra("id", tourItems.get(position).getId());
+                            intent.putExtra("TourId", Integer.toString(tourItems.get(position).getId()));
+                            intent.putExtra("TourName",tourItems.get(position).getLocation());
                             startActivity(intent);
                         }
 

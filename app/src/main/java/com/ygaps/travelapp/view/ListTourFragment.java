@@ -148,7 +148,8 @@ public class ListTourFragment extends Fragment {
                         public void onItemClick(int position, View v) {
 
                             Intent intent = new Intent(getActivity(), TourDetailActivity.class);
-                            intent.putExtra("id", tourItems.get(position).getId());
+                            intent.putExtra("TourId", Integer.toString(tourItems.get(position).getId()));
+                            intent.putExtra("TourName",tourItems.get(position).getLocation());
                             startActivity(intent);
                         }
 

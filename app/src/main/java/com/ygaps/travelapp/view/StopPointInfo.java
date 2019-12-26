@@ -94,6 +94,20 @@ public class StopPointInfo {
         this.serviceId = serviceId;
     }
 
+    StopPointInfo(int id, int serviceId, String name, String address, int provinceId, String lat, String longitude, long arriveAt, long leaveAt, int serviceTypeId, long minCost, long maxCost){
+        this.id = id;
+        this.serviceId = id;
+        this.name = name;
+        this.address = address;
+        this.provinceId = provinceId;
+        this.lat = lat;
+        this.longitude = longitude;
+        this.arriveAt = arriveAt;
+        this.leaveAt = leaveAt;
+        this.serviceTypeId = serviceTypeId;
+        this.minCost = minCost;
+        this.maxCost = maxCost;
+    }
     public void setName(String name) {
         this.name = name;
     }
