@@ -10,6 +10,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,60 +30,80 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.ygaps.travelapp.R;
-
-import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class AddStopPointDialog extends AppCompatDialogFragment {
-    private AddStopPointDialogListener listener;
+import static com.ygaps.travelapp.utils.DateTimeTool.convertMillisToDateTime;
+
+public class UpdateSuggestStopPointDialog extends AppCompatDialogFragment {
+    private UpdateSuggestStopPointDialog.InfoSuggestStopPointDialogListener listener;
+
+    private StopPointInfo pointInfo;
+    private int index;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        final View view = inflater.inflate(R.layout.dialog_add_stop_point_layout, null);
+        final View view = inflater.inflate(R.layout.dialog_update_suggest_stop_point, null);
 
-        //Spinner service type
-        final Spinner spinner1 = view.findViewById(R.id.spinner_service_type);
-        ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(getContext(),R.array.serviceName, android.R.layout.simple_spinner_item);
-        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner1.setAdapter(adapter1);
-        final RelativeLayout frameServiceType = view.findViewById(R.id.frame_service_type);
-        spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Bundle bundle = getArguments();
+        String JsonDataString = bundle.getString("JSONPointInfo");
+        index = bundle.getInt("Index");
+        pointInfo = new Gson().fromJson(JsonDataString, new TypeToken<StopPointInfo>(){}.getType());
 
-            }
+        final TextView txtSpName = view.findViewById(R.id.stop_point_name_suggest_update);
+        final TextView txtServiceID = view.findViewById(R.id.frame_service_type_suggest_update);
+        final TextView txtAddress = view.findViewById(R.id.address_suggest_update);
+        final TextView txtProvinceID = view.findViewById(R.id.frame_province_type_suggest_update);
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+        final TextView txtMinCost = view.findViewById(R.id.min_cost_suggest_update);
+        final TextView txtMaxCost = view.findViewById(R.id.max_cost_suggest_update);
 
-            }
-        });
-        //Spinner province
-        final Spinner spinner2 = view.findViewById(R.id.spinner_province);
-        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(getContext(),R.array.province, android.R.layout.simple_spinner_item);
-        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner2.setAdapter(adapter2);
-        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        final TextView txtArriveDate = view.findViewById(R.id.arrive_date_suggest_upđate);
+        final TextView txtArriveTime = view.findViewById(R.id.arrive_time_suggest_update);
 
-            }
+        final TextView txtLeaveDate = view.findViewById(R.id.leave_date_suggest_update);
+        final TextView txtLeaveTime = view.findViewById(R.id.leave_time_suggest_update);
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+        txtSpName.setText(pointInfo.getName());
+        txtAddress.setText(pointInfo.getAddress());
+        txtMinCost.setText(Long.toString(pointInfo.getMinCost()));
+        txtMaxCost.setText(Long.toString(pointInfo.getMaxCost()));
 
-            }
-        });
+        String arriveDateTime = convertMillisToDateTime(pointInfo.getArriveAt());
+        String arrArriveDateTime[] = arriveDateTime.split(" ", 2);
+        txtArriveDate.setText(arrArriveDateTime[0]);
+        txtArriveTime.setText(arrArriveDateTime[1]);
 
-        final ImageButton cancelbtn = view.findViewById(R.id.cancel_add);
+        String leaveDateTime = convertMillisToDateTime(pointInfo.getLeaveAt());
+        String arrLeaveDateTime[] = leaveDateTime.split(" ", 2);
+        txtLeaveDate.setText(arrLeaveDateTime[0]);
+        txtLeaveTime.setText(arrLeaveDateTime[1]);
+
+        String[] province = getResources().getStringArray(R.array.province);
+        String[] serviceType = getResources().getStringArray(R.array.serviceName);
+        int indexSvId = pointInfo.getServiceTypeId() - 1;
+        int indexProvinceId = pointInfo.getProvinceId() - 1;
+
+        if (indexSvId >= serviceType.length || indexSvId < 0){
+            indexSvId = 0;
+        }
+        if (indexProvinceId >= province.length || indexProvinceId < 0){
+            indexProvinceId = 0;
+        }
+        txtServiceID.setText(serviceType[indexSvId]);
+        txtProvinceID.setText(province[indexProvinceId]);
+
+
+        final ImageButton cancelbtn = view.findViewById(R.id.cancel_suggest_update);
         cancelbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,8 +112,7 @@ public class AddStopPointDialog extends AppCompatDialogFragment {
         });
 
         //Set arrive time picker
-        final TextView arriveTimeText = view.findViewById(R.id.arrive_time);
-        ImageButton setTimeBtn =  view.findViewById(R.id.arrive_time_btn);
+        ImageButton setTimeBtn =  view.findViewById(R.id.arrive_time_btn_suggest_update);
         setTimeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,7 +125,7 @@ public class AddStopPointDialog extends AppCompatDialogFragment {
                                 String time = hourOfDay + ":" + minute;
                                 SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
                                 try {
-                                    arriveTimeText.setText(dateFormat.format(dateFormat.parse(time)));
+                                    txtArriveTime.setText(dateFormat.format(dateFormat.parse(time)));
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
@@ -120,8 +140,7 @@ public class AddStopPointDialog extends AppCompatDialogFragment {
             }
         });
         //Set arrive date picker
-        final TextView arriveDateText = view.findViewById(R.id.arrive_date);
-        ImageButton arriveDateBtn = view.findViewById(R.id.arrive_date_btn);
+        ImageButton arriveDateBtn = view.findViewById(R.id.arrive_date_btn_suggest_update);
         arriveDateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,7 +154,7 @@ public class AddStopPointDialog extends AppCompatDialogFragment {
 
                                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                                 try {
-                                    arriveDateText.setText(dateFormat.format(dateFormat.parse(date)));
+                                    txtArriveDate.setText(dateFormat.format(dateFormat.parse(date)));
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
@@ -150,8 +169,7 @@ public class AddStopPointDialog extends AppCompatDialogFragment {
         });
 
         //Set leave date picker
-        final TextView leaveDateText = view.findViewById(R.id.leave_date);
-        ImageButton leaveDateBtn = view.findViewById(R.id.leave_date_btn);
+        ImageButton leaveDateBtn = view.findViewById(R.id.leave_date_btn_suggest_update);
         leaveDateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,7 +182,7 @@ public class AddStopPointDialog extends AppCompatDialogFragment {
                                 String date = dayOfMonth + "/" + (month + 1) + "/" + year;
                                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                                 try {
-                                    leaveDateText.setText(dateFormat.format(dateFormat.parse(date)));
+                                    txtLeaveDate.setText(dateFormat.format(dateFormat.parse(date)));
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
@@ -179,8 +197,7 @@ public class AddStopPointDialog extends AppCompatDialogFragment {
         });
 
         //Set leave time picker
-        final TextView leaveTimeText = view.findViewById(R.id.leave_time);
-        ImageButton leaveTimeBtn =  view.findViewById(R.id.leave_time_btn);
+        ImageButton leaveTimeBtn =  view.findViewById(R.id.leave_time_btn_suggest_update);
         leaveTimeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -193,7 +210,7 @@ public class AddStopPointDialog extends AppCompatDialogFragment {
                                 String time = hourOfDay + ":" + minute;
                                 SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
                                 try {
-                                    leaveTimeText.setText(dateFormat.format(dateFormat.parse(time)));
+                                    txtLeaveTime.setText(dateFormat.format(dateFormat.parse(time)));
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
@@ -208,79 +225,18 @@ public class AddStopPointDialog extends AppCompatDialogFragment {
             }
         });
 
-        //Set address text by data from activity
-        final EditText edAddress = view.findViewById(R.id.address);
-        Bundle bundle = getArguments();
-        edAddress.setText(bundle.getString("Address", ""));
-        //Set lat, lng
-        final double latitude = bundle.getDouble("Latitude",0);
-        final double longitude = bundle.getDouble("Longitude", 0);
 
-        Button submitBtn = view.findViewById(R.id.add_sp_submit);
-        final EditText edSpname = view.findViewById(R.id.stop_point_name);
-        final EditText edMinCost = view.findViewById(R.id.min_cost);
-        final EditText edMaxCost = view.findViewById(R.id.max_cost);
+        Button updateButton = view.findViewById(R.id.button_suggest_update);
         //arriveDateText, arriveTimeText, leaveDateText, leaveTimeText, address
 
-        submitBtn.setOnClickListener(new View.OnClickListener() {
+        updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String spname = edSpname.getText().toString();
-                int serviceTypeId = spinner1.getSelectedItemPosition() + 1;
-                String address = edAddress.getText().toString();
-                int provinceId = spinner2.getSelectedItemPosition() + 1;
 
-                String strMinCost = edMinCost.getText().toString();
-                String strMaxCost = edMaxCost.getText().toString();
-                long minCost, maxCost;
-                if (TextUtils.isEmpty(strMinCost)){
-                    minCost = 0;
-                }
-                else {
-                    minCost = Long.parseLong(strMinCost);
-                }
-
-                if (TextUtils.isEmpty(strMaxCost)){
-                    maxCost = 0;
-                }
-                else {
-                    maxCost = Long.parseLong(strMaxCost);
-                }
-
-                String strArrTime = arriveTimeText.getText().toString();
-                String strArrDate = arriveDateText.getText().toString();
-                String strLeaveTime = leaveTimeText.getText().toString();
-                String strLeaveDate = leaveDateText.getText().toString();
-
-                //Check isEmpty in fields: name, date, address
-                boolean isValid = true;
-                if (TextUtils.isEmpty(spname)){
-                    edSpname.setError("Please enter the name");
-                    isValid = false;
-                }
-                if (TextUtils.isEmpty(address)){
-                    edAddress.setError("Please enter address");
-                    isValid = false;
-                }
-                if (TextUtils.isEmpty(strArrTime)){
-                    arriveTimeText.setError("Please choose Arrive Time");
-                    isValid = false;
-                }
-                if (TextUtils.isEmpty(strArrDate)){
-                    arriveDateText.setError("Please choose Arrive Date");
-                    isValid = false;
-                }
-                if (TextUtils.isEmpty(strLeaveTime)){
-                    leaveTimeText.setError("Please choose Leave Time");
-                    isValid = false;
-                }
-                if (TextUtils.isEmpty(strLeaveDate)){
-                    leaveDateText.setError("Please choose Leave Date");
-                    isValid = false;
-                }
-                if (!isValid){
-                    return;
-                }
+                String strArrTime = txtArriveTime.getText().toString();
+                String strArrDate = txtArriveDate.getText().toString();
+                String strLeaveTime = txtLeaveTime.getText().toString();
+                String strLeaveDate = txtLeaveDate.getText().toString();
 
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                 //Convert ArriveDate String to millis
@@ -303,13 +259,38 @@ public class AddStopPointDialog extends AppCompatDialogFragment {
                 }
                 long millisLeaveDate = leaveDate.getTime();
 
+
                 //Send to a StopPointInfo object
-                StopPointInfo stopPointInfo = new StopPointInfo(spname, address, provinceId, Double.toString(latitude), Double.toString(longitude), millisArriveDate, millisLeaveDate, serviceTypeId, minCost, maxCost);
-                listener.applyData(stopPointInfo);
-                listener.fixedMarker(spname, serviceTypeId);
+                StopPointInfo updatePoint = new StopPointInfo(
+                        pointInfo.getName(),
+                        pointInfo.getAddress(),
+                        pointInfo.getProvinceId(),
+                        pointInfo.getLat(),
+                        pointInfo.getLongitude(),
+                        millisArriveDate,
+                        millisLeaveDate,
+                        pointInfo.getServiceTypeId(),
+                        pointInfo.getMinCost(),
+                        pointInfo.getMaxCost()
+                );
+                listener.updateSuggestStopPoint(index, updatePoint);
                 dismiss();
             }
         });
+
+
+
+        final Button deleteBtn = view.findViewById(R.id.button_delete_suggest_update);
+        //arriveDateText, arriveTimeText, leaveDateText, leaveTimeText, address
+
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.deleteSuggestStopPoint(index);
+                dismiss();
+            }
+        });
+
         builder.setView(view);
 
         return builder.create();
@@ -322,7 +303,7 @@ public class AddStopPointDialog extends AppCompatDialogFragment {
         super.onAttach(context);
 
         try {
-            listener = (AddStopPointDialogListener) context;
+            listener = (UpdateSuggestStopPointDialog.InfoSuggestStopPointDialogListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + "must implement DialogListener");
         }
@@ -340,10 +321,8 @@ public class AddStopPointDialog extends AppCompatDialogFragment {
     }
 
 
-    public interface AddStopPointDialogListener{
-        void applyData(StopPointInfo stopPointInfo);
-        void fixedMarker(String spName, int serviceTypeId);
-
+    public interface InfoSuggestStopPointDialogListener{
+        void deleteSuggestStopPoint(int index);
+        void updateSuggestStopPoint(int index, StopPointInfo updatePoint);
     }
-
 }

@@ -9,39 +9,29 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.SearchManager;
-import android.app.VoiceInteractor;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.MatrixCursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -57,7 +47,6 @@ import com.ygaps.travelapp.manager.Constants;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
@@ -67,20 +56,15 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.VisibleRegion;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.RequestBody;
@@ -90,12 +74,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -109,7 +88,8 @@ public class CreateStopsActivity extends AppCompatActivity
         AddStopPointDialog.AddStopPointDialogListener,
         ListStopPointDialog.ListStopPointDialogListener,
         AddStopPointSuggestDialog.AddStopPointDialogSuggestListener,
-        InfoStopPointDialog.InfoStopPointDialogListener,
+        UpdateStopPointDialog.InfoStopPointDialogListener,
+        UpdateSuggestStopPointDialog.InfoSuggestStopPointDialogListener,
         com.google.android.gms.location.LocationListener
 {
 
@@ -158,13 +138,22 @@ public class CreateStopsActivity extends AppCompatActivity
                 addStopPointDialog.show(getSupportFragmentManager(), "Add stop point dialog");
             }
             else if ((index = indexMarkerInSPMarker(marker)) != -1){
-                InfoStopPointDialog infoStopPointDialog = new InfoStopPointDialog();
                 Bundle bundle = new Bundle();
 
-                bundle.putString("JSONPointInfo", new Gson().toJsonTree(listSP.get(index)).getAsJsonObject().toString());
+                StopPointInfo itemInListSP = listSP.get(index);
+                bundle.putString("JSONPointInfo", new Gson().toJsonTree(itemInListSP).getAsJsonObject().toString());
                 bundle.putInt("Index", index);
-                infoStopPointDialog.setArguments(bundle);
-                infoStopPointDialog.show(getSupportFragmentManager(), "Info stop point dialog");
+
+                if (itemInListSP.getServiceId() == 0) {
+                    UpdateStopPointDialog updateStopPointDialog = new UpdateStopPointDialog();
+                    updateStopPointDialog.setArguments(bundle);
+                    updateStopPointDialog.show(getSupportFragmentManager(), "Update stop point dialog");
+                }
+                else{
+                    UpdateSuggestStopPointDialog updateSuggestStopPointDialog = new UpdateSuggestStopPointDialog();
+                    updateSuggestStopPointDialog.setArguments(bundle);
+                    updateSuggestStopPointDialog.show(getSupportFragmentManager(), "Update stop point dialog");
+                }
             }
             else {
                 mGoogleMap.setOnMarkerClickListener(mClusterManager);
@@ -216,17 +205,65 @@ public class CreateStopsActivity extends AppCompatActivity
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setCustomView(R.layout.custom_create_stop_action_bar);
+        actionBar.setCustomView(R.layout.custom_create_stop_point_action_bar);
         actionBarView = actionBar.getCustomView();
+
+        //Set search view for place
+        final RelativeLayout searchView = actionBarView.findViewById(R.id.search_location_create);
+
+        searchView.setOnClickListener(new SearchView.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CreateStopsActivity.this, SearchLocationActivity.class);
+
+                //intent.putExtra("title",foundItems.get(i).lvTitle );
+
+                startActivityForResult(intent,2);
+            }
+        });
 
         //Set Confirm exit dialog
         builder = new AlertDialog.Builder(this);
         builder.setTitle("Are you sure?");
-        builder.setMessage("All stop points that were set will be discarded.");
+        builder.setMessage("This tour will be discarded.");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                finish();
+                RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                String url="http://35.197.153.192:3000/tour/update-tour";
+                //Create request's body
+                JSONObject jsonBody = new JSONObject();
+                try {
+                    Intent intent = getIntent();
+                    int tourId = intent.getExtras().getInt("tourId");
+                    jsonBody.put("id", tourId);
+                    jsonBody.put("status", -1);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                //Set request
+                JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, jsonBody, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Toast.makeText(CreateStopsActivity.this, "Deleted 1 tour", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        finish();
+                    }
+                }){
+                    @Override
+                    public Map<String, String> getHeaders() {
+                        HashMap<String, String> headers = new HashMap<>();
+                        headers.put("Authorization",accessToken);
+                        return headers;
+                    }
+                };
+                //Add request to Queue
+                requestQueue.add(req);
+
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -244,26 +281,6 @@ public class CreateStopsActivity extends AppCompatActivity
             }
         });
 
-        //Set search view for place
-        final SearchView searchView = actionBarView.findViewById(R.id.search_location);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                searchView.clearFocus();
-            }
-        }, 300);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                geoLocate(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
     }
 
     //Init map
@@ -640,8 +657,15 @@ public class CreateStopsActivity extends AppCompatActivity
         int tourId = intent.getExtras().getInt("tourId");
         JSONObject jsonBody = new JSONObject();
         try {
+            for (int i=0 ; i<listSP.size(); i++){
+                jsonArray.getJSONObject(i).remove("id");
+                if (jsonArray.getJSONObject(i).getInt("serviceId") == 0){
+                    jsonArray.getJSONObject(i).remove("serviceId");
+                }
+            }
             jsonBody.put("tourId", tourId);
             jsonBody.put("stopPoints", jsonArray);
+            Log.d("REEEEQQQQ", jsonBody.toString());
             //Set request
             JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, jsonBody, new Response.Listener<JSONObject>() {
                 @Override
@@ -776,6 +800,39 @@ public class CreateStopsActivity extends AppCompatActivity
     }
 
     @Override
+    public void updateStopPoint(int index, StopPointInfo updatePoint) {
+        StopPointInfo point =  listSP.get(index);
+        point.setName(updatePoint.getName());
+        point.setAddress(updatePoint.getAddress());
+        point.setProvinceId(updatePoint.getProvinceId());
+        point.setLat(updatePoint.getLat());
+        point.setLongitude(updatePoint.getLongitude());
+        point.setArriveAt(updatePoint.getArriveAt());
+        point.setLeaveAt(updatePoint.getLeaveAt());
+        point.setServiceTypeId(updatePoint.getServiceTypeId());
+        point.setMinCost(updatePoint.getMinCost());
+        point.setMaxCost(updatePoint.getMaxCost());
+        listSPMarker.get(index).setTitle(updatePoint.getName());
+        Toast.makeText(CreateStopsActivity.this, "Updated 1 stop point", Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    public void deleteSuggestStopPoint(int index) {
+        listSP.remove(index);
+        listSPMarker.get(index).remove();
+        listSPMarker.remove(index);
+        Toast.makeText(CreateStopsActivity.this, "Deleted 1 stop point", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void updateSuggestStopPoint(int index, StopPointInfo updatePoint) {
+        StopPointInfo point =  listSP.get(index);
+        point.setArriveAt(updatePoint.getArriveAt());
+        point.setLeaveAt(updatePoint.getLeaveAt());
+        listSPMarker.get(index).setTitle(updatePoint.getName());
+        Toast.makeText(CreateStopsActivity.this, "Updated 1 stop point", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK
                 && event.getRepeatCount() == 0) {
@@ -841,5 +898,40 @@ public class CreateStopsActivity extends AppCompatActivity
                 .addApi( LocationServices.API )
                 .build();
         googleApiClient.connect();
+    }
+
+    //On result searching
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK  && requestCode == 2){
+            if (data.hasExtra("id")){
+                int spId = data.getExtras().getInt("id");
+                //Log.d("listSuggestPointInfo",Integer.toString(listSuggestPointInfo.size()) );
+                for (int i=0; i<listSuggestPointInfo.size(); i++){
+                    final StopPointInfo cur = listSuggestPointInfo.get(i);
+                    if (cur.getId() == spId) {
+                        LatLng ll = new LatLng(Double.parseDouble(cur.getLat()), Double.parseDouble(cur.getLongitude()));
+                        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(ll, 12);
+                        mGoogleMap.animateCamera(cameraUpdate);
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                AddStopPointSuggestDialog stopPointDialog = new AddStopPointSuggestDialog();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("JSONPointInfo", new Gson().toJsonTree(cur).getAsJsonObject().toString());
+                                stopPointDialog.setArguments(bundle);
+                                stopPointDialog.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+
+                                stopPointDialog.show(getSupportFragmentManager(), "Add stop point suggest dialog");
+                            }
+                        }, 1000);
+
+                    }
+                }
+
+            }
+        }
     }
 }
