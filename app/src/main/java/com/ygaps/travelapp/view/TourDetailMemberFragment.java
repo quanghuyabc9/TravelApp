@@ -99,7 +99,7 @@ public class TourDetailMemberFragment extends Fragment {
                 //Gửi request lên server để thêm thành thêm thành viên.
                 RequestQueue requestQueue1 = Volley.newRequestQueue(v.getContext());
                 String url1 = "http://35.197.153.192:3000/tour/add/member";
-                String tourId="4872";
+                String tourId="5174";
                // String userInviteId=name.getText().toString();
                // final Boolean isInvite=false;
                 //create request pagram
@@ -118,8 +118,8 @@ public class TourDetailMemberFragment extends Fragment {
                     public void onResponse(JSONObject response) {
                         Log.d("Res: ", response.toString());
                         try {
-                            String createdOn = response.getString("createdOn");
-                            Toast.makeText(v.getContext(), "success !!!", Toast.LENGTH_SHORT).show();
+                            String MSG=response.getString("message");
+                            Toast.makeText(v.getContext(), "success 123", Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

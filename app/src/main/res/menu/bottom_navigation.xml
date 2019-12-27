@@ -18,7 +18,7 @@
         />
     <item
         android:id="@+id/nav_noti"
-        android:icon="@drawable/ic_notifications_black_24dp"
+        android:icon="@drawable/ic_list_invite"
         android:title="Notifications"
         />
     <item
