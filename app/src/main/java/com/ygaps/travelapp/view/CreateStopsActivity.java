@@ -665,7 +665,7 @@ public class CreateStopsActivity extends AppCompatActivity
             }
             jsonBody.put("tourId", tourId);
             jsonBody.put("stopPoints", jsonArray);
-            Log.d("REEEEQQQQ", jsonBody.toString());
+            //Log.d("REEEEQQQQ", jsonBody.toString());
             //Set request
             JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, jsonBody, new Response.Listener<JSONObject>() {
                 @Override

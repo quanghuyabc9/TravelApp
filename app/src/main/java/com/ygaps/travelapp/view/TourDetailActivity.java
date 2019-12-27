@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +37,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-public class TourDetailActivity extends AppCompatActivity {
+public class TourDetailActivity extends AppCompatActivity implements StopPointDialogTab1TourDetail.StopPointDialogTab1TourDetailListener {
 
     private TabLayout tabLayout;
     private AppBarLayout appBarLayout;
@@ -198,5 +199,13 @@ public class TourDetailActivity extends AppCompatActivity {
             }
         }
         return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    public void applyDelete() {
+        TabLayout.Tab tableLayout1 = tabLayout.getTabAt(1);
+        TabLayout.Tab tableLayout2 = tabLayout.getTabAt(2);
+        tableLayout2.select();
+        tableLayout1.select();
     }
 }

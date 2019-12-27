@@ -41,6 +41,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.ygaps.travelapp.utils.EditTool.printHashKey;
+
 public class ListTourFragment extends Fragment {
 
     private RecyclerView mRecyclerView;

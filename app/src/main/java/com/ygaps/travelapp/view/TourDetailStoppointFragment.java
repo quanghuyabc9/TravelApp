@@ -2,8 +2,10 @@ package com.ygaps.travelapp.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,7 +37,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class TourDetailStoppointFragment extends Fragment {
+public class TourDetailStoppointFragment extends Fragment{
 
     View view;
     private String tourId = null;
@@ -43,7 +46,8 @@ public class TourDetailStoppointFragment extends Fragment {
     private ArrayList<StopPointInfo> dataItems;
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManger;
-    private RecyclerView.Adapter mAdapter;
+    private RecyclerStopPointTourDetailAdapter mAdapter;
+    private StopPointTourDetailDialog stopPointTourDetailDialog;
 
 
     @Nullable
@@ -55,6 +59,12 @@ public class TourDetailStoppointFragment extends Fragment {
         authorization = sharedPreferences.getString(getString(R.string.saved_access_token), null);
         tourId = getArguments().getString("TourId");
 
+        getListStopPoint();
+
+        return view;
+    }
+
+    private void getListStopPoint(){
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(Constants.APIEndpoint + "/tour/info" + "?tourId=" + tourId)
@@ -94,6 +104,26 @@ public class TourDetailStoppointFragment extends Fragment {
                             mLayoutManger = new LinearLayoutManager(getActivity());
 
                             mAdapter = new RecyclerStopPointTourDetailAdapter(dataItems);
+                            mAdapter.setOnItemClickListener(new RecyclerStopPointTourDetailAdapter.ClickListener() {
+                                @Override
+                                public void onItemClick(int position, View v) {
+
+                                    stopPointTourDetailDialog = new StopPointTourDetailDialog();
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("TourId", tourId);
+                                    bundle.putString("JSONPointInfo", new Gson().toJsonTree(dataItems.get(position)).getAsJsonObject().toString());
+
+                                    stopPointTourDetailDialog.setArguments(bundle);
+                                    stopPointTourDetailDialog.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+
+                                    stopPointTourDetailDialog.show(getChildFragmentManager(), "Stop point tour detail dialog");
+                                }
+
+                                @Override
+                                public void onItemLongClick(int position, View v) {
+
+                                }
+                            });
 
                             mRecyclerView.setLayoutManager(mLayoutManger);
 
@@ -138,9 +168,15 @@ public class TourDetailStoppointFragment extends Fragment {
                 }
             }
         });
-
-
-
-        return view;
+    }
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            if (stopPointTourDetailDialog!= null){
+                stopPointTourDetailDialog.dismiss();
+            }
+            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+        }
     }
 }

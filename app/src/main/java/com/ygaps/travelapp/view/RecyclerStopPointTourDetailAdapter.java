@@ -18,10 +18,12 @@ import static com.ygaps.travelapp.utils.DateTimeTool.convertMillisToDateTime;
 
 public class RecyclerStopPointTourDetailAdapter extends RecyclerView.Adapter<RecyclerStopPointTourDetailAdapter.spDataViewHolder> {
 
+
     private ArrayList<StopPointInfo> spDataItems;
     private Context context;
+    private RecyclerStopPointTourDetailAdapter.ClickListener clickListener;
 
-    public class spDataViewHolder extends RecyclerView.ViewHolder{
+    public class spDataViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
 
         private TextView spName;
         private TextView spServiceType;
@@ -32,6 +34,10 @@ public class RecyclerStopPointTourDetailAdapter extends RecyclerView.Adapter<Rec
 
         public spDataViewHolder(@NonNull View itemView) {
             super(itemView);
+
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
+
             spName = itemView.findViewById(R.id.sp_name_sp_tour_detail);
             spServiceType = itemView.findViewById(R.id.sp_service_type_tour_detail);
             spServiceTypeIcon = itemView.findViewById(R.id.sp_icon_service_type_tour_detail);
@@ -39,12 +45,25 @@ public class RecyclerStopPointTourDetailAdapter extends RecyclerView.Adapter<Rec
             spTime = itemView.findViewById(R.id.sp_datetime_tour_detail);
             spPrice = itemView.findViewById(R.id.sp_price_tour_detail);
         }
+        @Override
+        public void onClick(View v) {
+            clickListener.onItemClick(getAdapterPosition(), v);
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            clickListener.onItemLongClick(getAdapterPosition(), v);
+            return false;
+        }
+
     }
 
     public RecyclerStopPointTourDetailAdapter(ArrayList<StopPointInfo> spDataItems){
         this.spDataItems = spDataItems;
     }
-
+    public void setOnItemClickListener(ClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
     @NonNull
     @Override
     public RecyclerStopPointTourDetailAdapter.spDataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -94,4 +113,8 @@ public class RecyclerStopPointTourDetailAdapter extends RecyclerView.Adapter<Rec
         return spDataItems.size();
     }
 
+    public interface ClickListener {
+        void onItemClick(int position, View v);
+        void onItemLongClick(int position, View v);
+    }
 }

@@ -1,20 +1,15 @@
 package com.ygaps.travelapp.view;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,17 +17,12 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
-import com.ygaps.travelapp.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
-import java.util.ArrayList;
-
-import static android.widget.ArrayAdapter.createFromResource;
-import static com.ygaps.travelapp.utils.DateTimeTool.convertMillisToDateTime;
+import com.ygaps.travelapp.R;
 
 
-public class StopPointDialog extends AppCompatDialogFragment{
+public class StopPointTourDetailDialog extends AppCompatDialogFragment {
 
     private ViewPager mViewPager;
 
@@ -41,7 +31,8 @@ public class StopPointDialog extends AppCompatDialogFragment{
     TabLayout tabLayout;
     ViewPager viewPager;
 
-    private StopPointInfo pointInfo;
+    StopPointInfo pointInfo;
+    String tourId;
 
     @NonNull
     @Override
@@ -60,21 +51,23 @@ public class StopPointDialog extends AppCompatDialogFragment{
             //getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
             //Get data from root activity, add to bundle
+            tourId = getArguments().getString("TourId");
             String JSONPointInfo = getArguments().getString("JSONPointInfo");
-            Bundle bundle1 = new Bundle();
-            bundle1.putString("JSONPointInfo", JSONPointInfo);
-
             pointInfo = new Gson().fromJson(JSONPointInfo, new TypeToken<StopPointInfo>(){}.getType());
 
+            Bundle bundle1 = new Bundle();
+            bundle1.putString("JSONPointInfo", JSONPointInfo);
+            bundle1.putString("TourId", tourId);
+
             Bundle bundle2 = new Bundle();
-            bundle2.putInt("serviceId", pointInfo.getId());
+            bundle2.putInt("serviceId", pointInfo.getServiceId());
 
             //Set tab navigation
             tabLayout = (TabLayout) rootview.findViewById(R.id.tabs);
             viewPager = (ViewPager) rootview.findViewById(R.id.sp_container_fragment);
             SectionPageAdapter adapter = new SectionPageAdapter(getChildFragmentManager());
 
-            StopPointDialogTab1 stopPointDialogTab1 = new StopPointDialogTab1();
+            StopPointDialogTab1TourDetail stopPointDialogTab1 = new StopPointDialogTab1TourDetail();
             StopPointDialogTab2 stopPointDialogTab2 = new StopPointDialogTab2();
 
             //Send data to 2 tabs fragment
@@ -105,4 +98,17 @@ public class StopPointDialog extends AppCompatDialogFragment{
     public void onResume() {
         super.onResume();
     }
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        String contextDialogString = getArguments().getString("ContextDialog");
+        TourDetailStoppointFragment contextDialog = new Gson().fromJson(contextDialogString, new TypeToken<TourDetailStoppointFragment>(){}.getType());
+
+//        try {
+//            listener = (StopPointTourDetailDialogListener) context;
+//        } catch (ClassCastException e) {
+//            throw new ClassCastException(context.toString() + "must implement DialogListener");
+//        }
+    }
+
 }

@@ -191,4 +191,5 @@ public class TourDetailCommentsFragment extends Fragment {
 
         return view;
     }
+
 }
