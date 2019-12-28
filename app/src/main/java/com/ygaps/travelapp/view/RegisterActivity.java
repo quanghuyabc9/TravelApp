@@ -47,6 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 } else {
                     User user = new User();
+                    user.setFullName(edt_name.getText().toString());
                     user.setEmail(edt_mail.getText().toString());
                     user.setPhone(edt_phone.getText().toString());
                     user.setPassword(edt_password.getText().toString());
