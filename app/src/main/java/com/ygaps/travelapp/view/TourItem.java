@@ -6,14 +6,16 @@ public class TourItem {
     private String date;
     private String quantity;
     private String price;
+    private boolean isHost;
     private int id;
 
-    public TourItem(Integer img_src, String location, String date, String quantity, String price, int id){
+    public TourItem(Integer img_src, String location, String date, String quantity, String price, int id, boolean isHost){
         this.img_src = img_src;
         this.location = location;
         this.date = date;
         this.quantity = quantity;
         this.price = price;
+        this.isHost = isHost;
         this.id = id;
     }
 
@@ -31,6 +33,10 @@ public class TourItem {
     }
     public void setPrice(String price){
         this.price = price;
+    }
+
+    public void setHost(boolean host) {
+        isHost = host;
     }
 
     public void setId(int id) {
@@ -59,6 +65,10 @@ public class TourItem {
 
     public int getId() {
         return id;
+    }
+
+    public boolean isHost() {
+        return isHost;
     }
 }
 

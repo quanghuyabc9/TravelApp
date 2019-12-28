@@ -1,85 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <SearchView
-        android:id="@+id/tour_searchv_listInvite"
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:queryHint="Search..."
-        android:iconifiedByDefault="false"
-        android:layout_alignParentTop="true"
-        android:background="#FFFFFF"
-        android:layout_marginBottom="10dp"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:paddingRight="5dp"
-        android:paddingLeft="5dp"/>
-
-    <LinearLayout
-        android:id="@+id/container_plenty_listInvite"
-        android:orientation="horizontal"
-        android:layout_below="@+id/tour_searchv_listInvite"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#FFFFFF"
-        android:padding="5dp"
-        android:gravity="center_vertical">
-
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/icons8_traveler_100"/>
-
-        <TextView
-            android:id="@+id/tour_num_listInvite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="    "
-            android:textStyle="bold"
-            android:textColor="#000000"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" trips"
-            android:textColor="#000000"/>
-
-    </LinearLayout>
-    <View
-        android:id="@+id/divider"
-        android:layout_below="@+id/container_plenty_listInvite"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
-
-    <RelativeLayout
-        android:layout_below="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rview_listInvite"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="@drawable/custom_ripple" />
-        <TextView
-            android:id="@+id/no_found_tour_location_listInvite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="No tours found"
-            android:textStyle="bold"
-            android:textSize="22sp"
-            android:visibility="gone"/>
-
-    </RelativeLayout>
-
-
-
+        android:text="NOTIFICATIONS FRAGMENT"
+        android:textSize="30dp"
+        android:layout_centerInParent="true"/>
 
 </RelativeLayout>

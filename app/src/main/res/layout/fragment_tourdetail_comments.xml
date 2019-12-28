@@ -1,52 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
 
-    <LinearLayout
-        android:id="@+id/send"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="7dp"
-        android:paddingRight="7dp"
-        android:paddingTop="10dp"
-        android:layout_marginTop="10dp"
-        android:orientation="vertical">
-
-    <EditText
-        android:id="@+id/invitedChat"
-        android:hint="Comment..."
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@drawable/rounded_edittext_states"
-        android:maxLines="1"
-        android:padding="5dip"
-        android:singleLine="true" />
-
-    <Button
-        android:id="@+id/btn_send"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"
-        android:background="@drawable/btn_bg"
-        android:paddingLeft="65dp"
-        android:paddingRight="65dp"
-        android:text="send" />
-    </LinearLayout>
-
-    <View
-        android:layout_below="@+id/send"
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
     <androidx.recyclerview.widget.RecyclerView
         android:background="@drawable/custom_ripple"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/recycler_view"
-        android:layout_below="@+id/divider"/>
+        android:layout_above="@+id/send"/>
+    <TextView
+        android:id="@+id/empty_list_review_explore_tab2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:text="No comments yet"
+        android:textColor="#000000"
+        android:visibility="gone"/>
+
+
+    <RelativeLayout
+        android:layout_alignParentBottom="true"
+        android:id="@+id/send"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:background="#000000"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/container_edit_comment"
+            android:layout_toLeftOf="@+id/btn_send"
+            android:layout_centerVertical="true"
+            android:background="@drawable/rounded_edittext_states"
+            android:padding="10dp">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/invitedChat"/>
+
+        </RelativeLayout>
+        <TextView
+            android:layout_centerVertical="true"
+            android:id="@+id/btn_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/window_title_background"
+            android:layout_alignParentRight="true"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:paddingLeft="10dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:focusable="true"
+            android:clickable="true"
+            android:text="Send >" />
+    </RelativeLayout>
+
+
+
 
 </RelativeLayout>

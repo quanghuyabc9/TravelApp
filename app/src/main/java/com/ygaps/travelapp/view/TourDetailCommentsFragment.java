@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,7 +27,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.ygaps.travelapp.R;
 import com.ygaps.travelapp.utils.EditTool;
 
@@ -46,95 +50,63 @@ import retrofit2.http.HEAD;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class TourDetailCommentsFragment extends Fragment {
-    private RecyclerView mRecyclerView;
-    private RecyclerDataAdapter1 mAdapter;
-    private RecyclerView.LayoutManager layoutManager;
-    private EditText cmd;
-    private Button btn_send;
-    private String tourId;
 
-    ArrayList<CommentItem> commentItems;
-    ArrayList<CommentItem> holderCommentItems;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManger;
+    private ArrayList<CommentTourInfo> commentTourInfos;
+    private  View view;
+
+    private EditText cmd;
+    private TextView btn_send;
+    private String tourId;
+    private boolean isHost;
+
+    private RelativeLayout containerSend;
+
+    private int userId;
+    private String accessToken;
+
 
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-       final View view = inflater.inflate(R.layout.fragment_tourdetail_comments, container, false);
+       view = inflater.inflate(R.layout.fragment_tourdetail_comments, container, false);
 
         cmd=view.findViewById(R.id.invitedChat);
         btn_send=view.findViewById(R.id.btn_send);
+        containerSend = view.findViewById(R.id.send);
+
+        commentTourInfos = new ArrayList<>();
+
+        mRecyclerView = view.findViewById(R.id.recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManger = new LinearLayoutManager(getActivity());
+        //Set event button report click
+        mAdapter = new RecyclerTourCommentsAdapter(commentTourInfos);
+
+        mRecyclerView.setLayoutManager(mLayoutManger);
+        mRecyclerView.setAdapter(mAdapter);
 
 
         //get token from login
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.shared_pref_name), 0);
-        final String accessToken = sharedPref.getString(getString(R.string.saved_access_token), null);
-        tourId ="4506";
+        accessToken = sharedPref.getString(getString(R.string.saved_access_token), null);
         //show list-comment
-        commentItems=new ArrayList<>();
-        holderCommentItems=new ArrayList<>();
-        RequestQueue requestQueue = Volley.newRequestQueue(view.getContext());
-        String URL="http://35.197.153.192:3000/tour/comment-list?tourId=4506&pageIndex=1&pageSize=200";
+        Bundle bundle = getArguments();
+        tourId = bundle.getString("TourId");
+        isHost = bundle.getBoolean("IsHost");
+        //
+        if (!isHost){
+            containerSend.setVisibility(View.GONE);
+        }
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, URL,null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    Toast.makeText(view.getContext(), "get success", Toast.LENGTH_SHORT).show();
-                    JSONArray listComment = response.getJSONArray("commentList");
-                    for (int i = 0; i < listComment.length(); i++) {
-                        JSONObject o = listComment.getJSONObject(i);
-                        String comment = o.getString("comment");
+        getListComment();
 
-                        String name = o.getString("name");
-
-                        String onTime;
-                        long milisTime = o.optLong("createdOn", 0);
-                        if (milisTime == 0) {
-                            onTime = "null";
-                        } else {
-                            Calendar calendar = Calendar.getInstance();
-                            DateFormat simple = new SimpleDateFormat("dd/MM/yyyy");
-                            Date result = new Date(milisTime);
-                            onTime = simple.format(result);
-                        }
-                        commentItems.add(new CommentItem(name, comment, onTime));
-                    }
-                    holderCommentItems.addAll(commentItems);
-                    mRecyclerView=view.findViewById(R.id.recycler_view);
-                    mRecyclerView.setHasFixedSize(true);
-                    layoutManager=new LinearLayoutManager(getActivity());
-                    mAdapter=new RecyclerDataAdapter1(commentItems);
-
-                    mRecyclerView.setLayoutManager(layoutManager);
-                    mRecyclerView.setAdapter(mAdapter);
-                }catch (JSONException e){
-                    Toast.makeText(view.getContext(), "get fail", Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
-                }
-            }
-        },new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(view.getContext(), "get error", Toast.LENGTH_SHORT).show();
-                VolleyLog.d("Err", "Error: " + error.getMessage());
-                Log.e("Err", "Site Info Error: " + error.getMessage());
-                Toast.makeText(getActivity(),
-                        error.getMessage(), Toast.LENGTH_SHORT).show();
-
-            }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                HashMap<String, String> headers = new HashMap<>();
-                headers.put("Authorization", accessToken);
-                return headers;
-            }
-        };
-        requestQueue.add(request);
-
-
+        //get Id user
+        getUserId();
 
 
         //send comment
@@ -142,7 +114,6 @@ public class TourDetailCommentsFragment extends Fragment {
             @Override
             public void onClick(final View v) {
                 String comment = cmd.getText().toString();
-                String userId = "677";
 
 
                 //Gui request len server
@@ -163,12 +134,8 @@ public class TourDetailCommentsFragment extends Fragment {
                 JsonObjectRequest req1 = new JsonObjectRequest(Request.Method.POST, url, jsonBody, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("Res: ", response.toString());
-                        try {
-                            String createdOn = response.getString("createdOn");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        cmd.setText("");
+                        getListComment();
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -190,6 +157,85 @@ public class TourDetailCommentsFragment extends Fragment {
         });
 
         return view;
+    }
+    private void getListComment(){
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+
+        String url="http://35.197.153.192:3000/tour/comment-list?tourId="+tourId+"&pageIndex=1&pageSize=100";
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray feedbackList = response.getJSONArray("commentList");
+                    ArrayList<CommentTourInfo> newCommentTourInfos = new Gson().fromJson(feedbackList.toString(), new TypeToken<ArrayList<CommentTourInfo>>(){}.getType());
+                    commentTourInfos.clear();
+                    commentTourInfos.addAll(newCommentTourInfos);
+                    mAdapter.notifyDataSetChanged();
+
+                    if (commentTourInfos.size() == 0){
+                        TextView txtEmpty = view.findViewById(R.id.empty_list_review_explore_tab2);
+                        txtEmpty.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        TextView txtEmpty = view.findViewById(R.id.empty_list_review_explore_tab2);
+                        txtEmpty.setVisibility(View.GONE);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d("Err", "Error: " + error.getMessage());
+                Log.e("Err", "Site Info Error: " + error.getMessage());
+                Toast.makeText(getActivity(),
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization",accessToken);
+                return headers;
+            }
+        };
+
+        requestQueue.add(req);
+    }
+    private void getUserId(){
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+
+        String url="http://35.197.153.192:3000/user/info";
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    userId = response.getInt("id");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                userId = 1;
+                VolleyLog.d("Err", "Error: " + error.getMessage());
+                Log.e("Err", "Site Info Error: " + error.getMessage());
+                Toast.makeText(getActivity(),
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization",accessToken);
+                return headers;
+            }
+        };
     }
 
 }

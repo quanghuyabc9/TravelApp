@@ -23,84 +23,80 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
+import com.ygaps.travelapp.MyBraodcastReceiver;
 import com.ygaps.travelapp.R;
 import com.ygaps.travelapp.manager.Constants;
 import com.ygaps.travelapp.manager.MyApplication;
 import com.ygaps.travelapp.view.MainActivity;
 import android.provider.Settings.Secure;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.Map;
 
 public class MyFirebaseService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseService";
-
+    private  String tourId;
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
          //handle a notification payload.
+        // handle a notification payload.
+        // super.onMessageReceived(remoteMessage);
+        Log.e("FROM:",remoteMessage.getFrom());
+        if (remoteMessage.getData().size() > 0) {
+            Map data=remoteMessage.getData();
+            if (data.isEmpty()) { // message type is notification. //may ao cho xem
+                Log.e("data", "isNull");
+                sendNotification("Invite to join a Tour", remoteMessage.getNotification().getBody());
+            } else { // message type is data.
+                tourId = data.get("id").toString();
+                StringBuilder temp = new StringBuilder();
+                temp.append("Someone").append(" invites you to Tour: ").append(data.get("name"));
+                String body = temp.toString();
+                sendNotification("Invite to join a Tour", body);
+            }
+        }
+
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-
-            sendNotification(remoteMessage.getNotification().getBody());
+            RemoteMessage.Notification notification = remoteMessage.getNotification();
         }
     }
 
     @Override
     public void onNewToken(String token) {
         Log.d(TAG, "Refreshed token: " + token);
-
-        sendRegistrationToServer(token);
     }
 
-    public void sendRegistrationToServer(String token) {
-        // TODO: Implement this method to send token to your app server
-
-        String deviceId = MyApplication.deviceId;
-        String authorization = MyApplication.getToken();
-        if(deviceId != null && authorization != null) {
-            OkHttpClient client = new OkHttpClient();
-
-            RequestBody requestBody = new FormEncodingBuilder()
-                    .add("fcmToken", token)
-                    .add("deviceId", deviceId)
-                    .add("platform", "1")
-                    .add("appVersion", "1.0")
-                    .build();
-
-            final Request request = new Request.Builder()
-                    .url(Constants.APIEndpoint + "/user/notification/put-token")
-                    .addHeader("Content-Type", "application/json")
-                    .addHeader("authorization", authorization)
-                    .post(requestBody)
-                    .build();
-
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Request request, IOException e) {
-                    Log.d("Failure: ", e.toString());
-                }
-
-                @Override
-                public void onResponse(Response response) throws IOException {
-                    int code = response.code();
-                }
-            });
-        }
-
-    }
-
-    private void sendNotification(String messageBody) {
-        Intent intent = new Intent(this, MainActivity.class);
+    private Intent createIntent(String actionName,String messaggeBody)
+    {
+        Intent intent=new Intent(this, MyBraodcastReceiver.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        intent.putExtra("action",actionName);
+        intent.putExtra("tourId",tourId);
+        intent.putExtra("message",messaggeBody);
+        return intent;
+    }
 
+    private void sendNotification(String title, String messageBody) {
+        Intent intent = createIntent("OK",messageBody);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        sendBroadcast(intent);
+
+        Intent intent2 = new Intent(this,MainActivity.class);
+        intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent2.putExtra("action","refuse");
+        sendBroadcast(intent2);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
         String channelId = getString(R.string.project_id);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
                         .setSmallIcon(R.drawable.ic_launcher_background)
                         .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_background))
-                        .setContentTitle(getString(R.string.project_id))
+                        .setContentTitle(title)
                         .setContentText(messageBody)
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)
@@ -110,7 +106,7 @@ public class MyFirebaseService extends FirebaseMessagingService {
                         .addAction(new NotificationCompat.Action(
                                 android.R.drawable.sym_call_missed,
                                 "Cancel",
-                                PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)))
+                                PendingIntent.getActivity(this, 0, intent2, PendingIntent.FLAG_CANCEL_CURRENT)))
                         .addAction(new NotificationCompat.Action(
                                 android.R.drawable.sym_call_outgoing,
                                 "OK",
@@ -124,7 +120,6 @@ public class MyFirebaseService extends FirebaseMessagingService {
                     channelId,
                     "Channel human readable title",
                     NotificationManager.IMPORTANCE_DEFAULT);
-
             notificationManager.createNotificationChannel(channel);
         }
 

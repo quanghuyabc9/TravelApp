@@ -41,6 +41,8 @@ public class TourDetailStoppointFragment extends Fragment{
 
     View view;
     private String tourId = null;
+    private boolean isHost;
+    private boolean isMem;
     String authorization = null;
 
     private ArrayList<StopPointInfo> dataItems;
@@ -58,6 +60,8 @@ public class TourDetailStoppointFragment extends Fragment{
         SharedPreferences sharedPreferences = view.getContext().getSharedPreferences(getString(R.string.shared_pref_name), Context.MODE_PRIVATE);
         authorization = sharedPreferences.getString(getString(R.string.saved_access_token), null);
         tourId = getArguments().getString("TourId");
+        isHost = getArguments().getBoolean("IsHost");
+        isMem =getArguments().getBoolean("IsMem");
 
         getListStopPoint();
 
@@ -111,6 +115,7 @@ public class TourDetailStoppointFragment extends Fragment{
                                     stopPointTourDetailDialog = new StopPointTourDetailDialog();
                                     Bundle bundle = new Bundle();
                                     bundle.putString("TourId", tourId);
+                                    bundle.putBoolean("IsHost", isHost);
                                     bundle.putString("JSONPointInfo", new Gson().toJsonTree(dataItems.get(position)).getAsJsonObject().toString());
 
                                     stopPointTourDetailDialog.setArguments(bundle);

@@ -136,7 +136,8 @@ public class ListTourFragment extends Fragment {
                             }
                             String price = o.getString("minCost") + " - " + o.getString("maxCost");
                             int id = o.getInt("id");
-                            tourItems.add(new TourItem(R.drawable.alternative_view, location, date, quantity, price, id));
+                            //boolean isHost = o.getBoolean("isHost");
+                            tourItems.add(new TourItem(R.drawable.alternative_view, location, date, quantity, price, id, false));
                         }
                     }
                     holderTourItems.addAll(tourItems);
@@ -150,6 +151,8 @@ public class ListTourFragment extends Fragment {
                         public void onItemClick(int position, View v) {
 
                             Intent intent = new Intent(getActivity(), TourDetailActivity.class);
+                            intent.putExtra("IsMem", false);
+                            intent.putExtra("IsHost", false);
                             intent.putExtra("TourId", Integer.toString(tourItems.get(position).getId()));
                             intent.putExtra("TourName",tourItems.get(position).getLocation());
                             startActivity(intent);

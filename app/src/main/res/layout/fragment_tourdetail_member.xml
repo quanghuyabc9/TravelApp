@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="member fragment"
-        android:textAllCaps="true"
-        android:textSize="25sp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="7dp"
         android:paddingRight="7dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,7 +34,8 @@
         android:layout_height="wrap_content"
         android:paddingLeft="7dp"
         android:paddingRight="7dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
         <Button
             android:id="@+id/confirm"
             android:layout_width="wrap_content"
@@ -51,4 +48,41 @@
             android:paddingRight="65dp"
             android:text="Confirm" />
     </LinearLayout>
-</LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:id="@+id/container_title">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:text="List member"
+            android:textSize="20dp"
+            />
+        <TextView
+            android:id="@+id/add_member_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="Add member >"
+            android:textColor="@color/window_title_background"
+            android:textStyle="italic"
+            android:layout_centerVertical="true"
+            android:focusable="true"
+            android:clickable="true"/>
+
+
+    </RelativeLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/container_title"
+        android:id="@+id/list_view_member" />
+
+
+
+</RelativeLayout>

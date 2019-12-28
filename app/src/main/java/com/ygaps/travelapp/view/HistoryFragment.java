@@ -125,7 +125,8 @@ public class HistoryFragment extends Fragment {
                             }
                             String price = o.getString("minCost") + " - " + o.getString("maxCost");
                             int id = o.getInt("id");
-                            tourItems.add(new TourItem(R.drawable.alternative_view, location, date, quantity, price, id));
+                            boolean isHost = o.getBoolean("isHost");
+                            tourItems.add(new TourItem(R.drawable.alternative_view, location, date, quantity, price, id, isHost));
                         }
                     }
                     holderTourItems.addAll(tourItems);
@@ -139,6 +140,8 @@ public class HistoryFragment extends Fragment {
                         public void onItemClick(int position, View v) {
 
                             Intent intent = new Intent(getActivity(), TourDetailActivity.class);
+                            intent.putExtra("IsHost", tourItems.get(position).isHost());
+                            intent.putExtra("IsMem", true);
                             intent.putExtra("TourId", Integer.toString(tourItems.get(position).getId()));
                             intent.putExtra("TourName",tourItems.get(position).getLocation());
                             startActivity(intent);

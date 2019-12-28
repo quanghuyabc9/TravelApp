@@ -83,6 +83,7 @@ public class TourDetailInfoFragment extends Fragment {
     String authorization = null;
     private String tourId = null,
                    tourName = null;
+    private boolean isHost, isMem;
 
 
     public TourDetailInfoFragment() {
@@ -99,6 +100,9 @@ public class TourDetailInfoFragment extends Fragment {
         //tourId = "300";
         tourId = getArguments().getString("TourId");
         tourName = getArguments().getString("TourName");
+        isHost = getArguments().getBoolean("IsHost");
+        isMem =getArguments().getBoolean("IsMem");
+
         // Get view
         textView_date = view.findViewById(R.id.textview_tourdetail_editinfo_date);
         textView_people = view.findViewById(R.id.textview_tourdetail_editinfo_people);
@@ -106,15 +110,21 @@ public class TourDetailInfoFragment extends Fragment {
         textView_security = view.findViewById(R.id.textview_tourdetail_editinfo_security);
         showReviewsButton = view.findViewById(R.id.show_tour_review);
         editButton = view.findViewById(R.id.imagebutton_tourdetail_editinfo_editbtn);
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(view.getContext(), TourDetailEditInfoActivity.class);
-                intent.putExtra("TourId", tourId);
-                intent.putExtra("TourName", tourName);
-                startActivity(intent);
-            }
-        });
+        if (!isHost){
+            editButton.setVisibility(View.GONE);
+        }
+        else{
+            editButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(view.getContext(), TourDetailEditInfoActivity.class);
+                    intent.putExtra("TourId", tourId);
+                    intent.putExtra("TourName", tourName);
+                    startActivity(intent);
+                }
+            });
+        }
+
         showReviewsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

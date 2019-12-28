@@ -33,6 +33,7 @@ public class StopPointTourDetailDialog extends AppCompatDialogFragment {
 
     StopPointInfo pointInfo;
     String tourId;
+    boolean isHost;
 
     @NonNull
     @Override
@@ -52,12 +53,14 @@ public class StopPointTourDetailDialog extends AppCompatDialogFragment {
 
             //Get data from root activity, add to bundle
             tourId = getArguments().getString("TourId");
+            isHost = getArguments().getBoolean("IsHost");
             String JSONPointInfo = getArguments().getString("JSONPointInfo");
             pointInfo = new Gson().fromJson(JSONPointInfo, new TypeToken<StopPointInfo>(){}.getType());
 
             Bundle bundle1 = new Bundle();
             bundle1.putString("JSONPointInfo", JSONPointInfo);
             bundle1.putString("TourId", tourId);
+            bundle1.putBoolean("IsHost", isHost);
 
             Bundle bundle2 = new Bundle();
             bundle2.putInt("serviceId", pointInfo.getServiceId());

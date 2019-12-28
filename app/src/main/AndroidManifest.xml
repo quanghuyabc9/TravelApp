@@ -24,6 +24,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".view.SearchUserNameActivity"></activity>
         <activity android:name=".view.FollowTourActivity" />
         <activity android:name=".view.SearchLocationActivity" />
         <activity android:name=".view.RegisterActivity" />
@@ -97,7 +98,12 @@
         <activity
             android:name=".view.TourDetailEditInfoActivity"
             android:parentActivityName=".view.TourDetailActivity" />
-
+        <receiver android:name=".MyBraodcastReceiver"  android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.INPUT_METHOD_CHANGED" />
+            </intent-filter>
+        </receiver>
         <service
             android:name=".utils.MyFirebaseService"
             android:exported="false">

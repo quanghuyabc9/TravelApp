@@ -49,6 +49,8 @@ public class TourDetailActivity extends AppCompatActivity implements StopPointDi
     //data
     private String tourId = null;
     private String tourName = null;
+    private boolean isHost;
+    private boolean isMem;
     private String authorization = null;
 
     @Override
@@ -74,6 +76,16 @@ public class TourDetailActivity extends AppCompatActivity implements StopPointDi
         //Initialize data
         tourId = getIntent().getStringExtra("TourId");
         tourName = getIntent().getStringExtra("TourName");
+        isHost = getIntent().getBooleanExtra("IsHost", false);
+        isMem = getIntent().getBooleanExtra("IsMem", false);
+
+        if (!isHost){
+            deleleTourBtn.setVisibility(View.GONE);
+        }
+        if (!isMem){
+            followButton.setVisibility(View.GONE);
+        }
+
         textView_tourName.setText(tourName);
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.shared_pref_name), Context.MODE_PRIVATE);
         authorization = sharedPreferences.getString(getString(R.string.saved_access_token), null);
@@ -165,6 +177,8 @@ public class TourDetailActivity extends AppCompatActivity implements StopPointDi
         Bundle bundle_tourId = new Bundle();
         bundle_tourId.putString("TourId", tourId);
         bundle_tourId.putString("TourName", tourName);
+        bundle_tourId.putBoolean("IsHost", isHost);
+        bundle_tourId.putBoolean("IsMem", isMem);
 
         TourDetailInfoFragment tourDetailInfoFragment = new TourDetailInfoFragment();
         TourDetailStoppointFragment tourDetailStoppointFragment = new TourDetailStoppointFragment();
