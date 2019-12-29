@@ -64,13 +64,7 @@ public class EditTool {
         }
     }
 
-    public static boolean isValidEmail(String email) {
-        return Pattern.matches("^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$", email);
-    }
 
-    public static boolean isValidPassword(String password){
-        return password.length() >= 4;
-    }
 
     public static void printHashKey(Context pContext) {
         try {
