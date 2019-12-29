@@ -1,16 +1,11 @@
 package com.ygaps.travelapp.view;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -32,6 +27,7 @@ import com.ygaps.travelapp.model.LoginRequest;
 import com.ygaps.travelapp.model.LoginResponse;
 import com.ygaps.travelapp.network.MyAPIClient;
 import com.ygaps.travelapp.network.UserService;
+import com.ygaps.travelapp.utils.CheckTool;
 import com.ygaps.travelapp.utils.EditTool;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -55,8 +51,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -66,9 +60,8 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
     // Constants
-    private static final int RC_SIGN_IN = 0;
+    private static final int RC_SIGN_IN_WITH_GOOGLE = 0;
     public static String TAG  = "LoginActivity";
-    private static final String EMAIL = "email";
 
     // UI references.
     private AutoCompleteTextView emailPhoneView;
@@ -91,7 +84,6 @@ public class LoginActivity extends AppCompatActivity {
     };
     private CallbackManager callbackManager;
 
-    //private LoginButton signInButton_Facebook;
     private LoginButton signInButton_Facebook;
     private ImageButton signInButton_Facebook_Fake;
     private Button btn_signUp;
@@ -101,7 +93,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        if(getSupportActionBar() != null)
+            getSupportActionBar().hide();
         relLayout_LoginActivity = findViewById(R.id.relLayout_LoginActivity);
         relLayout_LoginActivity.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,8 +102,6 @@ public class LoginActivity extends AppCompatActivity {
                 EditTool.HideSoftKeyboard(LoginActivity.this);
             }
         });
-
-        //Forgot password
         button_forgotPassword = findViewById(R.id.btn_ForgotPassword);
         button_forgotPassword.setOnClickListener(
                 new View.OnClickListener() {
@@ -122,9 +113,6 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
         );
-
-
-        //Sign up
         btn_signUp = findViewById(R.id.btn_SignUp);
         btn_signUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,9 +121,6 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        //printHashKey(this);
-        getSupportActionBar().hide();
-
         /* --------------------------------------------------------------------------------------------- */
 
         /* Sign in with Google*/
@@ -147,13 +132,12 @@ public class LoginActivity extends AppCompatActivity {
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         signInButton_Google = findViewById(R.id.signInButton_Google);
-        //signInButton_Google.setSize(SignInButton.SIZE_WIDE);
         signInButton_Google.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.signInButton_Google:
-                        signIn();
+                        signInWithGoogle();
                         break;
                 }
             }
@@ -163,60 +147,15 @@ public class LoginActivity extends AppCompatActivity {
 
         /*Sign in with Facebook*/
         callbackManager = CallbackManager.Factory.create();
-        //LoginManager.getInstance().logOut();
-        // Callback registration
         signInButton_Facebook = findViewById(R.id.signInButton_Facebook);
-        signInButton_Facebook.setPermissions(Arrays.asList(EMAIL));
+        signInButton_Facebook.setPermissions(Arrays.asList("email"));
         signInButton_Facebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 // App code
-                Toast.makeText(LoginActivity.this, "Sign in with Facebook success", Toast.LENGTH_LONG).show();
-                //Log.i(TAG, "access_token_facebook: " + loginResult.getAccessToken().getToken());
-                SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.shared_pref_name),0);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(getString(R.string.saved_access_token_facebook), loginResult.getAccessToken().getToken());
-                editor.apply();
-                OkHttpClient client = new OkHttpClient();
-                RequestBody requestBody = new FormEncodingBuilder()
-                        .add("accessToken", loginResult.getAccessToken().getToken())
-                        .build();
-                final Request request = new Request.Builder()
-                        .url(Constants.APIEndpoint + "/user/login/by-facebook")
-                        .post(requestBody)
-                        .build();
-                client.newCall(request)
-                        .enqueue(new com.squareup.okhttp.Callback() {
-                            @Override
-                            public void onFailure(Request request, IOException e) {
-                                LoginActivity.this.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(LoginActivity.this, "Sign in with facebook failed", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void onResponse(com.squareup.okhttp.Response response) throws IOException {
-                                try {
-                                    JSONObject jsonObject = new JSONObject(response.body().string());
-                                    String accessToken = jsonObject.getString("token");
-                                    SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.shared_pref_name), 0);
-                                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                                    editor.putString(getString(R.string.saved_access_token), accessToken);
-                                    editor.apply();
-                                    Log.i(TAG, accessToken);
-                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    startActivity(intent);
-                                    finish();
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-                );
+                Toast.makeText(LoginActivity.this, "Sign in with Facebook successfully", Toast.LENGTH_SHORT).show();
+                String accessToken = loginResult.getAccessToken().getToken();
+                signInWithFacebook_API(accessToken);
             }
 
             @Override
@@ -228,8 +167,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onError(FacebookException exception) {
                 // App code
-                Toast.makeText(LoginActivity.this, "Sign in with Facebook error", Toast.LENGTH_LONG).show();
-                Log.i(TAG, exception.getMessage());
+                Toast.makeText(LoginActivity.this, exception.toString(), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -248,7 +186,6 @@ public class LoginActivity extends AppCompatActivity {
         relLayout_SignUpForgotPwBtn = findViewById(R.id.relLayout_SignInForgotPwBtn);
 
         handler.postDelayed(runnable, 2000);
-
 
         /* Sign in with emailPhone, password registered */
         userService = MyAPIClient.getInstance().getAdapter().create(UserService.class);
@@ -284,74 +221,58 @@ public class LoginActivity extends AppCompatActivity {
         mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                signInWithAccount_API();
             }
         });
     }
 
-    // Google
-    private void signIn() {
+
+    private void signInWithGoogle() {
+        progressDialog= new ProgressDialog(LoginActivity.this);
+        progressDialog.setMessage("Please wait...");
+        progressDialog.show();
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+        startActivityForResult(signInIntent, RC_SIGN_IN_WITH_GOOGLE);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) // Google
+        if (requestCode == RC_SIGN_IN_WITH_GOOGLE) // Google
         {
             // The Task returned from this call is always completed, no need to attach a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task);
+            handleSignInWithGoogleResult(task);
         }
         else // Facebook
-        {
             callbackManager.onActivityResult(requestCode, resultCode, data);
-        }
+
     }
 
-    // Google
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+    private void handleSignInWithGoogleResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            //String test = account.getServerAuthCode();
-            // Signed in successfully, show authenticated UI.
-            updateUI(account);
+            updateUI_SignInWithGoogle(account);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-            updateUI(null);
+
+            Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+            updateUI_SignInWithGoogle(null);
         }
+        progressDialog.dismiss();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        // Check for existing Google Sign In account, if the user is already signed in
-        // the GoogleSignInAccount will be non-null.
-        // GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        // updateUI(account);
-    }
-
-    // Get access token of Google account
-    private void updateUI(GoogleSignInAccount account) {
+    private void updateUI_SignInWithGoogle(GoogleSignInAccount account) {
         //Change UI according to user data.
-        if (account != null) {
-            Toast.makeText(this, "Sign in with Google success", Toast.LENGTH_LONG).show();
-
+        if (account != null && account.getServerAuthCode() != null) {
+            Toast.makeText(this, "Sign in with Google successful", Toast.LENGTH_LONG).show();
             // Build request to get access token of Google account
             OkHttpClient client = new OkHttpClient();
             RequestBody requestBody = new FormEncodingBuilder()
                     .add("grant_type", "authorization_code")
-                    .add("client_id", Constants.Google_ClientID)
-                    .add("client_secret", Constants.Google_ClientSecret)
+                    .add("client_id", getString(R.string.Google_ClientID))
+                    .add("client_secret", getString(R.string.Google_ClientSecret))
                     .add("redirect_uri","")
                     .add("code", account.getServerAuthCode())
                     .build();
@@ -362,25 +283,34 @@ public class LoginActivity extends AppCompatActivity {
             client.newCall(request).enqueue(new com.squareup.okhttp.Callback() {
                         @Override
                         public void onFailure(Request request, IOException e) {
-                            Log.e(TAG, e.toString());
+                            final IOException fe = e;
+                            LoginActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(LoginActivity.this, fe.toString(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
                         }
 
                         @Override
                         public void onResponse(com.squareup.okhttp.Response response) throws IOException {
                             try {
                                 JSONObject jsonObject = new JSONObject(response.body().string());
-                                final String message = jsonObject.toString(5);
                                 String accessToken = jsonObject.getString("access_token");
-                                // This is access token of Google account
-                                // Log.i(TAG, accessToken);
+                                signInWithGoogle_API(accessToken);
                             } catch (JSONException e) {
-                                e.printStackTrace();
+                                final JSONException fe = e;
+                                LoginActivity.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(LoginActivity.this, fe.toString(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                             }
                         }
                     }
             );
-        } else {
-            Toast.makeText(this, "Sign in with Google error", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -390,43 +320,34 @@ public class LoginActivity extends AppCompatActivity {
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin() {
+    private void signInWithAccount_API() {
         // Reset errors.
         emailPhoneView.setError(null);
         passwordView.setError(null);
-
         // Store values at the time of the login attempt.
         String email = emailPhoneView.getText().toString();
         String password = passwordView.getText().toString();
 
         boolean cancel = false;
-//        View focusView = null;
 
         // Check for a valid password
         if (TextUtils.isEmpty((password))) {
             passwordView.setError(getString(R.string.error_field_required));
             cancel =true;
         }
-        else if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        else if (!TextUtils.isEmpty(password) && !CheckTool.isValidPassword(password)) {
             passwordView.setError(getString(R.string.error_invalid_password));
-            //focusView = mPasswordView;
             cancel = true;
         }
-
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
             emailPhoneView.setError(getString(R.string.error_field_required));
-            //focusView = mEmailView;
             cancel = true;
-        } else if (!isEmailValid(email)) {
+        } else if (!CheckTool.isValidEmail(email)) {
             emailPhoneView.setError(getString(R.string.error_invalid_email));
-            //focusView = mEmailView;
             cancel = true;
         }
-
-        if(cancel == true){
-
-        }else{
+        if(!cancel){
             progressDialog= new ProgressDialog(LoginActivity.this);
             progressDialog.setMessage("Please wait...");
             //To show the dialog
@@ -452,7 +373,7 @@ public class LoginActivity extends AppCompatActivity {
                         SharedPreferences.Editor editor = sharedPref.edit();
                         editor.putString(getString(R.string.saved_access_token), response.body().getToken());
                         editor.putLong(getString(R.string.saved_access_token_time), time);
-                        editor.commit();
+                        editor.apply();
 
                         MyApplication app = (MyApplication) LoginActivity.this.getApplication();
                         app.setTokenInfo((response.body()));
@@ -463,15 +384,14 @@ public class LoginActivity extends AppCompatActivity {
                         LoginActivity.this.finish();
                         progressDialog.dismiss();
                     }
-                    else {
-                        Toast.makeText(LoginActivity.this,"Sign in failed", Toast.LENGTH_LONG).show();
+                    else if (response.code() == 404) {
+                        Toast.makeText(LoginActivity.this,"Wrong email/phone or password", Toast.LENGTH_LONG).show();
                         progressDialog.dismiss();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<LoginResponse> call, Throwable t) {
-                    Log.d(TAG, t.getMessage());
                     Toast.makeText(LoginActivity.this,"Sign in failed", Toast.LENGTH_LONG).show();
                     progressDialog.dismiss();
                 }
@@ -479,30 +399,131 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-//        return email.contains("@");
-        return true;
+    private void signInWithFacebook_API(String accessToken) {
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = new FormEncodingBuilder()
+                .add("accessToken", accessToken)
+                .build();
+        final Request request = new Request.Builder()
+                .url(Constants.APIEndpoint + "/user/login/by-facebook")
+                .post(requestBody)
+                .build();
+        client.newCall(request)
+                .enqueue(new com.squareup.okhttp.Callback() {
+                             @Override
+                             public void onFailure(Request request, IOException e) {
+                                 final IOException fe = e;
+                                 LoginActivity.this.runOnUiThread(new Runnable() {
+                                     @Override
+                                     public void run() {
+                                         Toast.makeText(LoginActivity.this, fe.toString() , Toast.LENGTH_SHORT).show();
+                                     }
+                                 });
+                             }
+
+                             @Override
+                             public void onResponse(com.squareup.okhttp.Response response) throws IOException {
+                                 try {
+                                     JSONObject jsonObject = new JSONObject(response.body().string());
+                                     String accessToken = jsonObject.getString("token");
+
+                                     SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.shared_pref_name), 0);
+                                     SharedPreferences.Editor editor = sharedPreferences.edit();
+                                     editor.putString(getString(R.string.saved_access_token), accessToken);
+                                     editor.apply();
+
+                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                     startActivity(intent);
+                                     finish();
+                                 } catch (JSONException e) {
+                                     final JSONException fe = e;
+                                     LoginActivity.this.runOnUiThread(new Runnable() {
+                                         @Override
+                                         public void run() {
+                                             Toast.makeText(LoginActivity.this, fe.toString(), Toast.LENGTH_SHORT).show();
+                                         }
+                                     });
+                                 }
+                             }
+                         }
+                );
     }
 
-    private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
-    }
-
-    public static void printHashKey(Context pContext) {
-        try {
-            PackageInfo info = pContext.getPackageManager().getPackageInfo(pContext.getPackageName(), PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                String hashKey = new String(Base64.encode(md.digest(), 0));
-                Log.i(TAG, "printHashKey() Hash Key: " + hashKey);
+    private void signInWithGoogle_API(String accessToken) {
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = new FormEncodingBuilder()
+                .add("accessToken", accessToken)
+                .build();
+        Request request = new Request.Builder()
+                .url(Constants.APIEndpoint + "/user/login/by-google")
+                .post(requestBody)
+                .build();
+        client.newCall(request).enqueue(new com.squareup.okhttp.Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                final IOException fe = e;
+                LoginActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(LoginActivity.this, fe.toString(),Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
-        } catch (NoSuchAlgorithmException e) {
-            Log.e(TAG, "printHashKey()", e);
-        } catch (Exception e) {
-            Log.e(TAG, "printHashKey()", e);
-        }
+
+            @Override
+            public void onResponse(com.squareup.okhttp.Response response) throws IOException {
+                if (response.code() == 200) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response.body().string());
+                        String accessToken = jsonObject.getString("token");
+                        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.shared_pref_name), 0);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString(getString(R.string.saved_access_token), accessToken);
+                        editor.apply();
+                        LoginActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(LoginActivity.this, "Sign in with google successful",Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        LoginActivity.this.finish();
+                    }
+                    catch (JSONException e) {
+                        final JSONException fe = e;
+                        LoginActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(LoginActivity.this, fe.toString(),Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }
+                else if (response.code() == 400 || response.code() == 500) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response.body().string());
+                        final String message = jsonObject.getString("message");
+                        LoginActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(LoginActivity.this, message,Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                    catch (JSONException e) {
+                        final JSONException fe = e;
+                        LoginActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(LoginActivity.this, fe.toString(),Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }
+            }
+        });
     }
 }
