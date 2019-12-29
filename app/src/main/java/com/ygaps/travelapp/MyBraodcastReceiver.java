@@ -47,7 +47,7 @@ public class MyBraodcastReceiver extends BroadcastReceiver {
         }
         //This is used to close the notification tray
         Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
-        context.sendBroadcast(it); // dong 34 m ai biet :v cua m  lay token, m lay o ben kia roi day qua day di//Lay moi cai token day qua nua roi gui la ok ak
+        context.sendBroadcast(it); // dong 34 m a,i biet :v cua m  lay token, m lay o ben kia roi day qua day di//Lay moi cai token day qua nua roi gui la ok ak
     }
 
     private void RefuseInvitation() {

@@ -168,7 +168,7 @@ public class TourDetailActivity extends AppCompatActivity implements StopPointDi
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TourDetailActivity.this, FollowTourActivity.class);
-                intent.putExtra("ToudId", tourId);
+                intent.putExtra("TourId", tourId);
                 startActivity(intent);
             }
         });
