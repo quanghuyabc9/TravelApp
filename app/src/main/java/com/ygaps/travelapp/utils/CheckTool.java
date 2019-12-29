@@ -4,7 +4,8 @@ import java.util.regex.Pattern;
 
 public class CheckTool {
     public static boolean isValidEmail(String email) {
-        return Pattern.matches("^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$", email);
+//        return Pattern.matches("^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$", email);
+        return true;
     }
 
     public static boolean isValidPassword(String password){
