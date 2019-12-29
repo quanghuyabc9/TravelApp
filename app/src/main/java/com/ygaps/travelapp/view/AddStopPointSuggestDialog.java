@@ -265,7 +265,21 @@ public class AddStopPointSuggestDialog extends AppCompatDialogFragment {
                 //Send to a StopPointInfo object
                 suggestedPointInfo.setArriveAt(millisArriveDate);
                 suggestedPointInfo.setLeaveAt(millisLeaveDate);
-                listener.applyDataSuggest(suggestedPointInfo);
+                //Create new instance of point info that contain id = null, serviceId = suggestedPointInfo.getId() to send to api
+                StopPointInfo toSend = new StopPointInfo(
+                        suggestedPointInfo.getName(),
+                        suggestedPointInfo.getAddress(),
+                        suggestedPointInfo.getProvinceId(),
+                        suggestedPointInfo.getLat(),
+                        suggestedPointInfo.getLongitude(),
+                        suggestedPointInfo.getArriveAt(),
+                        suggestedPointInfo.getLeaveAt(),
+                        suggestedPointInfo.getServiceTypeId(),
+                        suggestedPointInfo.getMinCost(),
+                        suggestedPointInfo.getMaxCost(),
+                        suggestedPointInfo.getId()
+                );
+                listener.applyDataSuggest(toSend);
                 listener.fixedMarkerSuggest(new LatLng(Double.parseDouble(suggestedPointInfo.getLat()), Double.parseDouble(suggestedPointInfo.getLongitude())), suggestedPointInfo.getName(), suggestedPointInfo.getServiceTypeId());
                 dismiss();
             }

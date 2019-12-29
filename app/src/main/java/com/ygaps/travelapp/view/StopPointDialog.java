@@ -41,6 +41,8 @@ public class StopPointDialog extends AppCompatDialogFragment{
     TabLayout tabLayout;
     ViewPager viewPager;
 
+    private StopPointInfo pointInfo;
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -59,8 +61,13 @@ public class StopPointDialog extends AppCompatDialogFragment{
 
             //Get data from root activity, add to bundle
             String JSONPointInfo = getArguments().getString("JSONPointInfo");
-            Bundle bundle = new Bundle();
-            bundle.putString("JSONPointInfo", JSONPointInfo);
+            Bundle bundle1 = new Bundle();
+            bundle1.putString("JSONPointInfo", JSONPointInfo);
+
+            pointInfo = new Gson().fromJson(JSONPointInfo, new TypeToken<StopPointInfo>(){}.getType());
+
+            Bundle bundle2 = new Bundle();
+            bundle2.putInt("serviceId", pointInfo.getId());
 
             //Set tab navigation
             tabLayout = (TabLayout) rootview.findViewById(R.id.tabs);
@@ -71,8 +78,8 @@ public class StopPointDialog extends AppCompatDialogFragment{
             StopPointDialogTab2 stopPointDialogTab2 = new StopPointDialogTab2();
 
             //Send data to 2 tabs fragment
-            stopPointDialogTab1.setArguments(bundle);
-            stopPointDialogTab2.setArguments(bundle);
+            stopPointDialogTab1.setArguments(bundle1);
+            stopPointDialogTab2.setArguments(bundle2);
 
             //Add tab fragment to adapter
             adapter.addFragment(stopPointDialogTab1, "GENERAL");

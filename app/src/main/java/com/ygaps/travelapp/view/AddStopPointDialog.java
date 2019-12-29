@@ -310,17 +310,6 @@ public class AddStopPointDialog extends AppCompatDialogFragment {
                 dismiss();
             }
         });
-
-//        builder.setTitle("Login").setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//
-//            }
-//        }).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//            }
-//        });
         builder.setView(view);
 
         return builder.create();

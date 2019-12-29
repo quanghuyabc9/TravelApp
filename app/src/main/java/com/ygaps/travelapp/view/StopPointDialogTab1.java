@@ -78,7 +78,6 @@ public class StopPointDialogTab1 extends Fragment {
         txtAddress.setText(pointInfo.getAddress());
 
         txtPrice.setText(pointInfo.getMinCost() + " - " + pointInfo.getMaxCost());
-        Log.d("Arrive", Long.toString(pointInfo.getArriveAt()));
 
         String[] province = getResources().getStringArray(R.array.province);
         String[] serviceType = getResources().getStringArray(R.array.serviceName);

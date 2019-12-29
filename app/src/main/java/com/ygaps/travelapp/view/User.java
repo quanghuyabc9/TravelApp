@@ -3,6 +3,8 @@ package com.ygaps.travelapp.view;
 import com.google.gson.annotations.SerializedName;
 
 public class User {
+    @SerializedName("fullName")
+    private String fullName;
 
     @SerializedName("email")
     private String email;
@@ -12,6 +14,14 @@ public class User {
 
     @SerializedName("password")
     private String password;
+
+    public String getFullname(){
+        return fullName;
+    }
+
+    public void setFullName(String fullName){
+        this.fullName=fullName;
+    }
 
     public String getEmail() {
         return email;

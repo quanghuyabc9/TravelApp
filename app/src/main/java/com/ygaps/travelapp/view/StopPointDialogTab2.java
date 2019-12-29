@@ -54,7 +54,6 @@ public class StopPointDialogTab2 extends Fragment {
     private RecyclerView.LayoutManager mLayoutManger;
     private ArrayList<ReviewsInfo> reviewsInfoItems;
 
-    private StopPointInfo pointInfo;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -65,12 +64,11 @@ public class StopPointDialogTab2 extends Fragment {
         final String accessToken = sharedPref.getString(getString(R.string.saved_access_token),null);
 
         Bundle bundle = getArguments();
-        String JSONPointInfo = bundle.getString("JSONPointInfo");
-        pointInfo = new Gson().fromJson(JSONPointInfo, new TypeToken<StopPointInfo>(){}.getType());
+        int serviceId = bundle.getInt("serviceId");
 
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 
-        String url="http://35.197.153.192:3000/tour/get/feedback-service?serviceId="+pointInfo.getId()+"&pageIndex=1&pageSize=100";
+        String url="http://35.197.153.192:3000/tour/get/feedback-service?serviceId="+serviceId+"&pageIndex=1&pageSize=100";
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {

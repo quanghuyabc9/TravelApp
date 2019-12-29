@@ -41,6 +41,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.ygaps.travelapp.utils.EditTool.printHashKey;
+
 public class ListTourFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
@@ -96,44 +98,46 @@ public class ListTourFragment extends Fragment {
                     JSONArray listTour = response.getJSONArray("tours");
                     for (int i = 0; i < listTour.length(); i++) {
                         JSONObject o = listTour.getJSONObject(i);
-                        String img = o.getString("avatar");
-                        if (img == null) {
+                        if (o.getInt("status") != -1) {
+                            String img = o.getString("avatar");
+                            if (img == null) {
 //                             img = "@drawable/alternative_view";
-                        }
-                        String location = o.getString("name");
+                            }
+                            String location = o.getString("name");
 
-                        String startDate;
-                        long milisStartDate = o.optLong("startDate", 0);
-                        if (milisStartDate == 0) {
-                            startDate = "null";
-                        } else {
-                            Calendar calendar = Calendar.getInstance();
-                            DateFormat simple = new SimpleDateFormat("dd/MM/yyyy");
-                            Date result = new Date(milisStartDate);
-                            startDate = simple.format(result);
+                            String startDate;
+                            long milisStartDate = o.optLong("startDate", 0);
+                            if (milisStartDate == 0) {
+                                startDate = "null";
+                            } else {
+                                Calendar calendar = Calendar.getInstance();
+                                DateFormat simple = new SimpleDateFormat("dd/MM/yyyy");
+                                Date result = new Date(milisStartDate);
+                                startDate = simple.format(result);
+                            }
+                            String endDate;
+                            long milisEndDate = o.optLong("startDate", 0);
+                            if (milisEndDate == 0) {
+                                endDate = "null";
+                            } else {
+                                Calendar calendar = Calendar.getInstance();
+                                DateFormat simple = new SimpleDateFormat("dd/MM/yyyy");
+                                Date result = new Date(milisEndDate);
+                                endDate = simple.format(result);
+                            }
+                            String date = startDate + " - " + endDate;
+                            String numAdults = o.getString("adults");
+                            String numChilds = o.getString("childs");
+                            String quantity;
+                            if (numChilds.equals("0")) {
+                                quantity = numAdults + " adults";
+                            } else {
+                                quantity = numAdults + " adults, " + numChilds + " childs";
+                            }
+                            String price = o.getString("minCost") + " - " + o.getString("maxCost");
+                            int id = o.getInt("id");
+                            tourItems.add(new TourItem(R.drawable.alternative_view, location, date, quantity, price, id));
                         }
-                        String endDate;
-                        long milisEndDate = o.optLong("startDate", 0);
-                        if (milisEndDate == 0) {
-                            endDate = "null";
-                        } else {
-                            Calendar calendar = Calendar.getInstance();
-                            DateFormat simple = new SimpleDateFormat("dd/MM/yyyy");
-                            Date result = new Date(milisEndDate);
-                            endDate = simple.format(result);
-                        }
-                        String date = startDate + " - " + endDate;
-                        String numAdults = o.getString("adults");
-                        String numChilds = o.getString("childs");
-                        String quantity;
-                        if (numChilds.equals("0")) {
-                            quantity = numAdults + " adults";
-                        } else {
-                            quantity = numAdults + " adults, " + numChilds + " childs";
-                        }
-                        String price = o.getString("minCost") + " - " + o.getString("maxCost");
-                        int id = o.getInt("id");
-                        tourItems.add(new TourItem(R.drawable.alternative_view, location, date, quantity, price, id));
                     }
                     holderTourItems.addAll(tourItems);
                     mRecyclerView = view.findViewById(R.id.rview);
@@ -146,7 +150,8 @@ public class ListTourFragment extends Fragment {
                         public void onItemClick(int position, View v) {
 
                             Intent intent = new Intent(getActivity(), TourDetailActivity.class);
-                            intent.putExtra("id", tourItems.get(position).getId());
+                            intent.putExtra("TourId", Integer.toString(tourItems.get(position).getId()));
+                            intent.putExtra("TourName",tourItems.get(position).getLocation());
                             startActivity(intent);
                         }
 

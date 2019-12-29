@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="40dp"
+
+    android:background="@drawable/rounded_dialog">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/line_title_list_review_tour"
+        android:background="@drawable/rounded_container">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp">
+            <TextView
+                android:id="@+id/list_stop_point_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Tour reviews"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:textSize="20sp" />
+            <ImageButton
+                android:id="@+id/cancel_list_reviews"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginRight="5dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/icons8_cancel_48"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:background="@color/transparent"
+                android:layout_alignParentRight="true"
+                android:layout_alignBottom="@+id/stop_point_info_title"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:paddingTop="7dp"
+        android:paddingLeft="3dp"
+        android:paddingRight="3dp"
+        android:layout_below="@+id/line_title_list_review_tour"
+        android:id="@+id/rview_reviews_explore"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <TextView
+        android:id="@+id/empty_list_review_explore_tab2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:text="No reviews yet"
+        android:textColor="#000000"
+        android:visibility="gone"/>
+
+
+</RelativeLayout>
