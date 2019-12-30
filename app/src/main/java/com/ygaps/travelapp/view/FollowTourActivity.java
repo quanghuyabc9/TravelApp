@@ -35,6 +35,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -121,7 +122,9 @@ public class FollowTourActivity extends AppCompatActivity
     private Marker myMarker;
     private String MarkerAddress;
 
-
+    //message
+    ArrayList<MessageItem> messageItems;
+    ListViewAdapterMessage adapter;
 
 
     //list sp
@@ -131,46 +134,6 @@ public class FollowTourActivity extends AppCompatActivity
 
     public final int Request_User_Location_Code = 99;
 
-//    GoogleMap.OnMarkerClickListener eventMarkerClicked = new GoogleMap.OnMarkerClickListener() {
-//        @Override
-//        public boolean onMarkerClick(Marker marker) {
-//            int index;
-//            if (myMarker != null && marker.getId().equals(myMarker.getId())) {
-//                AddStopPointDialog addStopPointDialog = new AddStopPointDialog();
-//                Bundle bundle = new Bundle();
-//                LatLng latLng = marker.getPosition();
-//                bundle.putString("Address", MarkerAddress);
-//                bundle.putDouble("Latitude", latLng.latitude);
-//                bundle.putDouble("Longitude", latLng.longitude);
-//                addStopPointDialog.setArguments(bundle);
-//                addStopPointDialog.show(getSupportFragmentManager(), "Add stop point dialog");
-//            }
-//            else if ((index = indexMarkerInSPMarker(marker)) != -1){
-//                Bundle bundle = new Bundle();
-//
-//                StopPointInfo itemInListSP = listSP.get(index);
-//                bundle.putString("JSONPointInfo", new Gson().toJsonTree(itemInListSP).getAsJsonObject().toString());
-//                bundle.putInt("Index", index);
-//
-//                if (itemInListSP.getServiceId() == 0) {
-//                    UpdateStopPointDialog updateStopPointDialog = new UpdateStopPointDialog();
-//                    updateStopPointDialog.setArguments(bundle);
-//                    updateStopPointDialog.show(getSupportFragmentManager(), "Update stop point dialog");
-//                }
-//                else{
-//                    UpdateSuggestStopPointDialog updateSuggestStopPointDialog = new UpdateSuggestStopPointDialog();
-//                    updateSuggestStopPointDialog.setArguments(bundle);
-//                    updateSuggestStopPointDialog.show(getSupportFragmentManager(), "Update stop point dialog");
-//                }
-//            }
-//            else {
-//                mGoogleMap.setOnMarkerClickListener(mClusterManager);
-//                mClusterManager.onMarkerClick(marker);
-//                mGoogleMap.setOnMarkerClickListener(eventMarkerClicked);
-//            }
-//            return false;
-//        }
-//    };
 
     public static final MediaType JSON  = MediaType.parse("application/json; charset=utf-8");
 
@@ -196,15 +159,32 @@ public class FollowTourActivity extends AppCompatActivity
             Toast.makeText(this, "Failed to initmap!!!", Toast.LENGTH_SHORT).show();
         }
 
-
-
-
         listSP = new ArrayList<>();
         listSPMarker = new ArrayList<>();
         listMarkerMem = new ArrayList<>();
         listWarningMarker = new ArrayList<>();
         //get stopPoint list from api get tour info
         getTourInfo();
+
+        //Set event click list message
+        ImageButton showList = findViewById(R.id.show_list_message);
+        final ListView listMessage = findViewById(R.id.list_view_message);
+        messageItems = new ArrayList<MessageItem>();
+        adapter = new ListViewAdapterMessage(this, messageItems);
+        listMessage.setAdapter(adapter);
+
+        showList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listMessage.getVisibility() == View.GONE){
+                    listMessage.setVisibility(View.VISIBLE);
+                    getListMessage();
+                }
+                else {
+                    listMessage.setVisibility(View.GONE);
+                }
+            }
+        });
 
         //Set event send message
         ImageButton sendMess = findViewById(R.id.button_send_message);
@@ -248,6 +228,7 @@ public class FollowTourActivity extends AppCompatActivity
                     public void onResponse(Response response) throws IOException {
                         if (response.code() == 200) {
                             //Add tour's marker in map
+                            getListMessage();
 
                             runOnUiThread(new Runnable() {
                                 @Override
@@ -542,13 +523,15 @@ public class FollowTourActivity extends AppCompatActivity
         {
             mLocationRequest = LocationRequest.create();
             mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-            mLocationRequest.setInterval(2000);
+            mLocationRequest.setInterval(10000);
+            mLocationRequest.setFastestInterval(10000);
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
         else{
             mLocationRequest = LocationRequest.create();
             mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-            mLocationRequest.setInterval(2000);
+            mLocationRequest.setInterval(10000);
+            mLocationRequest.setFastestInterval(10000);
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
             myLatitude = location.getLatitude();
             myLongitude = location.getLongitude();
@@ -929,7 +912,6 @@ public class FollowTourActivity extends AppCompatActivity
     private String getNameFromId(String id){
         for (int i = 0; i < membersInfos.size(); i++){
             if (Integer.toString(membersInfos.get(i).getId()).equals(id)){
-                Log.d("Name in infor", Integer.toString(membersInfos.get(i).getId()));
                 return membersInfos.get(i).getUserName();
             }
         }
@@ -948,7 +930,7 @@ public class FollowTourActivity extends AppCompatActivity
         OkHttpClient client = new OkHttpClient();
 
         com.squareup.okhttp.Request request = new com.squareup.okhttp.Request.Builder()
-                .url(Constants.APIEndpoint + "/tour/adFd/notification-on-road?tourId="+tourId+"&pageIndex=1&pageSize=100")
+                .url(Constants.APIEndpoint + "/tour/get/noti-on-road?tourId="+tourId+"&pageIndex=1&pageSize=100")
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Authorization", accessToken)
                 .build();
@@ -986,6 +968,80 @@ public class FollowTourActivity extends AppCompatActivity
                                     listWarningMarker.add(newMarker);
 
                                 }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+                } else if (response.code() == 404 || response.code() == 500) {
+                    try {
+                        final JSONObject jsonObject = new JSONObject(response.body().toString());
+                        final String message = jsonObject.getString("message");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(FollowTourActivity.this, message, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } catch (JSONException e) {
+                        final JSONException fe = e;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(FollowTourActivity.this, fe.toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(FollowTourActivity.this, getString(R.string.error_unknown), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
+    }
+    private void getListMessage(){
+        OkHttpClient client = new OkHttpClient();
+
+        com.squareup.okhttp.Request request = new com.squareup.okhttp.Request.Builder()
+                .url(Constants.APIEndpoint + "/tour/notification-list?tourId="+tourId+"&pageIndex=1&pageSize=100")
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Authorization", accessToken)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                final IOException fe = e;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(FollowTourActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+            @Override
+            public void onResponse(Response response) throws IOException {
+                if (response.code() == 200) {
+                    //Add tour's marker in map
+                    final String jsonResBody = response.body().string();
+                    Log.d("List mess", jsonResBody);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            JSONObject responseJSON = null;
+                            JSONArray jsonArray = null;
+                            try {
+                                responseJSON = new JSONObject(jsonResBody);
+                                jsonArray = responseJSON.getJSONArray("notiList");
+                                ArrayList<MessageItem> newMessageItems = new Gson().fromJson(jsonArray.toString(), new TypeToken<ArrayList<MessageItem>>(){}.getType());
+                                messageItems.clear();
+                                messageItems.addAll(newMessageItems);
+                                adapter.notifyDataSetChanged();
+
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
