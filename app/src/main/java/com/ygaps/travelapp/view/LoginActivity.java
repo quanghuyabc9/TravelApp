@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.facebook.AccessToken;
 import com.ygaps.travelapp.R;
 import com.ygaps.travelapp.manager.Constants;
 import com.ygaps.travelapp.manager.MyApplication;
@@ -126,7 +127,7 @@ public class LoginActivity extends AppCompatActivity {
         /* Sign in with Google*/
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestScopes(new Scope(Scopes.DRIVE_APPFOLDER))
-                .requestServerAuthCode(Constants.Google_ClientID)
+                .requestServerAuthCode(getString(R.string.Google_ClientID))
                 .requestEmail()
                 .build();
         // Build a GoogleSignInClient with the options specified by gso.
@@ -228,9 +229,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void signInWithGoogle() {
-        progressDialog= new ProgressDialog(LoginActivity.this);
-        progressDialog.setMessage("Please wait...");
-        progressDialog.show();
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN_WITH_GOOGLE);
     }
@@ -246,7 +244,6 @@ public class LoginActivity extends AppCompatActivity {
         }
         else // Facebook
             callbackManager.onActivityResult(requestCode, resultCode, data);
-
     }
 
     private void handleSignInWithGoogleResult(Task<GoogleSignInAccount> completedTask) {
@@ -260,7 +257,6 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
             updateUI_SignInWithGoogle(null);
         }
-        progressDialog.dismiss();
     }
 
     private void updateUI_SignInWithGoogle(GoogleSignInAccount account) {
@@ -388,6 +384,10 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(LoginActivity.this,"Wrong email/phone or password", Toast.LENGTH_LONG).show();
                         progressDialog.dismiss();
                     }
+                    else {
+                        Toast.makeText(LoginActivity.this, getString(R.string.error_unknown), Toast.LENGTH_LONG).show();
+                        progressDialog.dismiss();
+                    }
                 }
 
                 @Override
@@ -396,6 +396,10 @@ public class LoginActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                 }
             });
+        } else
+        {
+            Toast.makeText(LoginActivity.this, "Sign in canceled", Toast.LENGTH_SHORT).show();
+            progressDialog.dismiss();
         }
     }
 

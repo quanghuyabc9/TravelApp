@@ -24,6 +24,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.facebook.AccessToken;
 import com.ygaps.travelapp.R;
 import com.ygaps.travelapp.manager.Constants;
 import com.ygaps.travelapp.utils.ImageFilePath;
@@ -79,6 +80,7 @@ public class SettingsFragment extends Fragment {
             public void onClick(View v) {
                 // Sign out facebook
                 LoginManager.getInstance().logOut();
+                AccessToken.setCurrentAccessToken(null);
 
                 SharedPreferences sharedPref = v.getContext().getApplicationContext().getSharedPreferences(getString(R.string.shared_pref_name), 0);
                 SharedPreferences.Editor editor = sharedPref.edit();
