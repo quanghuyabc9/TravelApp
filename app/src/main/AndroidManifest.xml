@@ -20,6 +20,7 @@
         android:required="true" />
 
     <application
+        android:icon="@drawable/app_icon"
         android:name=".manager.MyApplication"
         android:allowBackup="true"
         android:label="@string/app_name"
@@ -28,17 +29,9 @@
         <activity android:name=".view.SearchUserNameActivity"></activity>
         <activity android:name=".view.FollowTourActivity" />
         <activity android:name=".view.SearchLocationActivity" />
-        <activity android:name=".view.RegisterActivity" />
+        <activity android:name=".view.RegisterActivity" android:parentActivityName=".view.LoginActivity" />
         <activity android:name=".view.CreateStopsActivity">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
-
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             tools:replace="android:value"
